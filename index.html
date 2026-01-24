@@ -1,0 +1,722 @@
+<script>
+    // ========== КОНФИГУРАЦИЯ FIREBASE ==========
+    const firebaseConfig = {
+        apiKey: "AIzaSyDdey6ZroD4KsiPiD2dnVfQe3I3OW3MPV8",
+        authDomain: "max-chat-f9319.firebaseapp.com",
+        databaseURL: "https://max-chat-f9319-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "max-chat-f9319",
+        storageBucket: "max-chat-f9319.firebasestorage.app",
+        messagingSenderId: "1013158224179",
+        appId: "1:1013158224179:web:c4a052ca2e86034de59e46"
+    };
+
+    // ========== ИНИЦИАЛИЗАЦИЯ ==========
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const database = firebase.database();
+    
+    // ========== ПЕРЕМЕННЫЕ ==========
+    let currentUser = null;
+    let currentUserId = null;
+    
+    // ========== УПРАВЛЕНИЕ ЭКРАНАМИ ==========
+    function showScreen(screenId) {
+        document.querySelectorAll('.screen').forEach(screen => {
+            screen.classList.remove('active');
+        });
+        document.getElementById(screenId).classList.add('active');
+    }
+    
+    function showChatScreen() {
+        if (!currentUser) {
+            showScreen('auth-screen');
+            return;
+        }
+        showScreen('chat-screen');
+        updateOnlineCount();
+    }
+    
+    function showSettings() {
+        showScreen('settings-screen');
+    }
+    
+    // ========== АВТОРИЗАЦИЯ ==========
+    function sendVerificationCode() {
+        const countryCode = document.getElementById('country-code').value;
+        let phoneNumber = document.getElementById('phone-number').value;
+        
+        // Очищаем номер от пробелов и скобок
+        phoneNumber = phoneNumber.replace(/\D/g, '');
+        
+        if (!phoneNumber || phoneNumber.length < 10) {
+            alert('Введите корректный номер телефона (минимум 10 цифр)');
+            document.getElementById('phone-number').focus();
+            return;
+        }
+        
+        const fullPhone = countryCode + phoneNumber;
+        
+        // Показываем анимацию загрузки
+        const sendBtn = document.querySelector('#auth-screen .btn-primary');
+        const originalText = sendBtn.textContent;
+        sendBtn.textContent = 'Отправка...';
+        sendBtn.disabled = true;
+        
+        // Имитация отправки SMS (демо-режим)
+        setTimeout(() => {
+            sendBtn.textContent = originalText;
+            sendBtn.disabled = false;
+            
+            // Показываем поле для кода
+            document.getElementById('code-section').style.display = 'block';
+            document.getElementById('verification-code').focus();
+            
+            // Сохраняем номер в localStorage для демо
+            localStorage.setItem('demo_phone', fullPhone);
+            
+            alert('✅ Демо-режим: Код "123456" сгенерирован\n\nВ реальной версии код придет по SMS');
+            
+        }, 2000);
+    }
+    
+    function verifyCode() {
+        const code = document.getElementById('verification-code').value;
+        
+        if (!code || code.length !== 6) {
+            alert('Введите 6-значный код');
+            return;
+        }
+        
+        // В демо-режиме принимаем любой код
+        const demoPhone = localStorage.getItem('demo_phone') || '+79991234567';
+        createDemoUser(demoPhone);
+    }
+    
+    function createDemoUser(phone) {
+        // Генерируем уникальный ID
+        const userId = 'user_' + Date.now();
+        
+        // Список случайных имён
+        const names = ['Максим', 'Анна', 'Иван', 'Мария', 'Алексей', 'Елена', 'Дмитрий', 'Ольга'];
+        const randomName = names[Math.floor(Math.random() * names.length)];
+        
+        // Создаём объект пользователя
+        currentUser = {
+            id: userId,
+            phone: phone,
+            name: randomName,
+            avatar: `https://ui-avatars.com/api/?name=${randomName}&background=0088cc&color=fff&bold=true`
+        };
+        
+        currentUserId = userId;
+        
+        // Сохраняем в localStorage
+        localStorage.setItem('maxchat_user', JSON.stringify(currentUser));
+        localStorage.setItem('maxchat_user_id', userId);
+        
+        // Сохраняем в Firebase
+        database.ref('users/' + userId).set({
+            phone: phone,
+            name: currentUser.name,
+            avatar: currentUser.avatar,
+            online: true,
+            lastSeen: Date.now(),
+            joined: Date.now(),
+            isDemo: true // Флаг демо-пользователя
+        }).then(() => {
+            // Обновляем аватар в интерфейсе
+            const avatarEl = document.getElementById('user-avatar');
+            if (avatarEl) {
+                avatarEl.innerHTML = randomName.charAt(0);
+                avatarEl.style.background = '#0088cc';
+            }
+            
+            // Обновляем онлайн-статус
+            updateOnlineCount();
+            
+            // Показываем чат
+            showChatScreen();
+            
+            // Загружаем сообщения
+            loadMessages();
+            
+            // Отправляем приветственное сообщение
+            sendWelcomeMessage();
+            
+        }).catch(error => {
+            console.error('Ошибка создания пользователя:', error);
+            alert('Ошибка создания аккаунта: ' + error.message);
+        });
+    }
+    
+    // ========== ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ ==========
+    function initApp() {
+        console.log('🔥 Max Chat инициализирован');
+        
+        // Проверяем сохранённого пользователя
+        const savedUser = localStorage.getItem('maxchat_user');
+        const savedUserId = localStorage.getItem('maxchat_user_id');
+        
+        if (savedUser && savedUserId) {
+            try {
+                currentUser = JSON.parse(savedUser);
+                currentUserId = savedUserId;
+                
+                // Обновляем онлайн статус в Firebase
+                database.ref('users/' + currentUserId).update({
+                    online: true,
+                    lastSeen: Date.now()
+                }).then(() => {
+                    // Показываем чат
+                    showChatScreen();
+                    loadMessages();
+                    updateOnlineCount();
+                    
+                    // Обновляем аватар
+                    const avatarEl = document.getElementById('user-avatar');
+                    if (avatarEl && currentUser.name) {
+                        avatarEl.innerHTML = currentUser.name.charAt(0);
+                        avatarEl.style.background = '#0088cc';
+                    }
+                    
+                    // Заполняем имя в настройках
+                    const usernameInput = document.getElementById('username');
+                    if (usernameInput) {
+                        usernameInput.value = currentUser.name;
+                    }
+                    
+                }).catch(error => {
+                    console.error('Ошибка восстановления сессии:', error);
+                    localStorage.clear();
+                    currentUser = null;
+                    currentUserId = null;
+                });
+                
+            } catch (e) {
+                console.error('Ошибка парсинга пользователя:', e);
+                localStorage.clear();
+            }
+        } else {
+            // Автофокус на поле номера
+            document.getElementById('phone-number').focus();
+        }
+        
+        // Настройка обработчиков событий
+        setupEventListeners();
+    }
+    
+    function setupEventListeners() {
+        // Отправка сообщения по Enter
+        const messageInput = document.getElementById('message-input');
+        if (messageInput) {
+            messageInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+        }
+        
+        // Обновление имени пользователя
+        const usernameInput = document.getElementById('username');
+        if (usernameInput) {
+            usernameInput.addEventListener('change', updateUsername);
+            usernameInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    updateUsername();
+                    this.blur();
+                }
+            });
+        }
+        
+        // Ввод кода по Enter
+        const codeInput = document.getElementById('verification-code');
+        if (codeInput) {
+            codeInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    verifyCode();
+                }
+            });
+        }
+        
+        // Ввод номера по Enter
+        const phoneInput = document.getElementById('phone-number');
+        if (phoneInput) {
+            phoneInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendVerificationCode();
+                }
+            });
+        }
+    }
+    
+    function updateUsername() {
+        const usernameInput = document.getElementById('username');
+        const newName = usernameInput.value.trim();
+        
+        if (!newName || newName.length < 2) {
+            alert('Имя должно быть не менее 2 символов');
+            usernameInput.value = currentUser.name;
+            return;
+        }
+        
+        if (newName === currentUser.name) return;
+        
+        if (currentUserId) {
+            database.ref('users/' + currentUserId).update({
+                name: newName,
+                updatedAt: Date.now()
+            }).then(() => {
+                // Обновляем локально
+                currentUser.name = newName;
+                localStorage.setItem('maxchat_user', JSON.stringify(currentUser));
+                
+                // Обновляем аватар
+                const avatarEl = document.getElementById('user-avatar');
+                if (avatarEl) {
+                    avatarEl.innerHTML = newName.charAt(0);
+                }
+                
+                // Отправляем уведомление в чат
+                database.ref('messages/general').push({
+                    text: `📛 ${currentUser.name} сменил(а) имя на "${newName}"`,
+                    senderId: 'system',
+                    senderName: 'System',
+                    timestamp: Date.now(),
+                    type: 'system'
+                });
+                
+                alert('Имя успешно обновлено!');
+                
+            }).catch(error => {
+                alert('Ошибка обновления имени: ' + error.message);
+            });
+        }
+    }
+    
+    // ========== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ==========
+    function showProgress() {
+        const progressBar = document.getElementById('progress-bar');
+        if (progressBar) {
+            progressBar.style.width = '100%';
+        }
+    }
+    
+    function hideProgress() {
+        const progressBar = document.getElementById('progress-bar');
+        if (progressBar) {
+            setTimeout(() => {
+                progressBar.style.width = '0%';
+            }, 300);
+        }
+    }
+    
+    function updateOnlineCount() {
+        if (!currentUserId) return;
+        
+        // Обновляем свой статус
+        database.ref('users/' + currentUserId).update({
+            online: true,
+            lastSeen: Date.now()
+        });
+        
+        // Слушаем общее количество пользователей
+        database.ref('users').on('value', (snapshot) => {
+            const users = snapshot.val();
+            let onlineCount = 0;
+            let totalCount = 0;
+            
+            if (users) {
+                Object.values(users).forEach(user => {
+                    totalCount++;
+                    if (user.online && Date.now() - user.lastSeen < 300000) {
+                        onlineCount++;
+                    }
+                });
+            }
+            
+            // Обновляем интерфейс
+            const onlineCountEl = document.getElementById('online-count');
+            const totalUsersEl = document.getElementById('total-users');
+            
+            if (onlineCountEl) {
+                onlineCountEl.textContent = `${onlineCount} онлайн • ${totalCount} всего`;
+            }
+            if (totalUsersEl) {
+                totalUsersEl.textContent = totalCount;
+            }
+        });
+    }
+    
+    function sendWelcomeMessage() {
+        if (!currentUser) return;
+        
+        database.ref('messages/general').push({
+            text: `👋 ${currentUser.name} присоединился к чату!`,
+            senderId: 'system',
+            senderName: 'System',
+            timestamp: Date.now(),
+            type: 'system'
+        });
+    }
+    
+    // ========== ИНИЦИАЛИЗАЦИЯ ==========
+    window.addEventListener('DOMContentLoaded', initApp);
+    
+    // Обработка закрытия страницы
+    window.addEventListener('beforeunload', function() {
+        if (currentUserId) {
+            // Пытаемся обновить статус перед закрытием
+            navigator.sendBeacon = navigator.sendBeacon || function() { return false; };
+            
+            const data = JSON.stringify({
+                online: false,
+                lastSeen: Date.now()
+            });
+            
+            const url = `${firebaseConfig.databaseURL}/users/${currentUserId}.json`;
+            navigator.sendBeacon(url, data);
+        }
+    });
+    
+    // Экспорт для отладки
+    window.debugMaxChat = {
+        reset: () => {
+            localStorage.clear();
+            location.reload();
+        },
+        user: () => currentUser,
+        firebase: database
+    };
+
+// ========== РАБОТА С СООБЩЕНИЯМИ ==========
+let currentChat = 'general';
+let messagesListener = null;
+
+function loadMessages() {
+    // Удаляем предыдущий слушатель
+    if (messagesListener) {
+        database.ref('messages/' + currentChat).off('value', messagesListener);
+        messagesListener = null;
+    }
+    
+    const messagesRef = database.ref('messages/' + currentChat);
+    const messagesDiv = document.getElementById('chat-messages');
+    
+    // Показываем загрузку
+    messagesDiv.innerHTML = `
+        <div style="text-align: center; padding: 40px; color: #666;">
+            <div style="font-size: 24px; margin-bottom: 10px;">💬</div>
+            Загрузка сообщений...
+        </div>
+    `;
+    
+    // Слушаем сообщения в реальном времени
+    messagesListener = messagesRef.orderByChild('timestamp').limitToLast(100).on('value', (snapshot) => {
+        const messages = snapshot.val();
+        
+        if (!messages || Object.keys(messages).length === 0) {
+            messagesDiv.innerHTML = `
+                <div class="message message-in" style="text-align: center; max-width: 90%; margin: 20px auto;">
+                    <div style="font-size: 36px; margin-bottom: 10px;">👋</div>
+                    <div class="message-sender" style="color: #0088cc; font-weight: bold;">Max Chat</div>
+                    <div style="margin: 10px 0;">Добро пожаловать в общий чат!</div>
+                    <div style="font-size: 14px; color: #666;">Напишите первое сообщение</div>
+                    <div class="message-time">только что</div>
+                </div>
+            `;
+            return;
+        }
+        
+        // Преобразуем объект в массив
+        const messagesArray = Object.entries(messages)
+            .map(([id, data]) => ({ id, ...data }))
+            .sort((a, b) => a.timestamp - b.timestamp);
+        
+        let html = '';
+        let lastDate = null;
+        let lastSender = null;
+        
+        messagesArray.forEach((msg, index) => {
+            const msgDate = new Date(msg.timestamp);
+            const dateStr = msgDate.toLocaleDateString('ru-RU', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+            
+            // Добавляем разделитель даты
+            if (dateStr !== lastDate) {
+                html += `
+                    <div class="date-divider">
+                        <span>${dateStr}</span>
+                    </div>
+                `;
+                lastDate = dateStr;
+            }
+            
+            const timeStr = msgDate.toLocaleTimeString('ru-RU', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            const isMyMessage = msg.senderId === currentUserId;
+            const isSystemMessage = msg.senderId === 'system';
+            
+            // Определяем, показывать ли имя отправителя
+            const showSender = !isMyMessage && !isSystemMessage && 
+                (lastSender !== msg.senderId || index === 0 ||
+                 (msg.timestamp - messagesArray[index - 1].timestamp) > 300000); // 5 минут
+            
+            if (showSender) {
+                lastSender = msg.senderId;
+            }
+            
+            // Формируем сообщение
+            html += `
+                <div class="message ${isMyMessage ? 'message-out' : 'message-in'} ${isSystemMessage ? 'system-message' : ''}" 
+                     id="msg-${msg.id}">
+                    ${showSender && !isSystemMessage ? 
+                        `<div class="message-sender">${msg.senderName || 'Аноним'}</div>` : ''}
+                    <div class="message-text">${formatMessageText(msg.text)}</div>
+                    <div class="message-time">
+                        ${timeStr}
+                        ${isMyMessage ? '<span style="margin-left: 5px;">✓✓</span>' : ''}
+                    </div>
+                </div>
+            `;
+        });
+        
+        messagesDiv.innerHTML = html;
+        
+        // Прокручиваем к последнему сообщению
+        setTimeout(() => {
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }, 100);
+    });
+}
+
+function sendMessage() {
+    if (!currentUser) {
+        alert('Сначала войдите в систему');
+        showScreen('auth-screen');
+        return;
+    }
+    
+    const input = document.getElementById('message-input');
+    const text = input.value.trim();
+    
+    if (!text) {
+        input.focus();
+        return;
+    }
+    
+    // Проверка длины
+    if (text.length > 2000) {
+        alert('Сообщение слишком длинное (максимум 2000 символов)');
+        return;
+    }
+    
+    // Создаём объект сообщения
+    const messageData = {
+        text: text,
+        senderId: currentUser.id,
+        senderName: currentUser.name,
+        timestamp: Date.now(),
+        type: 'text'
+    };
+    
+    // Очищаем поле ввода
+    input.value = '';
+    
+    // Показываем локально (оптимистичный UI)
+    const messagesDiv = document.getElementById('chat-messages');
+    const tempId = 'temp_' + Date.now();
+    const timeStr = new Date().toLocaleTimeString('ru-RU', {
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+    
+    messagesDiv.insertAdjacentHTML('beforeend', `
+        <div class="message message-out" id="${tempId}" style="opacity: 0.8;">
+            <div class="message-text">${formatMessageText(text)}</div>
+            <div class="message-time">${timeStr} ⌛</div>
+        </div>
+    `);
+    
+    // Прокручиваем вниз
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    
+    // Отправляем в Firebase
+    database.ref('messages/' + currentChat).push(messageData)
+        .then((ref) => {
+            // Обновляем временное сообщение
+            const tempMsg = document.getElementById(tempId);
+            if (tempMsg) {
+                tempMsg.style.opacity = '1';
+                tempMsg.id = 'msg-' + ref.key;
+                tempMsg.querySelector('.message-time').innerHTML = timeStr + ' <span style="margin-left: 5px;">✓✓</span>';
+            }
+        })
+        .catch((error) => {
+            console.error('Ошибка отправки:', error);
+            
+            // Помечаем сообщение как неотправленное
+            const tempMsg = document.getElementById(tempId);
+            if (tempMsg) {
+                tempMsg.style.opacity = '0.5';
+                tempMsg.querySelector('.message-time').innerHTML = 
+                    timeStr + ' <span style="color: #ff4444; margin-left: 5px;">✗</span>';
+                
+                alert('Не удалось отправить сообщение. Проверьте соединение.');
+            }
+        });
+}
+
+function formatMessageText(text) {
+    // Простая обработка текста
+    let formatted = text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    
+    // Выделяем ссылки
+    formatted = formatted.replace(
+        /(https?:\/\/[^\s]+)/g,
+        '<a href="$1" target="_blank" style="color: #0088cc; text-decoration: underline;">$1</a>'
+    );
+    
+    // Выделяем @упоминания
+    formatted = formatted.replace(
+        /@(\w+)/g,
+        '<span style="color: #0088cc; font-weight: bold;">@$1</span>'
+    );
+    
+    // Сохраняем переносы строк
+    formatted = formatted.replace(/\n/g, '<br>');
+    
+    return formatted;
+}
+
+// ========== ГРУППЫ ==========
+function createGroup() {
+    const groupName = prompt('Введите название группы:', 'Новая группа');
+    
+    if (!groupName || groupName.trim().length < 2) {
+        alert('Название должно содержать не менее 2 символов');
+        return;
+    }
+    
+    const cleanName = groupName.trim();
+    const groupId = 'group_' + Date.now();
+    
+    const groupData = {
+        name: cleanName,
+        creator: currentUserId,
+        created: Date.now(),
+        participants: {
+            [currentUserId]: true
+        },
+        lastMessage: '',
+        lastUpdate: Date.now()
+    };
+    
+    showProgress();
+    
+    database.ref('chats/' + groupId).set(groupData)
+        .then(() => {
+            // Создаём приветственное сообщение
+            return database.ref('messages/' + groupId).push({
+                text: `Группа "${cleanName}" создана! 🎉`,
+                senderId: 'system',
+                senderName: 'System',
+                timestamp: Date.now(),
+                type: 'system'
+            });
+        })
+        .then(() => {
+            hideProgress();
+            alert(`Группа "${cleanName}" успешно создана!`);
+            
+            // Переключаемся на новую группу
+            currentChat = groupId;
+            document.querySelector('.chat-header h3').textContent = cleanName;
+            document.getElementById('online-count').textContent = 'Новая группа';
+            
+            // Загружаем сообщения
+            loadMessages();
+        })
+        .catch(error => {
+            hideProgress();
+            alert('Ошибка создания группы: ' + error.message);
+        });
+}
+
+// ========== ВЫХОД ==========
+function logout() {
+    if (!confirm('Вы уверены, что хотите выйти?')) return;
+    
+    // Обновляем статус в Firebase
+    if (currentUserId) {
+        database.ref('users/' + currentUserId).update({
+            online: false,
+            lastSeen: Date.now()
+        });
+    }
+    
+    // Удаляем слушателей
+    if (messagesListener) {
+        database.ref('messages/' + currentChat).off('value', messagesListener);
+    }
+    
+    // Очищаем локальное хранилище
+    localStorage.removeItem('maxchat_user');
+    localStorage.removeItem('maxchat_user_id');
+    localStorage.removeItem('demo_phone');
+    
+    // Сбрасываем переменные
+    currentUser = null;
+    currentUserId = null;
+    currentChat = 'general';
+    
+    // Сбрасываем UI
+    document.getElementById('phone-number').value = '';
+    document.getElementById('verification-code').value = '';
+    document.getElementById('code-section').style.display = 'none';
+    document.getElementById('username').value = '';
+    
+    // Показываем экран авторизации
+    showScreen('auth-screen');
+}
+
+// Добавьте эти стили в CSS секцию:
+/*
+.date-divider {
+    text-align: center;
+    margin: 20px 0;
+    position: relative;
+}
+
+.date-divider span {
+    background: #f0f0f0;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 12px;
+    color: #666;
+}
+
+.system-message {
+    text-align: center;
+    background: rgba(0, 136, 204, 0.1) !important;
+    border: 1px solid rgba(0, 136, 204, 0.2);
+    max-width: 90% !important;
+    margin: 10px auto !important;
+}
+
+.message-text a {
+    color: #0088cc;
+    text-decoration: underline;
+    word-break: break-all;
+}
+*/
