@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Политика конфиденциальности - Collaps Chat</title>
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --border-color: #e9ecef;
+            --btn-primary-bg: #667eea;
+            --btn-primary-text: #ffffff;
+            --shadow: 0 20px 60px rgba(0,0,0,0.1);
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --text-primary: #ffffff;
+            --text-secondary: #cccccc;
+            --border-color: #444444;
+            --btn-primary-bg: #4a5568;
+            --btn-primary-text: #ffffff;
+            --shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 20px;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            padding: 40px;
+        }
+        
+        h1 {
+            color: #667eea;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 32px;
+        }
+        
+        h2 {
+            color: var(--text-primary);
+            margin: 25px 0 15px;
+            font-size: 24px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            color: var(--text-secondary);
+        }
+        
+        ul {
+            margin-bottom: 20px;
+            padding-left: 20px;
+            color: var(--text-secondary);
+        }
+        
+        li {
+            margin-bottom: 10px;
+        }
+        
+        .last-updated {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .back-btn {
+            display: inline-block;
+            background: var(--btn-primary-bg);
+            color: var(--btn-primary-text);
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--btn-primary-bg);
+            color: var(--btn-primary-text);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .theme-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            h2 {
+                font-size: 20px;
+            }
+            
+            .theme-toggle {
+                top: 10px;
+                right: 10px;
+                padding: 8px 15px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" id="themeToggle">🌙 Тёмная тема</button>
+    
+    <div class="container">
+        <h1>Политика конфиденциальности Collaps Chat</h1>
+        
+        <p><strong>Последнее обновление:</strong> 19 марта 2026 г.</p>
+        
+        <h2>1. Какие данные мы собираем</h2>
+        <p>При регистрации и использовании Collaps Chat мы собираем следующую информацию:</p>
+        <ul>
+            <li><strong>Имя пользователя (никнейм)</strong> — для отображения в чате</li>
+            <li><strong>Юзернейм для поиска</strong> — для поиска вас другими пользователями</li>
+            <li><strong>Email</strong> — для входа в аккаунт и восстановления пароля</li>
+            <li><strong>Пароль</strong> — хранится в зашифрованном виде</li>
+            <li><strong>Сообщения</strong> — которые вы отправляете в чатах, каналах и группах</li>
+            <li><strong>Время последнего визита и статус онлайн</strong> — для отображения активности</li>
+        </ul>
+        
+        <h2>2. Как мы используем ваши данные</h2>
+        <ul>
+            <li>Для обеспечения работы мессенджера (вход, отправка сообщений)</li>
+            <li>Для отображения вашего профиля другим пользователям</li>
+            <li>Для модерации контента (проверка на запрещённые слова)</li>
+            <li>Для технической поддержки</li>
+        </ul>
+        
+        <h2>3. Где хранятся данные</h2>
+        <p>Все данные хранятся в <strong>Firebase (Google Cloud)</strong>, серверы находятся в Европе (регион europe-west1). Firebase соответствует международным стандартам безопасности (ISO 27001, SOC 1/2/3).</p>
+        
+        <h2>4. Передача данных третьим лицам</h2>
+        <p>Мы <strong>НЕ передаём</strong> ваши персональные данные третьим лицам. Исключение: только по запросу государственных органов в соответствии с законодательством РФ.</p>
+        
+        <h2>5. Защита данных</h2>
+        <ul>
+            <li>Пароли хранятся в зашифрованном виде</li>
+            <li>Доступ к базе данных защищён правилами Firebase Security</li>
+            <li>Мы используем HTTPS для шифрования трафика</li>
+        </ul>
+        
+        <h2>6. Ваши права</h2>
+        <p>Вы имеете право:</p>
+        <ul>
+            <li>Запросить копию всех ваших данных (напишите на collapschat@bk.ru)</li>
+            <li>Исправить неточные данные (в настройках профиля)</li>
+            <li>Удалить свой аккаунт и все данные (кнопка в настройках или письмо на support)</li>
+            <li>Отозвать согласие на обработку данных (удалив аккаунт)</li>
+        </ul>
+        
+        <h2>7. Удаление аккаунта</h2>
+        <p>Чтобы удалить аккаунт и все связанные с ним данные:</p>
+        <ul>
+            <li><strong>Способ 1:</strong> Войдите в настройки и нажмите кнопку "Удалить аккаунт" в разделе "Опасная зона"</li>
+            <li><strong>Способ 2:</strong> Напишите письмо на collapschat.legal@bk.ru с вашего email, указанного при регистрации</li>
+            <li><strong>Способ 3:</strong> Напишите в чат поддержки (@support)</li>
+        </ul>
+        
+        <h2>8. Изменения в политике</h2>
+        <p>Мы можем обновлять эту политику. При значительных изменениях мы уведомим вас через сайт или по email.</p>
+        
+        <h2>9. Контакты</h2>
+        <p>По всем вопросам, связанным с персональными данными, пишите:</p>
+        <ul>
+            <li>Email: <strong> collapschat.legal@bk.ru</strong></li>
+            <li>Чат с поддержкой: <strong>@support</strong> в Collaps Chat</li>
+        </ul>
+        
+        <div style="text-align: center;">
+            <a href="index.html" class="back-btn">← Вернуться в чат</a>
+        </div>
+        
+        <div class="last-updated">
+            © 2026 Collaps Chat. Все права защищены.
+        </div>
+    </div>
+    
+    <script>
+        // Тема для страницы политики
+        const themeToggle = document.getElementById('themeToggle');
+        const savedTheme = localStorage.getItem('collapsChatTheme');
+        
+        if (savedTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            themeToggle.textContent = '☀️ Светлая тема';
+        }
+        
+        themeToggle.addEventListener('click', () => {
+            const html = document.documentElement;
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            
+            if (isDark) {
+                html.removeAttribute('data-theme');
+                themeToggle.textContent = '🌙 Тёмная тема';
+                localStorage.setItem('collapsChatTheme', 'light');
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                themeToggle.textContent = '☀️ Светлая тема';
+                localStorage.setItem('collapsChatTheme', 'dark');
+            }
+        });
+    </script>
+</body>
+</html>
