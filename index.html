@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Collaps Chat - Социальная сеть</title>
     <style>
         :root {
@@ -28,6 +28,7 @@
             --btn-disabled-text: #666666;
             --verified-bg: #1DA1F2;
             --checkreal-bg: #2ecc71;
+            --special-bg: #ff69b4;
             --banned-bg: #e74c3c;
             --online-color: #2ecc71;
             --danger-color: #e74c3c;
@@ -57,6 +58,7 @@
             --btn-disabled-text: #777777;
             --verified-bg: #1DA1F2;
             --checkreal-bg: #2ecc71;
+            --special-bg: #ff69b4;
             --banned-bg: #e74c3c;
             --online-color: #2ecc71;
             --danger-color: #e74c3c;
@@ -74,14 +76,14 @@
             background: var(--bg-primary);
             color: var(--text-primary);
             min-height: 100vh;
-            padding: 20px;
+            padding: 10px;
             transition: background 0.3s ease, color 0.3s ease;
         }
         
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            height: calc(100vh - 40px);
+            height: calc(100vh - 20px);
         }
         
         .app-container {
@@ -97,7 +99,7 @@
         .header {
             background: var(--bg-header);
             color: white;
-            padding: 15px 25px;
+            padding: 12px 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -105,47 +107,50 @@
         }
         
         .logo {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: bold;
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 10px;
         }
         
         .user-info {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 8px;
         }
         
         .username {
             font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 3px;
+            font-size: 14px;
         }
         
         .theme-toggle {
             background: rgba(255, 255, 255, 0.2);
             border: none;
             color: white;
-            padding: 8px 15px;
+            padding: 5px 10px;
             border-radius: 20px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 5px;
             font-weight: 600;
             transition: background 0.3s ease;
+            font-size: 12px;
         }
         
         .btn {
-            padding: 8px 20px;
+            padding: 8px 16px;
             border: none;
             border-radius: 50px;
             cursor: pointer;
             font-weight: 600;
             transition: all 0.3s ease;
+            font-size: 13px;
         }
         
         .btn:disabled {
@@ -178,9 +183,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             width: 100%;
             margin-bottom: 15px;
+            padding: 10px;
+            font-size: 14px;
         }
         
         .btn-google:hover:not(:disabled) {
@@ -189,7 +196,7 @@
         
         .btn-small {
             padding: 5px 12px;
-            font-size: 12px;
+            font-size: 11px;
         }
         
         .btn:hover:not(:disabled) {
@@ -205,7 +212,7 @@
         }
         
         .sidebar {
-            width: 280px;
+            width: 260px;
             background: var(--bg-sidebar);
             border-right: 1px solid var(--border-color);
             display: flex;
@@ -226,7 +233,7 @@
             flex: 1;
             flex-direction: column;
             overflow: hidden;
-            padding: 20px;
+            padding: 10px;
         }
         
         .screen.active {
@@ -234,29 +241,29 @@
         }
         
         .form-container {
-            max-width: 400px;
+            max-width: 350px;
             margin: auto;
             width: 100%;
-            padding: 30px;
+            padding: 20px;
             background: var(--bg-secondary);
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
         
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
         .checkbox-group {
-            margin: 20px 0;
+            margin: 15px 0;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
         
         .checkbox-group input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
             cursor: pointer;
         }
         
@@ -264,6 +271,7 @@
             margin-bottom: 0;
             font-weight: normal;
             cursor: pointer;
+            font-size: 13px;
         }
         
         .checkbox-group a {
@@ -274,28 +282,31 @@
         
         label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 5px;
             color: var(--text-primary);
             font-weight: 600;
+            font-size: 13px;
         }
         
         input, select, textarea {
             width: 100%;
-            padding: 12px 15px;
+            padding: 10px 12px;
             border: 2px solid var(--border-color);
             border-radius: 10px;
-            font-size: 16px;
+            font-size: 14px;
             transition: border-color 0.3s ease;
             background: var(--bg-primary);
             color: var(--text-primary);
+            margin-bottom: 8px;
         }
         
         .divider {
             display: flex;
             align-items: center;
             text-align: center;
-            margin: 20px 0;
+            margin: 15px 0;
             color: var(--text-muted);
+            font-size: 12px;
         }
         
         .divider::before,
@@ -306,23 +317,23 @@
         }
         
         .divider span {
-            padding: 0 10px;
+            padding: 0 8px;
         }
         
         .error {
             color: #e74c3c;
-            font-size: 14px;
-            margin-top: 5px;
+            font-size: 12px;
+            margin-top: 3px;
             display: none;
         }
         
         .footer {
             text-align: center;
-            padding: 12px;
+            padding: 10px;
             background: var(--bg-secondary);
             border-top: 1px solid var(--border-color);
             color: var(--text-secondary);
-            font-size: 14px;
+            font-size: 12px;
             flex-shrink: 0;
         }
         
@@ -345,7 +356,7 @@
         
         .chat-header {
             background: var(--bg-secondary);
-            padding: 15px 20px;
+            padding: 12px 15px;
             border-bottom: 1px solid var(--border-color);
             font-weight: 600;
             color: var(--text-primary);
@@ -353,25 +364,26 @@
             justify-content: space-between;
             align-items: center;
             flex-shrink: 0;
+            font-size: 14px;
         }
         
         .chat-header-actions {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             align-items: center;
         }
         
         .messages {
             flex: 1;
-            padding: 20px;
+            padding: 15px;
             overflow-y: auto;
             background: var(--bg-primary);
             min-height: 0;
         }
         
         .message {
-            margin-bottom: 15px;
-            max-width: 70%;
+            margin-bottom: 12px;
+            max-width: 85%;
         }
         
         .message.sent {
@@ -379,12 +391,13 @@
         }
         
         .message-content {
-            padding: 12px 16px;
+            padding: 10px 14px;
             border-radius: 18px;
             background: var(--message-bg);
             display: inline-block;
             word-break: break-word;
             color: var(--text-primary);
+            font-size: 14px;
         }
         
         .message.sent .message-content {
@@ -393,9 +406,9 @@
         }
         
         .message-info {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-muted);
-            margin-top: 5px;
+            margin-top: 4px;
             display: flex;
             align-items: center;
             gap: 5px;
@@ -403,15 +416,18 @@
         
         .chat-input {
             display: flex;
-            padding: 15px;
+            padding: 10px;
             background: var(--bg-secondary);
             border-top: 1px solid var(--border-color);
             flex-shrink: 0;
-            gap: 10px;
+            gap: 8px;
         }
         
         .chat-input input {
             flex: 1;
+            margin-bottom: 0;
+            font-size: 14px;
+            padding: 8px 12px;
         }
         
         .sidebar-content {
@@ -425,10 +441,12 @@
             display: flex;
             border-bottom: 2px solid var(--border-color);
             flex-shrink: 0;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
         
         .tab {
-            padding: 15px;
+            padding: 12px;
             cursor: pointer;
             font-weight: 600;
             color: var(--text-secondary);
@@ -436,7 +454,8 @@
             border-bottom: 3px solid transparent;
             flex: 1;
             text-align: center;
-            font-size: 14px;
+            font-size: 13px;
+            white-space: nowrap;
         }
         
         .tab.active {
@@ -456,7 +475,7 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            padding: 15px;
+            padding: 12px;
             display: none;
         }
         
@@ -466,29 +485,31 @@
         
         .tab-content-header {
             font-weight: 600;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             color: var(--text-primary);
-            padding-bottom: 10px;
+            padding-bottom: 8px;
             border-bottom: 1px solid var(--border-color);
             flex-shrink: 0;
+            font-size: 14px;
         }
         
         .users-list, .channels-list, .groups-list {
             flex: 1;
             overflow-y: auto;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             min-height: 0;
         }
         
         .channel-item, .user-item, .group-item {
-            padding: 12px 15px;
+            padding: 10px 12px;
             background: var(--bg-primary);
             border-radius: 10px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
             border: 1px solid var(--border-color);
             color: var(--text-primary);
+            font-size: 13px;
         }
         
         .badge {
@@ -498,6 +519,7 @@
             border-radius: 50%;
             position: relative;
             margin-left: 4px;
+            flex-shrink: 0;
         }
         
         .verified-badge {
@@ -506,6 +528,10 @@
         
         .checkreal-badge {
             background: var(--checkreal-bg);
+        }
+        
+        .special-badge {
+            background: var(--special-bg);
         }
         
         .banned-badge {
@@ -523,6 +549,11 @@
             font-weight: bold;
         }
         
+        .special-badge::after {
+            content: '★';
+            font-size: 10px;
+        }
+        
         .banned-badge::after {
             content: '⛔';
             font-size: 9px;
@@ -530,9 +561,12 @@
         
         .notification {
             position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 25px;
+            top: 10px;
+            right: 10px;
+            left: 10px;
+            max-width: 300px;
+            margin: 0 auto;
+            padding: 12px 20px;
             background: var(--bg-primary);
             color: var(--text-primary);
             border-radius: 10px;
@@ -540,6 +574,8 @@
             display: none;
             z-index: 1000;
             border: 1px solid var(--border-color);
+            font-size: 14px;
+            text-align: center;
         }
         
         .notification.success {
@@ -561,24 +597,64 @@
             justify-content: center;
             align-items: center;
             z-index: 1001;
+            padding: 15px;
         }
         
         .confirm-content {
             background: var(--bg-primary);
-            padding: 30px;
+            padding: 25px;
             border-radius: 15px;
-            max-width: 400px;
-            width: 90%;
+            max-width: 350px;
+            width: 100%;
+        }
+        
+        .confirm-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        .confirm-buttons button {
+            flex: 1;
+            padding: 10px;
         }
         
         .settings-form {
-            max-width: 600px;
-            margin: 20px auto;
+            max-width: 500px;
+            margin: 0 auto;
             padding: 20px;
             background: var(--bg-secondary);
             border-radius: 15px;
             overflow-y: auto;
             max-height: 100%;
+        }
+        
+        .settings-section {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .settings-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .settings-section h3 {
+            margin-bottom: 12px;
+            color: var(--text-primary);
+            font-size: 16px;
+        }
+        
+        .settings-section input {
+            margin-bottom: 12px;
+        }
+        
+        .settings-btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
         }
         
         .account-data {
@@ -587,15 +663,125 @@
             border-radius: 10px;
             margin-top: 15px;
             border: 1px solid var(--border-color);
+            font-size: 13px;
+        }
+        
+        .account-data-item {
+            margin-bottom: 10px;
+        }
+        
+        .users-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            cursor: pointer;
+            padding: 8px 10px;
+            background: var(--bg-primary);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            flex-shrink: 0;
+            font-size: 13px;
+        }
+        
+        .creator-only {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+        
+        .disclaimer {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 8px;
+            text-align: center;
+            line-height: 1.4;
+        }
+        
+        .search-box {
+            margin-bottom: 12px;
+        }
+        
+        .create-btn-container {
+            margin-top: 8px;
+        }
+        
+        .create-channel-btn, .create-group-btn {
+            width: 100%;
+            padding: 10px;
+        }
+        
+        .channel-form, .group-form {
+            margin-top: 12px;
+            padding: 12px;
+            background: var(--bg-primary);
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
         }
         
         @media (max-width: 768px) {
-            body { padding: 10px; }
-            .container { height: calc(100vh - 20px); }
-            .sidebar { width: 100%; height: 250px; border-right: none; border-bottom: 1px solid var(--border-color); }
-            .main-content { flex-direction: column; }
-            .message { max-width: 85%; }
-            .notification { left: 10px; right: 10px; }
+            body { padding: 5px; }
+            .container { height: calc(100vh - 10px); }
+            
+            .header {
+                padding: 8px 10px;
+            }
+            
+            .logo {
+                font-size: 18px;
+            }
+            
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: 180px;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+            
+            .tabs {
+                flex-wrap: nowrap;
+            }
+            
+            .tab {
+                padding: 10px 8px;
+                font-size: 12px;
+            }
+            
+            .chat-header {
+                padding: 10px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+            
+            .chat-header-actions {
+                width: 100%;
+                justify-content: flex-start;
+            }
+            
+            .message {
+                max-width: 90%;
+            }
+            
+            .form-container {
+                max-width: 100%;
+                margin: 10px;
+                padding: 15px;
+            }
+            
+            .notification {
+                left: 5px;
+                right: 5px;
+                max-width: none;
+            }
+            
+            .settings-form {
+                padding: 15px;
+            }
         }
     </style>
 </head>
@@ -629,18 +815,26 @@
                         <div class="tab-content-container">
                             <div class="tab-content active" id="globalTabContent">
                                 <div class="tab-content-header">Общий чат</div>
-                                <div style="flex:1; display:flex; justify-content:center; align-items:center; color:var(--text-muted);">
-                                    <div style="text-align:center;">
-                                        <div style="font-size:48px;">💬</div>
-                                        <div>Выберите чат сверху</div>
+                                <div class="users-online" style="margin-bottom:10px; font-size:12px; color:var(--text-secondary);" id="globalUsersCount">
+                                    0 онлайн
+                                </div>
+                                <div class="chat-container" style="height:100%;">
+                                    <div class="messages" id="globalMessages"></div>
+                                    <div class="chat-input">
+                                        <input type="text" id="globalMessageInput" placeholder="Сообщение...">
+                                        <button class="btn btn-secondary" id="sendGlobalMessage">➤</button>
                                     </div>
                                 </div>
                             </div>
                             <div class="tab-content" id="channelsTabContent">
                                 <div class="tab-content-header">Каналы</div>
-                                <div class="search-box"><input type="text" id="searchChannel" placeholder="Поиск..."></div>
+                                <div class="search-box">
+                                    <input type="text" id="searchChannel" placeholder="Поиск...">
+                                </div>
                                 <div class="channels-list" id="channelsList"></div>
-                                <button class="btn btn-secondary create-channel-btn" id="createChannelBtn">+ Создать</button>
+                                <div class="create-btn-container">
+                                    <button class="btn btn-secondary create-channel-btn" id="createChannelBtn">+ Создать канал</button>
+                                </div>
                                 <div class="channel-form" id="channelForm" style="display:none;">
                                     <input type="text" id="newChannelName" placeholder="Название">
                                     <textarea id="newChannelDesc" placeholder="Описание" rows="2"></textarea>
@@ -652,9 +846,13 @@
                             </div>
                             <div class="tab-content" id="groupsTabContent">
                                 <div class="tab-content-header">Группы</div>
-                                <div class="search-box"><input type="text" id="searchGroup" placeholder="Поиск..."></div>
+                                <div class="search-box">
+                                    <input type="text" id="searchGroup" placeholder="Поиск...">
+                                </div>
                                 <div class="groups-list" id="groupsList"></div>
-                                <button class="btn btn-secondary create-group-btn" id="createGroupBtn">+ Создать</button>
+                                <div class="create-btn-container">
+                                    <button class="btn btn-secondary create-group-btn" id="createGroupBtn">+ Создать группу</button>
+                                </div>
                                 <div class="group-form" id="groupForm" style="display:none;">
                                     <input type="text" id="newGroupName" placeholder="Название">
                                     <textarea id="newGroupDesc" placeholder="Описание" rows="2"></textarea>
@@ -671,7 +869,9 @@
                                     <span id="usersToggleIcon">▼</span>
                                 </div>
                                 <div class="users-collapsed" id="usersCollapsed">
-                                    <div class="search-box"><input type="text" id="searchUser" placeholder="Поиск..."></div>
+                                    <div class="search-box">
+                                        <input type="text" id="searchUser" placeholder="Поиск...">
+                                    </div>
                                     <div class="users-list" id="usersList"></div>
                                 </div>
                             </div>
@@ -683,16 +883,16 @@
                     <!-- Экран входа -->
                     <div class="screen active" id="loginScreen">
                         <div class="form-container">
-                            <h2 style="text-align:center; margin-bottom:20px;">Вход</h2>
+                            <h2 style="text-align:center; margin-bottom:15px;">Вход</h2>
                             
                             <button class="btn btn-google" id="googleLoginBtn">
-                                <svg width="18" height="18" viewBox="0 0 24 24">
+                                <svg width="16" height="16" viewBox="0 0 24 24">
                                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                                     <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
                                     <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
                                     <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                                 </svg>
-                                Войти через Google
+                                Google
                             </button>
                             
                             <div class="divider"><span>или</span></div>
@@ -708,7 +908,7 @@
                                 <div class="error" id="loginPasswordError"></div>
                             </div>
                             <button class="btn btn-primary" style="width:100%;" id="loginBtn">Войти</button>
-                            <p style="text-align:center; margin-top:15px;">
+                            <p style="text-align:center; margin-top:15px; font-size:13px;">
                                 Нет аккаунта? <a href="#" id="showRegister">Регистрация</a>
                             </p>
                         </div>
@@ -717,16 +917,16 @@
                     <!-- Экран регистрации -->
                     <div class="screen" id="registerScreen">
                         <div class="form-container">
-                            <h2 style="text-align:center; margin-bottom:20px;">Регистрация</h2>
+                            <h2 style="text-align:center; margin-bottom:15px;">Регистрация</h2>
                             
                             <button class="btn btn-google" id="googleRegisterBtn">
-                                <svg width="18" height="18" viewBox="0 0 24 24">
+                                <svg width="16" height="16" viewBox="0 0 24 24">
                                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                                     <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
                                     <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
                                     <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                                 </svg>
-                                Зарегистрироваться через Google
+                                Google
                             </button>
                             
                             <div class="divider"><span>или</span></div>
@@ -755,35 +955,21 @@
                             <div class="checkbox-group">
                                 <input type="checkbox" id="privacyCheckbox">
                                 <label for="privacyCheckbox">
-                                    Я принимаю <a href="privacy.html" target="_blank">Политику конфиденциальности</a>
+                                    Я принимаю <a href="privacy.html" target="_blank">Политику</a>
                                 </label>
                             </div>
                             
                             <button class="btn btn-primary" style="width:100%;" id="registerBtn" disabled>Зарегистрироваться</button>
-                            <p style="text-align:center; margin-top:15px;">
+                            <p style="text-align:center; margin-top:15px; font-size:13px;">
                                 Уже есть аккаунт? <a href="#" id="showLogin">Войти</a>
                             </p>
-                            <div class="disclaimer" style="font-size:12px; color:var(--text-muted); text-align:center; margin-top:10px;">
-                                Регистрируясь, вы подтверждаете, что вам есть 13 лет
+                            <div class="disclaimer">
+                                13+
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Остальные экраны -->
-                    <div class="screen" id="globalChatScreen">
-                        <div class="chat-container">
-                            <div class="chat-header">
-                                <span>💬 Общий чат</span>
-                                <span id="globalUsersCount">0 онлайн</span>
-                            </div>
-                            <div class="messages" id="globalMessages"></div>
-                            <div class="chat-input">
-                                <input type="text" id="globalMessageInput" placeholder="Сообщение...">
-                                <button class="btn btn-secondary" id="sendGlobalMessage">➤</button>
-                            </div>
-                        </div>
-                    </div>
-                    
+                    <!-- Экран канала -->
                     <div class="screen" id="channelScreen">
                         <div class="chat-container">
                             <div class="chat-header">
@@ -801,6 +987,7 @@
                         </div>
                     </div>
                     
+                    <!-- Экран группы -->
                     <div class="screen" id="groupScreen">
                         <div class="chat-container">
                             <div class="chat-header">
@@ -818,9 +1005,10 @@
                         </div>
                     </div>
                     
+                    <!-- Экран личных сообщений -->
                     <div class="screen" id="privateChatScreen">
                         <div class="chat-container">
-                            <div class="chat-header" id="privateChatHeader">💭 Личные сообщения</div>
+                            <div class="chat-header" id="privateChatHeader">💭 Личные</div>
                             <div class="messages" id="privateMessages"></div>
                             <div class="chat-input">
                                 <input type="text" id="privateMessageInput" placeholder="Сообщение...">
@@ -829,18 +1017,19 @@
                         </div>
                     </div>
                     
+                    <!-- Экран настроек -->
                     <div class="screen" id="settingsScreen">
                         <div class="settings-form">
-                            <h2 style="text-align:center;">Настройки</h2>
+                            <h2 style="text-align:center; margin-bottom:20px;">Настройки</h2>
                             
                             <div class="settings-section">
-                                <h3>📝 Смена ника</h3>
+                                <h3>📝 Сменить ник</h3>
                                 <input type="text" id="changeUsername" placeholder="Новый ник">
                                 <button class="btn btn-secondary" id="saveUsernameBtn">Сохранить</button>
                             </div>
                             
                             <div class="settings-section">
-                                <h3>🔗 Смена юзернейма</h3>
+                                <h3>🔗 Сменить юзернейм</h3>
                                 <input type="text" id="changeSearchUsername" placeholder="Новый юзернейм">
                                 <button class="btn btn-secondary" id="saveSearchUsernameBtn">Сохранить</button>
                             </div>
@@ -859,7 +1048,7 @@
                             <div class="settings-section">
                                 <h3>⚠️ Опасная зона</h3>
                                 <button class="btn btn-danger" id="deleteAccountBtn">Удалить аккаунт</button>
-                                <div class="disclaimer" style="font-size:12px; color:var(--text-muted); margin-top:5px;">Действие нельзя отменить</div>
+                                <div class="disclaimer">Безвозвратно</div>
                             </div>
                             
                             <div class="settings-section">
@@ -874,7 +1063,7 @@
             </div>
             
             <div class="footer">
-                © 2026 Collaps Chat | <a href="privacy.html" target="_blank">Политика конфиденциальности</a>
+                © 2026 Collaps Chat | <a href="privacy.html" target="_blank">Политика</a>
             </div>
         </div>
     </div>
@@ -883,7 +1072,7 @@
         <div class="confirm-content">
             <h3 id="confirmTitle">Подтверждение</h3>
             <p id="confirmMessage">Вы уверены?</p>
-            <div class="confirm-buttons" style="display:flex; gap:10px; margin-top:20px;">
+            <div class="confirm-buttons">
                 <button class="btn btn-danger" id="confirmYes">Да</button>
                 <button class="btn btn-primary" id="confirmNo">Нет</button>
             </div>
@@ -1085,6 +1274,7 @@
                     password, 
                     grant: false, 
                     checkReal: false, 
+                    special: false,
                     ban: false,
                     createdAt: Date.now(), 
                     lastSeen: Date.now(), 
@@ -1139,6 +1329,7 @@
                             password: '', 
                             grant: false, 
                             checkReal: false, 
+                            special: false,
                             ban: false,
                             createdAt: Date.now(), 
                             lastSeen: Date.now(), 
@@ -1265,7 +1456,8 @@
                     text, 
                     timestamp: Date.now(), 
                     grant: user.grant||false, 
-                    checkReal: user.checkReal||false
+                    checkReal: user.checkReal||false,
+                    special: user.special||false
                 });
                 return true;
             },
@@ -1282,10 +1474,12 @@
                     fromUsername: from.username,
                     fromGrant: from.grant||false, 
                     fromCheckReal: from.checkReal||false,
+                    fromSpecial: from.special||false,
                     toUserId: to.id, 
                     toUsername: to.username,
                     toGrant: to.grant||false, 
                     toCheckReal: to.checkReal||false,
+                    toSpecial: to.special||false,
                     text, 
                     timestamp: Date.now()
                 });
@@ -1304,7 +1498,8 @@
                     text, 
                     timestamp: Date.now(), 
                     grant: user.grant||false, 
-                    checkReal: user.checkReal||false
+                    checkReal: user.checkReal||false,
+                    special: user.special||false
                 });
                 return true;
             },
@@ -1321,7 +1516,8 @@
                     text, 
                     timestamp: Date.now(), 
                     grant: user.grant||false, 
-                    checkReal: user.checkReal||false
+                    checkReal: user.checkReal||false,
+                    special: user.special||false
                 });
                 return true;
             },
@@ -1447,7 +1643,10 @@
                 
                 firebaseFunctions.loadUsers((users) => { 
                     this.displayUsers(users); 
-                    this.updateGlobalUsersCount(users); 
+                    const online = users.filter(u => u.online).length;
+                    if (elements.globalUsersCount) {
+                        elements.globalUsersCount.textContent = `${online} онлайн`;
+                    }
                 });
                 
                 firebaseFunctions.loadChannels((ch) => this.displayChannels(ch));
@@ -1461,7 +1660,9 @@
                 setInterval(() => { 
                     if (currentUser) {
                         const online = allUsers.filter(u => u.online).length;
-                        elements.globalUsersCount.textContent = `${online} онлайн`;
+                        if (elements.globalUsersCount) {
+                            elements.globalUsersCount.textContent = `${online} онлайн`;
+                        }
                     }
                 }, 5000);
                 
@@ -1509,7 +1710,7 @@
             
             handleRegister: async function() {
                 if (!elements.privacyCheckbox.checked) { 
-                    utils.showNotification('Примите политику конфиденциальности', 'error'); 
+                    utils.showNotification('Примите политику', 'error'); 
                     return; 
                 }
                 
@@ -1586,6 +1787,7 @@
                 let html = currentUser.username;
                 if (currentUser.grant) html += ' <span class="badge verified-badge"></span>';
                 else if (currentUser.checkReal) html += ' <span class="badge checkreal-badge"></span>';
+                else if (currentUser.special) html += ' <span class="badge special-badge"></span>';
                 if (currentUser.ban) html += ' <span class="badge banned-badge"></span>';
                 elements.usernameDisplay.innerHTML = html;
             },
@@ -1615,7 +1817,9 @@
                 const target = document.getElementById(tab + 'TabContent');
                 if (target) target.classList.add('active');
                 
-                if (tab === 'global') this.showScreen('global');
+                if (tab === 'global') {
+                    this.showScreen('global');
+                }
                 else if (tab === 'channels') { 
                     this.showScreen('channel'); 
                     if (!selectedChannel) {
@@ -1637,7 +1841,7 @@
                 else if (tab === 'users') { 
                     this.showScreen('private'); 
                     if (!selectedUser) {
-                        elements.privateChatHeader.innerHTML = '💭 Личные сообщения';
+                        elements.privateChatHeader.innerHTML = '💭 Личные';
                         elements.privateMessages.innerHTML = '<div class="no-data">Выберите пользователя</div>';
                         elements.privateMessageInput.disabled = true;
                         elements.sendPrivateMessage.disabled = true;
@@ -1662,6 +1866,7 @@
                     let badges = '';
                     if (u.grant) badges += '<span class="badge verified-badge"></span>';
                     else if (u.checkReal) badges += '<span class="badge checkreal-badge"></span>';
+                    else if (u.special) badges += '<span class="badge special-badge"></span>';
                     if (u.ban) badges += '<span class="badge banned-badge"></span>';
                     
                     div.innerHTML = `
@@ -1692,8 +1897,8 @@
                     div.innerHTML = `
                         <div style="font-weight:600;"># ${c.name}</div>
                         <div style="font-size:12px; color:var(--text-secondary);">${c.description||'Нет описания'}</div>
-                        <div class="channel-meta">${c.memberCount||0} уч. • создал ${c.creatorName}</div>
-                        ${c.creatorId === currentUser?.id ? '<div class="creator-only">Вы создатель</div>' : ''}
+                        <div style="font-size:11px; color:var(--text-muted); margin-top:3px;">${c.memberCount||0} уч. • создал ${c.creatorName}</div>
+                        ${c.creatorId === currentUser?.id ? '<div style="font-size:10px; color:var(--text-muted);">Вы создатель</div>' : ''}
                     `;
                     div.addEventListener('click', () => this.selectChannel(c));
                     elements.channelsList.appendChild(div);
@@ -1715,8 +1920,8 @@
                     div.innerHTML = `
                         <div style="font-weight:600;">👥 ${g.name}</div>
                         <div style="font-size:12px; color:var(--text-secondary);">${g.description||'Нет описания'}</div>
-                        <div class="group-meta">${g.memberCount||0} уч. • создал ${g.creatorName}</div>
-                        ${g.admins?.includes(currentUser?.id) ? '<div class="creator-only">Вы админ</div>' : ''}
+                        <div style="font-size:11px; color:var(--text-muted); margin-top:3px;">${g.memberCount||0} уч. • создал ${g.creatorName}</div>
+                        ${g.admins?.includes(currentUser?.id) ? '<div style="font-size:10px; color:var(--text-muted);">Вы админ</div>' : ''}
                     `;
                     div.addEventListener('click', () => this.selectGroup(g));
                     elements.groupsList.appendChild(div);
@@ -1725,7 +1930,7 @@
             
             selectUser: async function(u) {
                 if (u.ban) { 
-                    utils.showNotification('Этот пользователь заблокирован', 'error'); 
+                    utils.showNotification('Пользователь заблокирован', 'error'); 
                     return; 
                 }
                 
@@ -1734,6 +1939,7 @@
                 let badges = '';
                 if (u.grant) badges += '<span class="badge verified-badge"></span>';
                 else if (u.checkReal) badges += '<span class="badge checkreal-badge"></span>';
+                else if (u.special) badges += '<span class="badge special-badge"></span>';
                 
                 elements.privateChatHeader.innerHTML = `💭 ${u.username} ${badges}`;
                 elements.privateMessages.innerHTML = '';
@@ -1752,13 +1958,13 @@
                 if (res.success) {
                     selectedChannel = res.channel;
                     elements.channelTitle.textContent = `# ${ch.name}`;
-                    elements.channelMembers.textContent = `${res.channel.memberCount} уч.`;
+                    elements.channelMembers.textContent = `${res.channel.memberCount}`;
                     elements.channelMessages.innerHTML = '';
                     
                     const isCreator = ch.creatorId === currentUser.id;
                     elements.channelMessageInput.disabled = !isCreator;
                     elements.sendChannelMessage.disabled = !isCreator;
-                    elements.channelMessageInput.placeholder = isCreator ? 'Сообщение...' : 'Только создатель может писать';
+                    elements.channelMessageInput.placeholder = isCreator ? 'Сообщение...' : 'Только создатель';
                     elements.leaveChannelBtn.style.display = 'block';
                     
                     this.showScreen('channel');
@@ -1776,7 +1982,7 @@
                 if (res.success) {
                     selectedGroup = res.group;
                     elements.groupTitle.textContent = `👥 ${gr.name}`;
-                    elements.groupMembers.textContent = `${res.group.memberCount} уч.`;
+                    elements.groupMembers.textContent = `${res.group.memberCount}`;
                     elements.groupMessages.innerHTML = '';
                     elements.groupMessageInput.disabled = false;
                     elements.sendGroupMessage.disabled = false;
@@ -1812,7 +2018,7 @@
             sendChannelMessage: function() {
                 if (!currentUser || !selectedChannel || currentUser.ban) return;
                 if (selectedChannel.creatorId !== currentUser.id) { 
-                    utils.showNotification('Только создатель может писать', 'error'); 
+                    utils.showNotification('Только создатель', 'error'); 
                     return; 
                 }
                 const msg = elements.channelMessageInput.value.trim();
@@ -1836,6 +2042,7 @@
                 let badges = '';
                 if (m.grant) badges = '<span class="badge verified-badge"></span>';
                 else if (m.checkReal) badges = '<span class="badge checkreal-badge"></span>';
+                else if (m.special) badges = '<span class="badge special-badge"></span>';
                 
                 const div = document.createElement('div');
                 div.className = `message ${isMe ? 'sent' : ''}`;
@@ -1855,11 +2062,12 @@
                 if (!elements.privateMessages) return;
                 const isMe = currentUser && m.fromUserId === currentUser.id;
                 
-                const showBadge = isMe ? (m.toCheckReal||m.toGrant) : (m.fromCheckReal||m.fromGrant);
+                const showBadge = isMe ? (m.toCheckReal||m.toGrant||m.toSpecial) : (m.fromCheckReal||m.fromGrant||m.fromSpecial);
                 let badges = '';
                 if (showBadge) {
                     if (isMe ? m.toGrant : m.fromGrant) badges = '<span class="badge verified-badge"></span>';
                     else if (isMe ? m.toCheckReal : m.fromCheckReal) badges = '<span class="badge checkreal-badge"></span>';
+                    else if (isMe ? m.toSpecial : m.fromSpecial) badges = '<span class="badge special-badge"></span>';
                 }
                 
                 const div = document.createElement('div');
@@ -1883,6 +2091,7 @@
                 let badges = '';
                 if (m.grant) badges = '<span class="badge verified-badge"></span>';
                 else if (m.checkReal) badges = '<span class="badge checkreal-badge"></span>';
+                else if (m.special) badges = '<span class="badge special-badge"></span>';
                 
                 const div = document.createElement('div');
                 div.className = `message ${isMe ? 'sent' : ''}`;
@@ -1905,6 +2114,7 @@
                 let badges = '';
                 if (m.grant) badges = '<span class="badge verified-badge"></span>';
                 else if (m.checkReal) badges = '<span class="badge checkreal-badge"></span>';
+                else if (m.special) badges = '<span class="badge special-badge"></span>';
                 
                 const div = document.createElement('div');
                 div.className = `message ${isMe ? 'sent' : ''}`;
@@ -2102,13 +2312,17 @@
             showAccountData: function() {
                 elements.accountData.style.display = 'block';
                 elements.accountData.innerHTML = `
-                    <div><strong>ID:</strong> ${currentUser.id}</div>
-                    <div><strong>Ник:</strong> ${currentUser.username}</div>
-                    <div><strong>Юзернейм:</strong> @${currentUser.searchUsername}</div>
-                    <div><strong>Email:</strong> ${currentUser.email}</div>
-                    <div><strong>Дата:</strong> ${new Date(currentUser.createdAt).toLocaleDateString()}</div>
-                    <div><strong>Верификация:</strong> ${currentUser.grant ? 'Синяя' : currentUser.checkReal ? 'Зелёная' : 'Нет'}</div>
-                    <div><strong>Статус:</strong> ${currentUser.ban ? 'Заблокирован' : 'Активен'}</div>
+                    <div class="account-data-item"><strong>ID:</strong> ${currentUser.id}</div>
+                    <div class="account-data-item"><strong>Ник:</strong> ${currentUser.username}</div>
+                    <div class="account-data-item"><strong>Юзернейм:</strong> @${currentUser.searchUsername}</div>
+                    <div class="account-data-item"><strong>Email:</strong> ${currentUser.email}</div>
+                    <div class="account-data-item"><strong>Дата:</strong> ${new Date(currentUser.createdAt).toLocaleDateString()}</div>
+                    <div class="account-data-item"><strong>Статус:</strong> ${currentUser.ban ? 'Заблокирован' : 'Активен'}</div>
+                    <div class="account-data-item"><strong>Галочки:</strong> 
+                        ${currentUser.grant ? '🔵' : ''} 
+                        ${currentUser.checkReal ? '🟢' : ''} 
+                        ${currentUser.special ? '🌸' : ''}
+                    </div>
                 `;
             },
             
