@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Collaps Chat - Социальная сеть</title>
     <style>
         :root {
@@ -72,34 +72,25 @@
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
-            min-height: 100vh;
-            padding: 10px;
-            transition: background 0.3s ease, color 0.3s ease;
-        }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            height: calc(100vh - 20px);
+            height: 100vh;
+            overflow: hidden;
         }
         
         .app-container {
-            background: var(--bg-primary);
-            border-radius: 20px;
-            box-shadow: var(--shadow);
-            overflow: hidden;
-            height: 100%;
+            height: 100vh;
             display: flex;
             flex-direction: column;
+            background: var(--bg-primary);
         }
         
+        /* Шапка */
         .header {
             background: var(--bg-header);
             color: white;
-            padding: 12px 15px;
+            padding: 12px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -108,57 +99,303 @@
         
         .logo {
             font-size: 20px;
-            font-weight: bold;
+            font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
         
         .user-info {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
         }
         
         .username {
-            font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 3px;
-            font-size: 14px;
+            gap: 4px;
+            font-weight: 500;
         }
         
         .theme-toggle {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255,255,255,0.2);
             border: none;
             color: white;
-            padding: 5px 10px;
+            padding: 6px 12px;
             border-radius: 20px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 5px;
-            font-weight: 600;
-            transition: background 0.3s ease;
-            font-size: 12px;
-        }
-        
-        .btn {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
+            gap: 4px;
             font-size: 13px;
         }
         
-        .btn:disabled {
-            background: var(--btn-disabled-bg);
-            color: var(--btn-disabled-text);
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
+        /* Основной контент */
+        .main-content {
+            flex: 1;
+            display: flex;
+            min-height: 0;
+            overflow: hidden;
+        }
+        
+        /* Сайдбар */
+        .sidebar {
+            width: 260px;
+            background: var(--bg-sidebar);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid var(--border-color);
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 14px;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+        
+        .tab-content-container {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .tab-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow-y: auto;
+            padding: 16px;
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Списки */
+        .users-list, .channels-list, .groups-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .user-item, .channel-item, .group-item {
+            padding: 12px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+        }
+        
+        .user-item:hover, .channel-item:hover, .group-item:hover {
+            border-color: #667eea;
+        }
+        
+        .user-item.active, .channel-item.active, .group-item.active {
+            border-color: #667eea;
+            background: rgba(102,126,234,0.05);
+        }
+        
+        /* Бейджи */
+        .badge {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            margin-left: 4px;
+            position: relative;
+        }
+        
+        .verified-badge { background: var(--verified-bg); }
+        .checkreal-badge { background: var(--checkreal-bg); }
+        .special-badge { background: var(--special-bg); }
+        .banned-badge { background: var(--banned-bg); }
+        
+        .badge::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        
+        .special-badge::after { content: '★'; }
+        .banned-badge::after { content: '⛔'; font-size: 10px; }
+        
+        /* Контентная область */
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: var(--bg-primary);
+        }
+        
+        /* Экраны */
+        .screen {
+            flex: 1;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .screen.active {
+            display: flex;
+        }
+        
+        /* Чат */
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            height: 100%;
+        }
+        
+        .chat-header {
+            padding: 16px 20px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 500;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .message {
+            max-width: 70%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .message.sent {
+            align-self: flex-end;
+        }
+        
+        .message-content {
+            padding: 10px 14px;
+            border-radius: 18px;
+            background: var(--message-bg);
+            color: var(--text-primary);
+            word-break: break-word;
+        }
+        
+        .message.sent .message-content {
+            background: var(--message-sent-bg);
+            color: white;
+        }
+        
+        .message-info {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .chat-input {
+            padding: 16px 20px;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 12px;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 10px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 24px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+        
+        .chat-input input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .chat-input button {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: none;
+            background: var(--btn-secondary-bg);
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        
+        /* Формы */
+        .form-container {
+            max-width: 360px;
+            margin: auto;
+            padding: 32px;
+            background: var(--bg-secondary);
+            border-radius: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+        
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
         }
         
         .btn-primary {
@@ -168,11 +405,6 @@
         
         .btn-secondary {
             background: var(--btn-secondary-bg);
-            color: var(--btn-secondary-text);
-        }
-        
-        .btn-danger {
-            background: var(--danger-color);
             color: white;
         }
         
@@ -185,408 +417,72 @@
             justify-content: center;
             gap: 8px;
             width: 100%;
-            margin-bottom: 15px;
-            padding: 10px;
-            font-size: 14px;
+            margin-bottom: 16px;
         }
         
-        .btn-google:hover:not(:disabled) {
-            background: var(--bg-secondary);
-        }
-        
-        .btn-small {
-            padding: 5px 12px;
-            font-size: 11px;
-        }
-        
-        .btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        
-        .main-content {
-            display: flex;
-            flex: 1;
-            min-height: 0;
-            overflow: hidden;
-        }
-        
-        .sidebar {
-            width: 260px;
-            background: var(--bg-sidebar);
-            border-right: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-        
-        .content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-        
-        .screen {
-            display: none;
-            flex: 1;
-            flex-direction: column;
-            overflow: hidden;
-            padding: 10px;
-        }
-        
-        .screen.active {
-            display: flex;
-        }
-        
-        .form-container {
-            max-width: 350px;
-            margin: auto;
-            width: 100%;
-            padding: 20px;
-            background: var(--bg-secondary);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-        
-        .form-group {
-            margin-bottom: 15px;
-        }
-        
-        .checkbox-group {
-            margin: 15px 0;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .checkbox-group input[type="checkbox"] {
-            width: 16px;
-            height: 16px;
-            cursor: pointer;
-        }
-        
-        .checkbox-group label {
-            margin-bottom: 0;
-            font-weight: normal;
-            cursor: pointer;
-            font-size: 13px;
-        }
-        
-        .checkbox-group a {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 600;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: var(--text-primary);
-            font-weight: 600;
-            font-size: 13px;
-        }
-        
-        input, select, textarea {
-            width: 100%;
-            padding: 10px 12px;
-            border: 2px solid var(--border-color);
-            border-radius: 10px;
-            font-size: 14px;
-            transition: border-color 0.3s ease;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            margin-bottom: 8px;
+        .btn-danger {
+            background: var(--danger-color);
+            color: white;
         }
         
         .divider {
             display: flex;
             align-items: center;
-            text-align: center;
-            margin: 15px 0;
+            gap: 8px;
+            margin: 16px 0;
             color: var(--text-muted);
-            font-size: 12px;
         }
         
-        .divider::before,
-        .divider::after {
-            content: '';
+        .divider-line {
             flex: 1;
-            border-bottom: 1px solid var(--border-color);
+            height: 1px;
+            background: var(--border-color);
         }
         
-        .divider span {
-            padding: 0 8px;
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 16px 0;
         }
         
-        .error {
-            color: #e74c3c;
-            font-size: 12px;
-            margin-top: 3px;
-            display: none;
+        /* Настройки */
+        .settings-form {
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 24px;
+            background: var(--bg-secondary);
+            border-radius: 20px;
         }
         
+        .settings-section {
+            margin-bottom: 24px;
+        }
+        
+        .settings-section h3 {
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+        
+        .account-data {
+            background: var(--bg-primary);
+            padding: 16px;
+            border-radius: 12px;
+            margin-top: 12px;
+        }
+        
+        /* Футер */
         .footer {
-            text-align: center;
             padding: 10px;
+            text-align: center;
             background: var(--bg-secondary);
             border-top: 1px solid var(--border-color);
-            color: var(--text-secondary);
             font-size: 12px;
             flex-shrink: 0;
         }
         
-        .footer a {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 600;
-        }
-        
-        .chat-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            overflow: hidden;
-            background: var(--bg-primary);
-            height: 100%;
-        }
-        
-        .chat-header {
-            background: var(--bg-secondary);
-            padding: 12px 15px;
-            border-bottom: 1px solid var(--border-color);
-            font-weight: 600;
-            color: var(--text-primary);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-shrink: 0;
-            font-size: 14px;
-        }
-        
-        .chat-header-actions {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-        
-        .messages {
-            flex: 1;
-            padding: 15px;
-            overflow-y: auto;
-            background: var(--bg-primary);
-            min-height: 0;
-        }
-        
-        .message {
-            margin-bottom: 12px;
-            max-width: 85%;
-        }
-        
-        .message.sent {
-            margin-left: auto;
-        }
-        
-        .message-content {
-            padding: 10px 14px;
-            border-radius: 18px;
-            background: var(--message-bg);
-            display: inline-block;
-            word-break: break-word;
-            color: var(--text-primary);
-            font-size: 14px;
-        }
-        
-        .message.sent .message-content {
-            background: var(--message-sent-bg);
-            color: var(--message-sent-text);
-        }
-        
-        .message-info {
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-top: 4px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        .chat-input {
-            display: flex;
-            padding: 10px;
-            background: var(--bg-secondary);
-            border-top: 1px solid var(--border-color);
-            flex-shrink: 0;
-            gap: 8px;
-        }
-        
-        .chat-input input {
-            flex: 1;
-            margin-bottom: 0;
-            font-size: 14px;
-            padding: 8px 12px;
-        }
-        
-        .sidebar-content {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            overflow: hidden;
-        }
-        
-        .tabs {
-            display: flex;
-            border-bottom: 2px solid var(--border-color);
-            flex-shrink: 0;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-        
-        .tab {
-            padding: 12px;
-            cursor: pointer;
-            font-weight: 600;
-            color: var(--text-secondary);
-            transition: all 0.3s ease;
-            border-bottom: 3px solid transparent;
-            flex: 1;
-            text-align: center;
-            font-size: 13px;
-            white-space: nowrap;
-        }
-        
-        .tab.active {
-            color: #667eea;
-            border-bottom-color: #667eea;
-        }
-        
-        .tab-content-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-        
-        .tab-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            padding: 12px;
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: flex;
-        }
-        
-        .tab-content-header {
-            font-weight: 600;
-            margin-bottom: 12px;
-            color: var(--text-primary);
-            padding-bottom: 8px;
-            border-bottom: 1px solid var(--border-color);
-            flex-shrink: 0;
-            font-size: 14px;
-        }
-        
-        .users-list, .channels-list, .groups-list {
-            flex: 1;
-            overflow-y: auto;
-            margin-bottom: 12px;
-            min-height: 0;
-        }
-        
-        .channel-item, .user-item, .group-item {
-            padding: 10px 12px;
-            background: var(--bg-primary);
-            border-radius: 10px;
-            margin-bottom: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            font-size: 13px;
-        }
-        
-        .badge {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            position: relative;
-            margin-left: 4px;
-            flex-shrink: 0;
-        }
-        
-        .verified-badge {
-            background: var(--verified-bg);
-        }
-        
-        .checkreal-badge {
-            background: var(--checkreal-bg);
-        }
-        
-        .special-badge {
-            background: var(--special-bg);
-        }
-        
-        .banned-badge {
-            background: var(--banned-bg);
-        }
-        
-        .badge::after {
-            content: '✓';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-size: 10px;
-            font-weight: bold;
-        }
-        
-        .special-badge::after {
-            content: '★';
-            font-size: 10px;
-        }
-        
-        .banned-badge::after {
-            content: '⛔';
-            font-size: 9px;
-        }
-        
-        .notification {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            left: 10px;
-            max-width: 300px;
-            margin: 0 auto;
-            padding: 12px 20px;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            border-radius: 10px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-            display: none;
-            z-index: 1000;
-            border: 1px solid var(--border-color);
-            font-size: 14px;
-            text-align: center;
-        }
-        
-        .notification.success {
-            border-left: 4px solid #2ecc71;
-        }
-        
-        .notification.error {
-            border-left: 4px solid #e74c3c;
-        }
-        
-        .confirm-modal {
+        /* Модалка */
+        .modal {
             position: fixed;
             top: 0;
             left: 0;
@@ -596,491 +492,358 @@
             display: none;
             justify-content: center;
             align-items: center;
-            z-index: 1001;
-            padding: 15px;
+            z-index: 1000;
         }
         
-        .confirm-content {
+        .modal-content {
             background: var(--bg-primary);
-            padding: 25px;
-            border-radius: 15px;
-            max-width: 350px;
-            width: 100%;
+            padding: 24px;
+            border-radius: 20px;
+            max-width: 400px;
+            width: 90%;
         }
         
-        .confirm-buttons {
+        .modal-buttons {
             display: flex;
             gap: 12px;
             margin-top: 20px;
         }
         
-        .confirm-buttons button {
+        .modal-buttons button {
             flex: 1;
-            padding: 10px;
-        }
-        
-        .settings-form {
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 20px;
-            background: var(--bg-secondary);
-            border-radius: 15px;
-            overflow-y: auto;
-            max-height: 100%;
-        }
-        
-        .settings-section {
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--border-color);
-        }
-        
-        .settings-section:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-        
-        .settings-section h3 {
-            margin-bottom: 12px;
-            color: var(--text-primary);
-            font-size: 16px;
-        }
-        
-        .settings-section input {
-            margin-bottom: 12px;
-        }
-        
-        .settings-btn-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 8px;
-        }
-        
-        .account-data {
-            background: var(--bg-primary);
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 15px;
-            border: 1px solid var(--border-color);
-            font-size: 13px;
-        }
-        
-        .account-data-item {
-            margin-bottom: 10px;
-        }
-        
-        .users-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-            cursor: pointer;
-            padding: 8px 10px;
-            background: var(--bg-primary);
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            flex-shrink: 0;
-            font-size: 13px;
-        }
-        
-        .creator-only {
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-top: 4px;
-        }
-        
-        .disclaimer {
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-top: 8px;
-            text-align: center;
-            line-height: 1.4;
-        }
-        
-        .search-box {
-            margin-bottom: 12px;
-        }
-        
-        .create-btn-container {
-            margin-top: 8px;
-        }
-        
-        .create-channel-btn, .create-group-btn {
-            width: 100%;
-            padding: 10px;
-        }
-        
-        .channel-form, .group-form {
-            margin-top: 12px;
             padding: 12px;
-            background: var(--bg-primary);
-            border-radius: 10px;
-            border: 1px solid var(--border-color);
         }
         
+        /* Уведомления */
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 12px 24px;
+            border-radius: 30px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1001;
+            display: none;
+        }
+        
+        /* Адаптация */
         @media (max-width: 768px) {
-            body { padding: 5px; }
-            .container { height: calc(100vh - 10px); }
-            
-            .header {
-                padding: 8px 10px;
-            }
-            
-            .logo {
-                font-size: 18px;
-            }
-            
             .main-content {
                 flex-direction: column;
             }
             
             .sidebar {
                 width: 100%;
-                height: 180px;
+                height: 140px;
                 border-right: none;
                 border-bottom: 1px solid var(--border-color);
             }
             
             .tabs {
-                flex-wrap: nowrap;
-            }
-            
-            .tab {
-                padding: 10px 8px;
-                font-size: 12px;
-            }
-            
-            .chat-header {
-                padding: 10px;
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 5px;
-            }
-            
-            .chat-header-actions {
-                width: 100%;
-                justify-content: flex-start;
+                height: 48px;
             }
             
             .message {
-                max-width: 90%;
+                max-width: 85%;
             }
             
             .form-container {
-                max-width: 100%;
-                margin: 10px;
-                padding: 15px;
-            }
-            
-            .notification {
-                left: 5px;
-                right: 5px;
-                max-width: none;
-            }
-            
-            .settings-form {
-                padding: 15px;
+                margin: 16px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="app-container">
-            <div class="header">
-                <div class="logo">
-                    <span>Collaps Chat</span>
-                    <button class="theme-toggle" id="themeToggle">
-                        <span id="themeIcon">🌙</span>
-                        <span id="themeText">Тёмная</span>
-                    </button>
+    <div class="app-container">
+        <!-- Шапка -->
+        <div class="header">
+            <div class="logo">
+                <span>Collaps Chat</span>
+                <button class="theme-toggle" id="themeToggle">
+                    <span id="themeIcon">🌙</span>
+                    <span id="themeText">Тёмная</span>
+                </button>
+            </div>
+            <div class="user-info" id="userInfo">
+                <span class="username" id="usernameDisplay">Гость</span>
+                <button class="btn btn-primary" id="logoutBtn" style="display: none;">Выйти</button>
+                <button class="btn btn-primary" id="settingsBtn" style="display: none;">⚙️</button>
+            </div>
+        </div>
+        
+        <!-- Основной контент -->
+        <div class="main-content">
+            <!-- Сайдбар (после входа) -->
+            <div class="sidebar" id="sidebar" style="display: none;">
+                <div class="tabs">
+                    <div class="tab active" data-tab="global">💬 Общий</div>
+                    <div class="tab" data-tab="channels">📢 Каналы</div>
+                    <div class="tab" data-tab="groups">👥 Группы</div>
+                    <div class="tab" data-tab="users">👤 Люди</div>
                 </div>
-                <div class="user-info" id="userInfo">
-                    <span class="username" id="usernameDisplay">Гость</span>
-                    <button class="btn btn-primary" id="logoutBtn" style="display: none;">Выйти</button>
-                    <button class="btn btn-primary" id="settingsBtn" style="display: none;">Настройки</button>
+                
+                <div class="tab-content-container">
+                    <!-- Общий чат -->
+                    <div class="tab-content active" id="globalTabContent">
+                        <div style="margin-bottom: 12px; color: var(--text-secondary);" id="globalUsersCount">0 онлайн</div>
+                        <div class="chat-container" style="height: calc(100% - 40px);">
+                            <div class="chat-messages" id="globalMessages"></div>
+                            <div class="chat-input">
+                                <input type="text" id="globalMessageInput" placeholder="Сообщение...">
+                                <button id="sendGlobalMessage">➤</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Каналы -->
+                    <div class="tab-content" id="channelsTabContent">
+                        <input type="text" id="searchChannel" placeholder="Поиск канала..." style="width: 100%; padding: 10px; margin-bottom: 12px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-primary); color: var(--text-primary);">
+                        <div class="channels-list" id="channelsList"></div>
+                        <button class="btn btn-secondary" id="createChannelBtn" style="width: 100%; margin-top: 12px;">+ Создать канал</button>
+                        <div class="channel-form" id="channelForm" style="display: none; margin-top: 12px;">
+                            <input type="text" id="newChannelName" placeholder="Название" style="width: 100%; margin-bottom: 8px;">
+                            <textarea id="newChannelDesc" placeholder="Описание" rows="2" style="width: 100%; margin-bottom: 8px;"></textarea>
+                            <div style="display: flex; gap: 8px;">
+                                <button class="btn btn-secondary" id="saveChannelBtn" style="flex: 1;">Создать</button>
+                                <button class="btn btn-primary" id="cancelChannelBtn" style="flex: 1;">Отмена</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Группы -->
+                    <div class="tab-content" id="groupsTabContent">
+                        <input type="text" id="searchGroup" placeholder="Поиск группы..." style="width: 100%; padding: 10px; margin-bottom: 12px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-primary); color: var(--text-primary);">
+                        <div class="groups-list" id="groupsList"></div>
+                        <button class="btn btn-secondary" id="createGroupBtn" style="width: 100%; margin-top: 12px;">+ Создать группу</button>
+                        <div class="group-form" id="groupForm" style="display: none; margin-top: 12px;">
+                            <input type="text" id="newGroupName" placeholder="Название" style="width: 100%; margin-bottom: 8px;">
+                            <textarea id="newGroupDesc" placeholder="Описание" rows="2" style="width: 100%; margin-bottom: 8px;"></textarea>
+                            <div style="display: flex; gap: 8px;">
+                                <button class="btn btn-secondary" id="saveGroupBtn" style="flex: 1;">Создать</button>
+                                <button class="btn btn-primary" id="cancelGroupBtn" style="flex: 1;">Отмена</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Пользователи -->
+                    <div class="tab-content" id="usersTabContent">
+                        <div class="users-header" id="usersToggle" style="display: flex; justify-content: space-between; padding: 10px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; margin-bottom: 12px; cursor: pointer;">
+                            <span>Все пользователи</span>
+                            <span id="usersToggleIcon">▼</span>
+                        </div>
+                        <div class="users-collapsed" id="usersCollapsed">
+                            <input type="text" id="searchUser" placeholder="Поиск пользователя..." style="width: 100%; padding: 10px; margin-bottom: 12px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-primary); color: var(--text-primary);">
+                            <div class="users-list" id="usersList"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
             
-            <div class="main-content">
-                <div class="sidebar" id="sidebar" style="display: none;">
-                    <div class="sidebar-content">
-                        <div class="tabs">
-                            <div class="tab active" data-tab="global">💬 Общий</div>
-                            <div class="tab" data-tab="channels">📢 Каналы</div>
-                            <div class="tab" data-tab="groups">👥 Группы</div>
-                            <div class="tab" data-tab="users">👤 Люди</div>
+            <!-- Контентная область -->
+            <div class="content">
+                <!-- Экран входа -->
+                <div class="screen active" id="loginScreen">
+                    <div class="form-container">
+                        <h2 style="text-align: center; margin-bottom: 24px;">Вход</h2>
+                        
+                        <button class="btn btn-google" id="googleLoginBtn">
+                            <svg width="18" height="18" viewBox="0 0 24 24">
+                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                            </svg>
+                            Войти через Google
+                        </button>
+                        
+                        <div class="divider">
+                            <span class="divider-line"></span>
+                            <span>или</span>
+                            <span class="divider-line"></span>
                         </div>
-                        <div class="tab-content-container">
-                            <div class="tab-content active" id="globalTabContent">
-                                <div class="tab-content-header">Общий чат</div>
-                                <div class="users-online" style="margin-bottom:10px; font-size:12px; color:var(--text-secondary);" id="globalUsersCount">
-                                    0 онлайн
-                                </div>
-                                <div class="chat-container" style="height:100%;">
-                                    <div class="messages" id="globalMessages"></div>
-                                    <div class="chat-input">
-                                        <input type="text" id="globalMessageInput" placeholder="Сообщение...">
-                                        <button class="btn btn-secondary" id="sendGlobalMessage">➤</button>
-                                    </div>
-                                </div>
+                        
+                        <div class="form-group">
+                            <label>Юзернейм или email</label>
+                            <input type="text" id="loginUsername" placeholder="Введите...">
+                        </div>
+                        <div class="form-group">
+                            <label>Пароль</label>
+                            <input type="password" id="loginPassword" placeholder="Введите...">
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%;" id="loginBtn">Войти</button>
+                        <p style="text-align: center; margin-top: 16px;">
+                            Нет аккаунта? <a href="#" id="showRegister">Регистрация</a>
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Экран регистрации -->
+                <div class="screen" id="registerScreen">
+                    <div class="form-container">
+                        <h2 style="text-align: center; margin-bottom: 24px;">Регистрация</h2>
+                        
+                        <button class="btn btn-google" id="googleRegisterBtn">
+                            <svg width="18" height="18" viewBox="0 0 24 24">
+                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                            </svg>
+                            Зарегистрироваться через Google
+                        </button>
+                        
+                        <div class="divider">
+                            <span class="divider-line"></span>
+                            <span>или</span>
+                            <span class="divider-line"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Юзернейм</label>
+                            <input type="text" id="regUsername" placeholder="Придумайте...">
+                        </div>
+                        <div class="form-group">
+                            <label>Юзернейм для поиска</label>
+                            <input type="text" id="regSearchUsername" placeholder="Латиница, цифры, _">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="regEmail" placeholder="example@mail.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Пароль</label>
+                            <input type="password" id="regPassword" placeholder="Не менее 6 символов">
+                        </div>
+                        
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="privacyCheckbox">
+                            <label for="privacyCheckbox">Я принимаю <a href="privacy.html" target="_blank">Политику</a></label>
+                        </div>
+                        
+                        <button class="btn btn-primary" style="width: 100%;" id="registerBtn" disabled>Зарегистрироваться</button>
+                        <p style="text-align: center; margin-top: 16px;">
+                            Уже есть аккаунт? <a href="#" id="showLogin">Войти</a>
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Экран канала -->
+                <div class="screen" id="channelScreen">
+                    <div class="chat-container">
+                        <div class="chat-header">
+                            <span id="channelTitle">Канал</span>
+                            <div style="display: flex; gap: 12px;">
+                                <span id="channelMembers">0</span>
+                                <button class="btn btn-danger" id="leaveChannelBtn" style="display: none;">Покинуть</button>
                             </div>
-                            <div class="tab-content" id="channelsTabContent">
-                                <div class="tab-content-header">Каналы</div>
-                                <div class="search-box">
-                                    <input type="text" id="searchChannel" placeholder="Поиск...">
-                                </div>
-                                <div class="channels-list" id="channelsList"></div>
-                                <div class="create-btn-container">
-                                    <button class="btn btn-secondary create-channel-btn" id="createChannelBtn">+ Создать канал</button>
-                                </div>
-                                <div class="channel-form" id="channelForm" style="display:none;">
-                                    <input type="text" id="newChannelName" placeholder="Название">
-                                    <textarea id="newChannelDesc" placeholder="Описание" rows="2"></textarea>
-                                    <div style="display:flex; gap:5px; margin-top:5px;">
-                                        <button class="btn btn-secondary btn-small" id="saveChannelBtn">Создать</button>
-                                        <button class="btn btn-primary btn-small" id="cancelChannelBtn">Отмена</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-content" id="groupsTabContent">
-                                <div class="tab-content-header">Группы</div>
-                                <div class="search-box">
-                                    <input type="text" id="searchGroup" placeholder="Поиск...">
-                                </div>
-                                <div class="groups-list" id="groupsList"></div>
-                                <div class="create-btn-container">
-                                    <button class="btn btn-secondary create-group-btn" id="createGroupBtn">+ Создать группу</button>
-                                </div>
-                                <div class="group-form" id="groupForm" style="display:none;">
-                                    <input type="text" id="newGroupName" placeholder="Название">
-                                    <textarea id="newGroupDesc" placeholder="Описание" rows="2"></textarea>
-                                    <div style="display:flex; gap:5px; margin-top:5px;">
-                                        <button class="btn btn-secondary btn-small" id="saveGroupBtn">Создать</button>
-                                        <button class="btn btn-primary btn-small" id="cancelGroupBtn">Отмена</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-content" id="usersTabContent">
-                                <div class="tab-content-header">Пользователи</div>
-                                <div class="users-header" id="usersToggle">
-                                    <span>Все пользователи</span>
-                                    <span id="usersToggleIcon">▼</span>
-                                </div>
-                                <div class="users-collapsed" id="usersCollapsed">
-                                    <div class="search-box">
-                                        <input type="text" id="searchUser" placeholder="Поиск...">
-                                    </div>
-                                    <div class="users-list" id="usersList"></div>
-                                </div>
-                            </div>
+                        </div>
+                        <div class="chat-messages" id="channelMessages"></div>
+                        <div class="chat-input">
+                            <input type="text" id="channelMessageInput" placeholder="Только создатель может писать" disabled>
+                            <button id="sendChannelMessage" disabled>➤</button>
                         </div>
                     </div>
                 </div>
                 
-                <div class="content">
-                    <!-- Экран входа -->
-                    <div class="screen active" id="loginScreen">
-                        <div class="form-container">
-                            <h2 style="text-align:center; margin-bottom:15px;">Вход</h2>
-                            
-                            <button class="btn btn-google" id="googleLoginBtn">
-                                <svg width="16" height="16" viewBox="0 0 24 24">
-                                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                                </svg>
-                                Google
-                            </button>
-                            
-                            <div class="divider"><span>или</span></div>
-                            
-                            <div class="form-group">
-                                <label>Юзернейм или email</label>
-                                <input type="text" id="loginUsername" placeholder="Введите...">
-                                <div class="error" id="loginUsernameError"></div>
-                            </div>
-                            <div class="form-group">
-                                <label>Пароль</label>
-                                <input type="password" id="loginPassword" placeholder="Введите...">
-                                <div class="error" id="loginPasswordError"></div>
-                            </div>
-                            <button class="btn btn-primary" style="width:100%;" id="loginBtn">Войти</button>
-                            <p style="text-align:center; margin-top:15px; font-size:13px;">
-                                Нет аккаунта? <a href="#" id="showRegister">Регистрация</a>
-                            </p>
-                        </div>
-                    </div>
-                    
-                    <!-- Экран регистрации -->
-                    <div class="screen" id="registerScreen">
-                        <div class="form-container">
-                            <h2 style="text-align:center; margin-bottom:15px;">Регистрация</h2>
-                            
-                            <button class="btn btn-google" id="googleRegisterBtn">
-                                <svg width="16" height="16" viewBox="0 0 24 24">
-                                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                                </svg>
-                                Google
-                            </button>
-                            
-                            <div class="divider"><span>или</span></div>
-                            
-                            <div class="form-group">
-                                <label>Юзернейм</label>
-                                <input type="text" id="regUsername" placeholder="Придумайте...">
-                                <div class="error" id="regUsernameError"></div>
-                            </div>
-                            <div class="form-group">
-                                <label>Юзернейм для поиска</label>
-                                <input type="text" id="regSearchUsername" placeholder="Латиница, цифры, _">
-                                <div class="error" id="regSearchUsernameError"></div>
-                            </div>
-                            <div class="form-group">
-                                <label>Email</label>
-                                <input type="email" id="regEmail" placeholder="example@mail.com">
-                                <div class="error" id="regEmailError"></div>
-                            </div>
-                            <div class="form-group">
-                                <label>Пароль</label>
-                                <input type="password" id="regPassword" placeholder="Не менее 6 символов">
-                                <div class="error" id="regPasswordError"></div>
-                            </div>
-                            
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="privacyCheckbox">
-                                <label for="privacyCheckbox">
-                                    Я принимаю <a href="privacy.html" target="_blank">Политику</a>
-                                </label>
-                            </div>
-                            
-                            <button class="btn btn-primary" style="width:100%;" id="registerBtn" disabled>Зарегистрироваться</button>
-                            <p style="text-align:center; margin-top:15px; font-size:13px;">
-                                Уже есть аккаунт? <a href="#" id="showLogin">Войти</a>
-                            </p>
-                            <div class="disclaimer">
-                                13+
+                <!-- Экран группы -->
+                <div class="screen" id="groupScreen">
+                    <div class="chat-container">
+                        <div class="chat-header">
+                            <span id="groupTitle">Группа</span>
+                            <div style="display: flex; gap: 12px;">
+                                <span id="groupMembers">0</span>
+                                <button class="btn btn-danger" id="leaveGroupBtn" style="display: none;">Покинуть</button>
                             </div>
                         </div>
-                    </div>
-                    
-                    <!-- Экран канала -->
-                    <div class="screen" id="channelScreen">
-                        <div class="chat-container">
-                            <div class="chat-header">
-                                <span id="channelTitle">Канал</span>
-                                <div class="chat-header-actions">
-                                    <span id="channelMembers">0</span>
-                                    <button class="btn btn-danger btn-small" id="leaveChannelBtn" style="display:none;">Покинуть</button>
-                                </div>
-                            </div>
-                            <div class="messages" id="channelMessages"></div>
-                            <div class="chat-input">
-                                <input type="text" id="channelMessageInput" placeholder="..." disabled>
-                                <button class="btn btn-secondary" id="sendChannelMessage" disabled>➤</button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Экран группы -->
-                    <div class="screen" id="groupScreen">
-                        <div class="chat-container">
-                            <div class="chat-header">
-                                <span id="groupTitle">Группа</span>
-                                <div class="chat-header-actions">
-                                    <span id="groupMembers">0</span>
-                                    <button class="btn btn-danger btn-small" id="leaveGroupBtn" style="display:none;">Покинуть</button>
-                                </div>
-                            </div>
-                            <div class="messages" id="groupMessages"></div>
-                            <div class="chat-input">
-                                <input type="text" id="groupMessageInput" placeholder="Сообщение...">
-                                <button class="btn btn-secondary" id="sendGroupMessage">➤</button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Экран личных сообщений -->
-                    <div class="screen" id="privateChatScreen">
-                        <div class="chat-container">
-                            <div class="chat-header" id="privateChatHeader">💭 Личные</div>
-                            <div class="messages" id="privateMessages"></div>
-                            <div class="chat-input">
-                                <input type="text" id="privateMessageInput" placeholder="Сообщение...">
-                                <button class="btn btn-secondary" id="sendPrivateMessage">➤</button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Экран настроек -->
-                    <div class="screen" id="settingsScreen">
-                        <div class="settings-form">
-                            <h2 style="text-align:center; margin-bottom:20px;">Настройки</h2>
-                            
-                            <div class="settings-section">
-                                <h3>📝 Сменить ник</h3>
-                                <input type="text" id="changeUsername" placeholder="Новый ник">
-                                <button class="btn btn-secondary" id="saveUsernameBtn">Сохранить</button>
-                            </div>
-                            
-                            <div class="settings-section">
-                                <h3>🔗 Сменить юзернейм</h3>
-                                <input type="text" id="changeSearchUsername" placeholder="Новый юзернейм">
-                                <button class="btn btn-secondary" id="saveSearchUsernameBtn">Сохранить</button>
-                            </div>
-                            
-                            <div class="settings-section">
-                                <h3>🎨 Тема</h3>
-                                <button class="btn btn-secondary" id="toggleThemeBtn">Переключить</button>
-                            </div>
-                            
-                            <div class="settings-section">
-                                <h3>📊 Данные аккаунта</h3>
-                                <button class="btn btn-secondary" id="showAccountDataBtn">Показать</button>
-                                <div class="account-data" id="accountData" style="display:none;"></div>
-                            </div>
-                            
-                            <div class="settings-section">
-                                <h3>⚠️ Опасная зона</h3>
-                                <button class="btn btn-danger" id="deleteAccountBtn">Удалить аккаунт</button>
-                                <div class="disclaimer">Безвозвратно</div>
-                            </div>
-                            
-                            <div class="settings-section">
-                                <h3>🆘 Поддержка</h3>
-                                <button class="btn btn-secondary" id="contactSupportBtn">@support</button>
-                            </div>
-                            
-                            <button class="btn btn-primary" id="backToChatBtn">← Назад</button>
+                        <div class="chat-messages" id="groupMessages"></div>
+                        <div class="chat-input">
+                            <input type="text" id="groupMessageInput" placeholder="Сообщение...">
+                            <button id="sendGroupMessage">➤</button>
                         </div>
                     </div>
                 </div>
+                
+                <!-- Экран личных сообщений -->
+                <div class="screen" id="privateChatScreen">
+                    <div class="chat-container">
+                        <div class="chat-header" id="privateChatHeader">💭 Личные сообщения</div>
+                        <div class="chat-messages" id="privateMessages"></div>
+                        <div class="chat-input">
+                            <input type="text" id="privateMessageInput" placeholder="Сообщение...">
+                            <button id="sendPrivateMessage">➤</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Экран настроек -->
+                <div class="screen" id="settingsScreen">
+                    <div class="settings-form">
+                        <h2 style="text-align: center; margin-bottom: 24px;">Настройки</h2>
+                        
+                        <div class="settings-section">
+                            <h3>📝 Сменить ник</h3>
+                            <input type="text" id="changeUsername" placeholder="Новый ник" style="width: 100%; margin-bottom: 12px;">
+                            <button class="btn btn-secondary" id="saveUsernameBtn" style="width: 100%;">Сохранить</button>
+                        </div>
+                        
+                        <div class="settings-section">
+                            <h3>🔗 Сменить юзернейм</h3>
+                            <input type="text" id="changeSearchUsername" placeholder="Новый юзернейм" style="width: 100%; margin-bottom: 12px;">
+                            <button class="btn btn-secondary" id="saveSearchUsernameBtn" style="width: 100%;">Сохранить</button>
+                        </div>
+                        
+                        <div class="settings-section">
+                            <h3>🎨 Тема</h3>
+                            <button class="btn btn-secondary" id="toggleThemeBtn" style="width: 100%;">Переключить</button>
+                        </div>
+                        
+                        <div class="settings-section">
+                            <h3>📊 Данные аккаунта</h3>
+                            <button class="btn btn-secondary" id="showAccountDataBtn" style="width: 100%; margin-bottom: 12px;">Показать</button>
+                            <div class="account-data" id="accountData" style="display: none;"></div>
+                        </div>
+                        
+                        <div class="settings-section">
+                            <h3>⚠️ Опасная зона</h3>
+                            <button class="btn btn-danger" id="deleteAccountBtn" style="width: 100%;">Удалить аккаунт</button>
+                        </div>
+                        
+                        <div class="settings-section">
+                            <h3>🆘 Поддержка</h3>
+                            <button class="btn btn-secondary" id="contactSupportBtn" style="width: 100%;">@support</button>
+                        </div>
+                        
+                        <button class="btn btn-primary" id="backToChatBtn" style="width: 100%;">← Назад</button>
+                    </div>
+                </div>
             </div>
-            
-            <div class="footer">
-                © 2026 Collaps Chat | <a href="privacy.html" target="_blank">Политика</a>
-            </div>
+        </div>
+        
+        <!-- Футер -->
+        <div class="footer">
+            © 2026 Collaps Chat | <a href="privacy.html" target="_blank">Политика конфиденциальности</a>
         </div>
     </div>
     
-    <div class="confirm-modal" id="confirmModal">
-        <div class="confirm-content">
+    <!-- Модалка подтверждения -->
+    <div class="modal" id="confirmModal">
+        <div class="modal-content">
             <h3 id="confirmTitle">Подтверждение</h3>
-            <p id="confirmMessage">Вы уверены?</p>
-            <div class="confirm-buttons">
+            <p id="confirmMessage" style="margin: 16px 0;">Вы уверены?</p>
+            <div class="modal-buttons">
                 <button class="btn btn-danger" id="confirmYes">Да</button>
                 <button class="btn btn-primary" id="confirmNo">Нет</button>
             </div>
         </div>
     </div>
     
+    <!-- Уведомления -->
     <div class="notification" id="notification"></div>
-
+    
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
         import { getDatabase, ref, set, push, onChildAdded, query, orderByChild, equalTo, get, onValue, remove, update } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
@@ -1107,9 +870,8 @@
         let selectedUser = null;
         let selectedChannel = null;
         let selectedGroup = null;
-        let bannedUsers = {};
-        let pendingAction = null;
         let allUsers = [];
+        let pendingAction = null;
         
         const elements = {
             loginBtn: document.getElementById('loginBtn'),
@@ -1162,13 +924,6 @@
             newGroupDesc: document.getElementById('newGroupDesc'),
             changeUsername: document.getElementById('changeUsername'),
             changeSearchUsername: document.getElementById('changeSearchUsername'),
-            loginScreen: document.getElementById('loginScreen'),
-            registerScreen: document.getElementById('registerScreen'),
-            globalChatScreen: document.getElementById('globalChatScreen'),
-            privateChatScreen: document.getElementById('privateChatScreen'),
-            channelScreen: document.getElementById('channelScreen'),
-            groupScreen: document.getElementById('groupScreen'),
-            settingsScreen: document.getElementById('settingsScreen'),
             sidebar: document.getElementById('sidebar'),
             globalTabContent: document.getElementById('globalTabContent'),
             channelsTabContent: document.getElementById('channelsTabContent'),
@@ -1179,9 +934,12 @@
             usersToggle: document.getElementById('usersToggle'),
             usersCollapsed: document.getElementById('usersCollapsed'),
             usersToggleIcon: document.getElementById('usersToggleIcon'),
-            confirmModal: document.getElementById('confirmModal'),
-            confirmTitle: document.getElementById('confirmTitle'),
-            confirmMessage: document.getElementById('confirmMessage'),
+            loginScreen: document.getElementById('loginScreen'),
+            registerScreen: document.getElementById('registerScreen'),
+            channelScreen: document.getElementById('channelScreen'),
+            groupScreen: document.getElementById('groupScreen'),
+            privateChatScreen: document.getElementById('privateChatScreen'),
+            settingsScreen: document.getElementById('settingsScreen'),
             usernameDisplay: document.getElementById('usernameDisplay'),
             userInfo: document.getElementById('userInfo'),
             channelTitle: document.getElementById('channelTitle'),
@@ -1201,31 +959,34 @@
             privateChatHeader: document.getElementById('privateChatHeader'),
             accountData: document.getElementById('accountData'),
             notification: document.getElementById('notification'),
+            confirmModal: document.getElementById('confirmModal'),
+            confirmTitle: document.getElementById('confirmTitle'),
+            confirmMessage: document.getElementById('confirmMessage'),
             tabs: document.querySelectorAll('.tab')
         };
         
         const utils = {
-            showNotification: function(message, type = 'success') {
-                elements.notification.textContent = message;
+            showNotification: (msg, type = 'success') => {
+                elements.notification.textContent = msg;
                 elements.notification.className = `notification ${type}`;
                 elements.notification.style.display = 'block';
                 setTimeout(() => elements.notification.style.display = 'none', 3000);
             },
             validateEmail: (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
-            validateSearchUsername: (username) => /^[a-zA-Z0-9_]+$/.test(username),
+            validateSearchUsername: (u) => /^[a-zA-Z0-9_]+$/.test(u),
             formatTime: (ts) => new Date(ts).toLocaleTimeString('ru-RU', {hour:'2-digit', minute:'2-digit'}),
             formatLastSeen: (ts) => {
                 if (!ts) return 'давно';
                 const diff = Date.now() - ts;
                 if (diff < 60000) return 'только что';
-                if (diff < 3600000) return `${Math.floor(diff/60000)} мин назад`;
-                if (diff < 86400000) return `${Math.floor(diff/3600000)} ч назад`;
+                if (diff < 3600000) return Math.floor(diff/60000) + ' мин назад';
+                if (diff < 86400000) return Math.floor(diff/3600000) + ' ч назад';
                 return new Date(ts).toLocaleDateString('ru-RU');
             },
-            formatOnlineStatus: (user) => {
-                if (user.ban) return '<span style="color:var(--banned-bg);">⛔ заблокирован</span>';
-                if (user.online) return '<span style="color:var(--online-color);">● онлайн</span>';
-                return `<span style="color:var(--text-muted);">● был ${utils.formatLastSeen(user.lastSeen)}</span>`;
+            formatOnlineStatus: (u) => {
+                if (u.ban) return '<span style="color:var(--banned-bg);">⛔ заблокирован</span>';
+                if (u.online) return '<span style="color:var(--online-color);">● онлайн</span>';
+                return '<span style="color:var(--text-muted);">● офлайн</span>';
             },
             showConfirm: (title, msg, cb) => {
                 elements.confirmTitle.textContent = title;
@@ -1249,62 +1010,51 @@
         };
         
         const firebaseFunctions = {
-            checkUserBan: async function(userId) {
-                const snap = await get(ref(database, `users/${userId}`));
+            checkUserBan: async (id) => {
+                const snap = await get(ref(database, `users/${id}`));
                 return snap.exists() && snap.val().ban === true;
             },
             
-            registerUser: async function(username, searchUsername, email, password) {
-                if (utils.checkBannedWords(username).banned) return {success:false, message:'Ник содержит запрещённые слова'};
-                if (utils.checkBannedWords(searchUsername).banned) return {success:false, message:'Юзернейм содержит запрещённые слова'};
+            registerUser: async (username, searchUsername, email, password) => {
+                if (utils.checkBannedWords(username).banned) return {success: false, message: 'Ник содержит запрещённые слова'};
+                if (utils.checkBannedWords(searchUsername).banned) return {success: false, message: 'Юзернейм содержит запрещённые слова'};
                 
                 const usersRef = ref(database, 'users');
                 const emailSnap = await get(query(usersRef, orderByChild('email'), equalTo(email.toLowerCase())));
-                if (emailSnap.exists()) return {success:false, message:'Email уже используется'};
+                if (emailSnap.exists()) return {success: false, message: 'Email уже используется'};
                 
                 const searchSnap = await get(query(usersRef, orderByChild('searchUsername'), equalTo(searchUsername.toLowerCase())));
-                if (searchSnap.exists()) return {success:false, message:'Юзернейм занят'};
+                if (searchSnap.exists()) return {success: false, message: 'Юзернейм занят'};
                 
                 const userId = push(usersRef).key;
                 const userData = {
-                    id: userId,
-                    username, 
-                    searchUsername: searchUsername.toLowerCase(), 
-                    email: email.toLowerCase(),
-                    password, 
-                    grant: false, 
-                    checkReal: false, 
-                    special: false,
-                    ban: false,
-                    createdAt: Date.now(), 
-                    lastSeen: Date.now(), 
-                    online: true
+                    id: userId, username, searchUsername: searchUsername.toLowerCase(), email: email.toLowerCase(),
+                    password, grant: false, checkReal: false, special: false, ban: false,
+                    createdAt: Date.now(), lastSeen: Date.now(), online: true
                 };
                 await set(ref(database, `users/${userId}`), userData);
-                return {success:true, user:userData};
+                return {success: true, user: userData};
             },
             
-            loginUser: async function(identifier, password) {
+            loginUser: async (identifier, password) => {
                 const usersRef = ref(database, 'users');
                 const snapshot = await get(usersRef);
-                if (!snapshot.exists()) return {success:false, message:'Пользователь не найден'};
+                if (!snapshot.exists()) return {success: false, message: 'Пользователь не найден'};
                 
                 let found = null;
                 snapshot.forEach(child => {
                     const u = child.val();
-                    if ((u.username === identifier || u.email === identifier.toLowerCase() || u.searchUsername === identifier.toLowerCase()) && u.password === password) {
-                        found = u;
-                    }
+                    if ((u.username === identifier || u.email === identifier.toLowerCase() || u.searchUsername === identifier.toLowerCase()) && u.password === password) found = u;
                 });
                 
-                if (!found) return {success:false, message:'Неверный логин или пароль'};
-                if (found.ban) return {success:false, message:'Аккаунт заблокирован'};
+                if (!found) return {success: false, message: 'Неверный логин или пароль'};
+                if (found.ban) return {success: false, message: 'Аккаунт заблокирован'};
                 
                 await update(ref(database, `users/${found.id}`), {online: true, lastSeen: Date.now()});
-                return {success:true, user: found};
+                return {success: true, user: found};
             },
             
-            googleLogin: async function() {
+            googleLogin: async () => {
                 try {
                     const result = await signInWithPopup(auth, provider);
                     const user = result.user;
@@ -1315,209 +1065,159 @@
                     if (emailQuery.exists()) {
                         let existingUser = null;
                         emailQuery.forEach(child => existingUser = child.val());
-                        if (existingUser.ban) return {success:false, message:'Аккаунт заблокирован'};
+                        if (existingUser.ban) return {success: false, message: 'Аккаунт заблокирован'};
                         await update(ref(database, `users/${existingUser.id}`), {online: true, lastSeen: Date.now()});
-                        return {success:true, user: existingUser};
+                        return {success: true, user: existingUser};
                     } else {
                         const userId = push(usersRef).key;
                         const searchUsername = user.email.split('@')[0].replace(/[^a-zA-Z0-9_]/g, '') + '_' + Math.floor(Math.random()*1000);
                         const newUser = {
-                            id: userId, 
-                            username: user.displayName || 'Google User',
-                            searchUsername, 
-                            email: user.email.toLowerCase(),
-                            password: '', 
-                            grant: false, 
-                            checkReal: false, 
-                            special: false,
-                            ban: false,
-                            createdAt: Date.now(), 
-                            lastSeen: Date.now(), 
-                            online: true
+                            id: userId, username: user.displayName || 'Google User', searchUsername, email: user.email.toLowerCase(),
+                            password: '', grant: false, checkReal: false, special: false, ban: false,
+                            createdAt: Date.now(), lastSeen: Date.now(), online: true
                         };
                         await set(ref(database, `users/${userId}`), newUser);
-                        return {success:true, user: newUser};
+                        return {success: true, user: newUser};
                     }
                 } catch (e) {
-                    return {success:false, message:'Ошибка входа через Google'};
+                    return {success: false, message: 'Ошибка входа через Google'};
                 }
             },
             
-            deleteUserAccount: async function(userId) {
-                await remove(ref(database, `users/${userId}`));
+            deleteUserAccount: async (id) => {
+                await remove(ref(database, `users/${id}`));
                 return {success: true};
             },
             
-            updateUser: async function(userId, updates) {
-                await update(ref(database, `users/${userId}`), updates);
+            updateUser: async (id, updates) => {
+                await update(ref(database, `users/${id}`), updates);
                 return {success: true};
             },
             
-            createChannel: async function(name, desc, creator) {
-                if (utils.checkBannedWords(name).banned) return {success:false, message:'Название содержит запрещённые слова'};
+            createChannel: async (name, desc, creator) => {
+                if (utils.checkBannedWords(name).banned) return {success: false, message: 'Название содержит запрещённые слова'};
                 const id = push(ref(database, 'channels')).key;
                 const data = {
-                    id, name, description: desc || '', 
-                    creatorId: creator.id, 
-                    creatorName: creator.username,
-                    createdAt: Date.now(), 
-                    members: {[creator.id]: {username: creator.username, joinedAt: Date.now(), isCreator: true}},
-                    memberCount: 1, 
-                    type: 'channel'
+                    id, name, description: desc || '', creatorId: creator.id, creatorName: creator.username,
+                    createdAt: Date.now(), members: {[creator.id]: {username: creator.username, joinedAt: Date.now(), isCreator: true}},
+                    memberCount: 1, type: 'channel'
                 };
                 await set(ref(database, `channels/${id}`), data);
-                return {success:true, channel: data};
+                return {success: true, channel: data};
             },
             
-            createGroup: async function(name, desc, creator) {
-                if (utils.checkBannedWords(name).banned) return {success:false, message:'Название содержит запрещённые слова'};
+            createGroup: async (name, desc, creator) => {
+                if (utils.checkBannedWords(name).banned) return {success: false, message: 'Название содержит запрещённые слова'};
                 const id = push(ref(database, 'groups')).key;
                 const data = {
-                    id, name, description: desc || '', 
-                    creatorId: creator.id, 
-                    creatorName: creator.username,
-                    createdAt: Date.now(), 
-                    members: {[creator.id]: {username: creator.username, joinedAt: Date.now(), isAdmin: true}},
-                    memberCount: 1, 
-                    admins: [creator.id], 
-                    type: 'group'
+                    id, name, description: desc || '', creatorId: creator.id, creatorName: creator.username,
+                    createdAt: Date.now(), members: {[creator.id]: {username: creator.username, joinedAt: Date.now(), isAdmin: true}},
+                    memberCount: 1, admins: [creator.id], type: 'group'
                 };
                 await set(ref(database, `groups/${id}`), data);
-                return {success:true, group: data};
+                return {success: true, group: data};
             },
             
-            joinChannel: async function(channelId, user) {
+            joinChannel: async (channelId, user) => {
                 const snap = await get(ref(database, `channels/${channelId}`));
-                if (!snap.exists()) return {success:false};
+                if (!snap.exists()) return {success: false};
                 const ch = snap.val();
                 if (!ch.members?.[user.id]) {
-                    await set(ref(database, `channels/${channelId}/members/${user.id}`), {
-                        username: user.username, 
-                        joinedAt: Date.now()
-                    });
-                    await set(ref(database, `channels/${channelId}/memberCount`), (ch.memberCount||0)+1);
+                    await set(ref(database, `channels/${channelId}/members/${user.id}`), {username: user.username, joinedAt: Date.now()});
+                    await set(ref(database, `channels/${channelId}/memberCount`), (ch.memberCount||0) + 1);
                 }
-                return {success:true, channel: {...ch, memberCount: (ch.memberCount||0)+1}};
+                return {success: true, channel: {...ch, memberCount: (ch.memberCount||0) + 1}};
             },
             
-            joinGroup: async function(groupId, user) {
+            joinGroup: async (groupId, user) => {
                 const snap = await get(ref(database, `groups/${groupId}`));
-                if (!snap.exists()) return {success:false};
+                if (!snap.exists()) return {success: false};
                 const gr = snap.val();
                 if (!gr.members?.[user.id]) {
-                    await set(ref(database, `groups/${groupId}/members/${user.id}`), {
-                        username: user.username, 
-                        joinedAt: Date.now()
-                    });
-                    await set(ref(database, `groups/${groupId}/memberCount`), (gr.memberCount||0)+1);
+                    await set(ref(database, `groups/${groupId}/members/${user.id}`), {username: user.username, joinedAt: Date.now()});
+                    await set(ref(database, `groups/${groupId}/memberCount`), (gr.memberCount||0) + 1);
                 }
-                return {success:true, group: {...gr, memberCount: (gr.memberCount||0)+1}};
+                return {success: true, group: {...gr, memberCount: (gr.memberCount||0) + 1}};
             },
             
-            leaveChannel: async function(channelId, userId) {
+            leaveChannel: async (channelId, userId) => {
                 const snap = await get(ref(database, `channels/${channelId}`));
-                if (!snap.exists()) return {success:false};
+                if (!snap.exists()) return {success: false};
                 const ch = snap.val();
                 await remove(ref(database, `channels/${channelId}/members/${userId}`));
-                const newCount = Math.max(0, (ch.memberCount||1)-1);
+                const newCount = Math.max(0, (ch.memberCount||1) - 1);
                 await set(ref(database, `channels/${channelId}/memberCount`), newCount);
                 if (ch.creatorId === userId && newCount === 0) {
                     await remove(ref(database, `channels/${channelId}`));
                     await remove(ref(database, `channelMessages/${channelId}`));
-                    return {success:true, deleted:true};
+                    return {success: true, deleted: true};
                 }
-                return {success:true, deleted:false};
+                return {success: true, deleted: false};
             },
             
-            leaveGroup: async function(groupId, userId) {
+            leaveGroup: async (groupId, userId) => {
                 const snap = await get(ref(database, `groups/${groupId}`));
-                if (!snap.exists()) return {success:false};
+                if (!snap.exists()) return {success: false};
                 const gr = snap.val();
                 await remove(ref(database, `groups/${groupId}/members/${userId}`));
-                const newCount = Math.max(0, (gr.memberCount||1)-1);
+                const newCount = Math.max(0, (gr.memberCount||1) - 1);
                 await set(ref(database, `groups/${groupId}/memberCount`), newCount);
                 if (gr.creatorId === userId && newCount === 0) {
                     await remove(ref(database, `groups/${groupId}`));
                     await remove(ref(database, `groupMessages/${groupId}`));
-                    return {success:true, deleted:true};
+                    return {success: true, deleted: true};
                 }
-                return {success:true, deleted:false};
+                return {success: true, deleted: false};
             },
             
-            sendGlobalMessage: function(text, user) {
+            sendGlobalMessage: (text, user) => {
                 if (user.ban) { utils.showNotification('Вы заблокированы', 'error'); return false; }
                 const check = utils.checkBannedWords(text);
                 if (check.banned) { utils.showNotification('Сообщение содержит запрещённые слова', 'error'); return false; }
                 const refMsg = push(ref(database, 'globalMessages'));
                 set(refMsg, {
-                    id: refMsg.key, 
-                    userId: user.id, 
-                    username: user.username, 
-                    text, 
-                    timestamp: Date.now(), 
-                    grant: user.grant||false, 
-                    checkReal: user.checkReal||false,
-                    special: user.special||false
+                    id: refMsg.key, userId: user.id, username: user.username, text, timestamp: Date.now(),
+                    grant: user.grant||false, checkReal: user.checkReal||false, special: user.special||false
                 });
                 return true;
             },
             
-            sendPrivateMessage: function(text, from, to) {
+            sendPrivateMessage: (text, from, to) => {
                 if (from.ban) { utils.showNotification('Вы заблокированы', 'error'); return false; }
                 const check = utils.checkBannedWords(text);
                 if (check.banned) { utils.showNotification('Сообщение содержит запрещённые слова', 'error'); return false; }
                 const chatId = [from.id, to.id].sort().join('_');
                 const refMsg = push(ref(database, `privateMessages/${chatId}`));
                 set(refMsg, {
-                    id: refMsg.key, 
-                    fromUserId: from.id, 
-                    fromUsername: from.username,
-                    fromGrant: from.grant||false, 
-                    fromCheckReal: from.checkReal||false,
-                    fromSpecial: from.special||false,
-                    toUserId: to.id, 
-                    toUsername: to.username,
-                    toGrant: to.grant||false, 
-                    toCheckReal: to.checkReal||false,
-                    toSpecial: to.special||false,
-                    text, 
-                    timestamp: Date.now()
+                    id: refMsg.key, fromUserId: from.id, fromUsername: from.username,
+                    fromGrant: from.grant||false, fromCheckReal: from.checkReal||false, fromSpecial: from.special||false,
+                    toUserId: to.id, toUsername: to.username,
+                    toGrant: to.grant||false, toCheckReal: to.checkReal||false, toSpecial: to.special||false,
+                    text, timestamp: Date.now()
                 });
                 return true;
             },
             
-            sendChannelMessage: function(text, user, channelId) {
+            sendChannelMessage: (text, user, channelId) => {
                 if (user.ban) { utils.showNotification('Вы заблокированы', 'error'); return false; }
                 const check = utils.checkBannedWords(text);
                 if (check.banned) { utils.showNotification('Сообщение содержит запрещённые слова', 'error'); return false; }
                 const refMsg = push(ref(database, `channelMessages/${channelId}`));
                 set(refMsg, {
-                    id: refMsg.key, 
-                    userId: user.id, 
-                    username: user.username, 
-                    text, 
-                    timestamp: Date.now(), 
-                    grant: user.grant||false, 
-                    checkReal: user.checkReal||false,
-                    special: user.special||false
+                    id: refMsg.key, userId: user.id, username: user.username, text, timestamp: Date.now(),
+                    grant: user.grant||false, checkReal: user.checkReal||false, special: user.special||false
                 });
                 return true;
             },
             
-            sendGroupMessage: function(text, user, groupId) {
+            sendGroupMessage: (text, user, groupId) => {
                 if (user.ban) { utils.showNotification('Вы заблокированы', 'error'); return false; }
                 const check = utils.checkBannedWords(text);
                 if (check.banned) { utils.showNotification('Сообщение содержит запрещённые слова', 'error'); return false; }
                 const refMsg = push(ref(database, `groupMessages/${groupId}`));
                 set(refMsg, {
-                    id: refMsg.key, 
-                    userId: user.id, 
-                    username: user.username, 
-                    text, 
-                    timestamp: Date.now(), 
-                    grant: user.grant||false, 
-                    checkReal: user.checkReal||false,
-                    special: user.special||false
+                    id: refMsg.key, userId: user.id, username: user.username, text, timestamp: Date.now(),
+                    grant: user.grant||false, checkReal: user.checkReal||false, special: user.special||false
                 });
                 return true;
             },
@@ -1537,9 +1237,9 @@
             subscribeToGroupMessages: (gid, cb) => onChildAdded(query(ref(database, `groupMessages/${gid}`), orderByChild('timestamp')), (s) => cb(s.val())),
             
             updateOnlineStatus: (uid, status) => {
-                if (uid) { 
-                    set(ref(database, `users/${uid}/online`), status); 
-                    set(ref(database, `users/${uid}/lastSeen`), Date.now()); 
+                if (uid) {
+                    set(ref(database, `users/${uid}/online`), status);
+                    set(ref(database, `users/${uid}/lastSeen`), Date.now());
                 }
             }
         };
@@ -1554,18 +1254,22 @@
                         currentUser = JSON.parse(saved);
                         firebaseFunctions.checkUserBan(currentUser.id).then(banned => {
                             if (banned) {
-                                utils.showNotification('Ваш аккаунт заблокирован', 'error');
+                                utils.showNotification('Аккаунт заблокирован', 'error');
                                 localStorage.removeItem('collapsChatUser');
                                 this.showScreen('login');
                             } else {
                                 this.showMainApp();
                             }
                         });
-                    } catch { 
-                        localStorage.removeItem('collapsChatUser'); 
-                    }
+                    } catch { localStorage.removeItem('collapsChatUser'); }
                 }
                 
+                this.attachEvents();
+                this.loadData();
+                this.startTimers();
+            },
+            
+            attachEvents: function() {
                 elements.loginBtn?.addEventListener('click', () => this.handleLogin());
                 elements.registerBtn?.addEventListener('click', () => this.handleRegister());
                 elements.googleLoginBtn?.addEventListener('click', () => this.handleGoogle());
@@ -1602,30 +1306,30 @@
                 elements.searchChannel?.addEventListener('input', (e) => this.filterChannels(e.target.value));
                 elements.searchGroup?.addEventListener('input', (e) => this.filterGroups(e.target.value));
                 
-                elements.createChannelBtn?.addEventListener('click', () => { 
-                    elements.channelForm.style.display = 'block'; 
-                    elements.createChannelBtn.style.display = 'none'; 
+                elements.createChannelBtn?.addEventListener('click', () => {
+                    elements.channelForm.style.display = 'block';
+                    elements.createChannelBtn.style.display = 'none';
                 });
                 
-                elements.cancelChannelBtn?.addEventListener('click', () => { 
-                    elements.channelForm.style.display = 'none'; 
-                    elements.createChannelBtn.style.display = 'block'; 
-                    elements.newChannelName.value = ''; 
-                    elements.newChannelDesc.value = ''; 
+                elements.cancelChannelBtn?.addEventListener('click', () => {
+                    elements.channelForm.style.display = 'none';
+                    elements.createChannelBtn.style.display = 'block';
+                    elements.newChannelName.value = '';
+                    elements.newChannelDesc.value = '';
                 });
                 
                 elements.saveChannelBtn?.addEventListener('click', () => this.createChannel());
                 
-                elements.createGroupBtn?.addEventListener('click', () => { 
-                    elements.groupForm.style.display = 'block'; 
-                    elements.createGroupBtn.style.display = 'none'; 
+                elements.createGroupBtn?.addEventListener('click', () => {
+                    elements.groupForm.style.display = 'block';
+                    elements.createGroupBtn.style.display = 'none';
                 });
                 
-                elements.cancelGroupBtn?.addEventListener('click', () => { 
-                    elements.groupForm.style.display = 'none'; 
-                    elements.createGroupBtn.style.display = 'block'; 
-                    elements.newGroupName.value = ''; 
-                    elements.newGroupDesc.value = ''; 
+                elements.cancelGroupBtn?.addEventListener('click', () => {
+                    elements.groupForm.style.display = 'none';
+                    elements.createGroupBtn.style.display = 'block';
+                    elements.newGroupName.value = '';
+                    elements.newGroupDesc.value = '';
                 });
                 
                 elements.saveGroupBtn?.addEventListener('click', () => this.createGroup());
@@ -1640,29 +1344,29 @@
                     elements.usersCollapsed.classList.toggle('collapsed');
                     elements.usersToggleIcon.textContent = elements.usersCollapsed.classList.contains('collapsed') ? '▶' : '▼';
                 });
-                
-                firebaseFunctions.loadUsers((users) => { 
-                    this.displayUsers(users); 
+            },
+            
+            loadData: function() {
+                firebaseFunctions.loadUsers((users) => {
+                    this.displayUsers(users);
                     const online = users.filter(u => u.online).length;
-                    if (elements.globalUsersCount) {
-                        elements.globalUsersCount.textContent = `${online} онлайн`;
-                    }
+                    if (elements.globalUsersCount) elements.globalUsersCount.textContent = `${online} онлайн`;
                 });
                 
                 firebaseFunctions.loadChannels((ch) => this.displayChannels(ch));
                 firebaseFunctions.loadGroups((gr) => this.displayGroups(gr));
                 firebaseFunctions.subscribeToGlobalMessages((msg) => this.addGlobalMessage(msg));
-                
-                window.addEventListener('beforeunload', () => { 
-                    if (currentUser) firebaseFunctions.updateOnlineStatus(currentUser.id, false); 
+            },
+            
+            startTimers: function() {
+                window.addEventListener('beforeunload', () => {
+                    if (currentUser) firebaseFunctions.updateOnlineStatus(currentUser.id, false);
                 });
                 
-                setInterval(() => { 
+                setInterval(() => {
                     if (currentUser) {
                         const online = allUsers.filter(u => u.online).length;
-                        if (elements.globalUsersCount) {
-                            elements.globalUsersCount.textContent = `${online} онлайн`;
-                        }
+                        if (elements.globalUsersCount) elements.globalUsersCount.textContent = `${online} онлайн`;
                     }
                 }, 5000);
                 
@@ -1670,7 +1374,7 @@
                     if (currentUser) {
                         const banned = await firebaseFunctions.checkUserBan(currentUser.id);
                         if (banned) {
-                            utils.showNotification('Ваш аккаунт заблокирован', 'error');
+                            utils.showNotification('Аккаунт заблокирован', 'error');
                             this.handleLogout();
                         }
                     }
@@ -1678,67 +1382,47 @@
             },
             
             handleGoogle: async function() {
-                const result = await firebaseFunctions.googleLogin();
-                if (result.success) {
-                    currentUser = result.user;
+                const res = await firebaseFunctions.googleLogin();
+                if (res.success) {
+                    currentUser = res.user;
                     localStorage.setItem('collapsChatUser', JSON.stringify(currentUser));
-                    utils.showNotification('Вход через Google выполнен');
+                    utils.showNotification('Вход выполнен');
                     this.showMainApp();
-                } else {
-                    utils.showNotification(result.message, 'error');
-                }
+                } else utils.showNotification(res.message, 'error');
             },
             
             handleLogin: async function() {
                 const id = elements.loginUsername.value.trim();
                 const pwd = elements.loginPassword.value.trim();
-                
-                if (!id || !pwd) {
-                    utils.showNotification('Заполните все поля', 'error');
-                    return;
-                }
-                
+                if (!id || !pwd) { utils.showNotification('Заполните поля', 'error'); return; }
                 const res = await firebaseFunctions.loginUser(id, pwd);
-                if (res.success) { 
-                    currentUser = res.user; 
-                    localStorage.setItem('collapsChatUser', JSON.stringify(currentUser)); 
-                    this.showMainApp(); 
-                } else { 
-                    utils.showNotification(res.message, 'error'); 
-                }
+                if (res.success) {
+                    currentUser = res.user;
+                    localStorage.setItem('collapsChatUser', JSON.stringify(currentUser));
+                    this.showMainApp();
+                } else utils.showNotification(res.message, 'error');
             },
             
             handleRegister: async function() {
-                if (!elements.privacyCheckbox.checked) { 
-                    utils.showNotification('Примите политику', 'error'); 
-                    return; 
-                }
-                
+                if (!elements.privacyCheckbox.checked) { utils.showNotification('Примите политику', 'error'); return; }
                 const u = elements.regUsername.value.trim();
                 const su = elements.regSearchUsername.value.trim().toLowerCase();
                 const e = elements.regEmail.value.trim();
                 const p = elements.regPassword.value.trim();
-                
-                if (!u || !su || !e || !p) {
-                    utils.showNotification('Заполните все поля', 'error');
-                    return;
-                }
-                
+                if (!u || !su || !e || !p) { utils.showNotification('Заполните поля', 'error'); return; }
                 const res = await firebaseFunctions.registerUser(u, su, e, p);
-                if (res.success) { 
-                    currentUser = res.user; 
-                    localStorage.setItem('collapsChatUser', JSON.stringify(currentUser)); 
-                    this.showMainApp(); 
-                } else { 
-                    utils.showNotification(res.message, 'error'); 
-                }
+                if (res.success) {
+                    currentUser = res.user;
+                    localStorage.setItem('collapsChatUser', JSON.stringify(currentUser));
+                    this.showMainApp();
+                } else utils.showNotification(res.message, 'error');
             },
             
             handleLogout: function() {
                 if (currentUser) firebaseFunctions.updateOnlineStatus(currentUser.id, false);
-                currentUser = null; 
-                selectedUser = null; 
-                selectedChannel = null; 
+                currentUser = null;
+                selectedUser = null;
+                selectedChannel = null;
                 selectedGroup = null;
                 localStorage.removeItem('collapsChatUser');
                 this.showScreen('login');
@@ -1750,7 +1434,7 @@
             
             deleteAccount: function() {
                 if (!currentUser) return;
-                utils.showConfirm('Удаление аккаунта', 'Это действие нельзя отменить. Все данные будут удалены.', async () => {
+                utils.showConfirm('Удаление', 'Все данные будут удалены', async () => {
                     await firebaseFunctions.deleteUserAccount(currentUser.id);
                     utils.showNotification('Аккаунт удалён');
                     this.handleLogout();
@@ -1793,56 +1477,53 @@
             },
             
             showScreen: function(screen) {
-                elements.loginScreen?.classList.remove('active');
-                elements.registerScreen?.classList.remove('active');
-                elements.globalChatScreen?.classList.remove('active');
-                elements.privateChatScreen?.classList.remove('active');
-                elements.channelScreen?.classList.remove('active');
-                elements.groupScreen?.classList.remove('active');
-                elements.settingsScreen?.classList.remove('active');
+                elements.loginScreen.classList.remove('active');
+                elements.registerScreen.classList.remove('active');
+                elements.channelScreen.classList.remove('active');
+                elements.groupScreen.classList.remove('active');
+                elements.privateChatScreen.classList.remove('active');
+                elements.settingsScreen.classList.remove('active');
                 
-                const target = document.getElementById(screen + 'Screen');
-                if (target) target.classList.add('active');
+                if (screen === 'login') elements.loginScreen.classList.add('active');
+                else if (screen === 'register') elements.registerScreen.classList.add('active');
+                else if (screen === 'channel') elements.channelScreen.classList.add('active');
+                else if (screen === 'group') elements.groupScreen.classList.add('active');
+                else if (screen === 'private') elements.privateChatScreen.classList.add('active');
+                else if (screen === 'settings') elements.settingsScreen.classList.add('active');
             },
             
             switchTab: function(tab) {
                 elements.tabs.forEach(t => t.classList.remove('active'));
                 document.querySelector(`.tab[data-tab="${tab}"]`)?.classList.add('active');
                 
-                elements.globalTabContent?.classList.remove('active');
-                elements.channelsTabContent?.classList.remove('active');
-                elements.groupsTabContent?.classList.remove('active');
-                elements.usersTabContent?.classList.remove('active');
-                
-                const target = document.getElementById(tab + 'TabContent');
-                if (target) target.classList.add('active');
+                elements.globalTabContent.classList.remove('active');
+                elements.channelsTabContent.classList.remove('active');
+                elements.groupsTabContent.classList.remove('active');
+                elements.usersTabContent.classList.remove('active');
                 
                 if (tab === 'global') {
-                    this.showScreen('global');
-                }
-                else if (tab === 'channels') { 
-                    this.showScreen('channel'); 
+                    elements.globalTabContent.classList.add('active');
+                } else if (tab === 'channels') {
+                    elements.channelsTabContent.classList.add('active');
                     if (!selectedChannel) {
-                        elements.channelMessages.innerHTML = '<div class="no-data">Выберите канал</div>';
+                        elements.channelMessages.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 20px;">Выберите канал</div>';
                         elements.channelMessageInput.disabled = true;
                         elements.sendChannelMessage.disabled = true;
                         elements.leaveChannelBtn.style.display = 'none';
                     }
-                }
-                else if (tab === 'groups') { 
-                    this.showScreen('group'); 
+                } else if (tab === 'groups') {
+                    elements.groupsTabContent.classList.add('active');
                     if (!selectedGroup) {
-                        elements.groupMessages.innerHTML = '<div class="no-data">Выберите группу</div>';
+                        elements.groupMessages.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 20px;">Выберите группу</div>';
                         elements.groupMessageInput.disabled = true;
                         elements.sendGroupMessage.disabled = true;
                         elements.leaveGroupBtn.style.display = 'none';
                     }
-                }
-                else if (tab === 'users') { 
-                    this.showScreen('private'); 
+                } else if (tab === 'users') {
+                    elements.usersTabContent.classList.add('active');
                     if (!selectedUser) {
-                        elements.privateChatHeader.innerHTML = '💭 Личные';
-                        elements.privateMessages.innerHTML = '<div class="no-data">Выберите пользователя</div>';
+                        elements.privateChatHeader.innerHTML = '💭 Личные сообщения';
+                        elements.privateMessages.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 20px;">Выберите пользователя</div>';
                         elements.privateMessageInput.disabled = true;
                         elements.sendPrivateMessage.disabled = true;
                     }
@@ -1854,9 +1535,9 @@
                 elements.usersList.innerHTML = '';
                 
                 const filtered = users.filter(u => !currentUser || u.id !== currentUser.id);
-                if (!filtered.length) { 
-                    elements.usersList.innerHTML = '<div class="no-data">Нет пользователей</div>'; 
-                    return; 
+                if (!filtered.length) {
+                    elements.usersList.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 20px;">Нет пользователей</div>';
+                    return;
                 }
                 
                 filtered.forEach(u => {
@@ -1870,11 +1551,11 @@
                     if (u.ban) badges += '<span class="badge banned-badge"></span>';
                     
                     div.innerHTML = `
-                        <div style="display:flex; align-items:center; gap:5px; margin-bottom:3px; flex-wrap:wrap;">
-                            <span style="font-weight:600;">${u.username}</span>${badges}
+                        <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 4px;">
+                            <span style="font-weight: 600;">${u.username}</span>${badges}
                         </div>
-                        <div style="font-size:12px; color:var(--text-secondary);">@${u.searchUsername}</div>
-                        <div style="font-size:11px; margin-top:3px;">${utils.formatOnlineStatus(u)}</div>
+                        <div style="font-size: 12px; color: var(--text-secondary);">@${u.searchUsername}</div>
+                        <div style="font-size: 11px; margin-top: 4px;">${utils.formatOnlineStatus(u)}</div>
                     `;
                     
                     div.addEventListener('click', () => this.selectUser(u));
@@ -1886,20 +1567,22 @@
                 if (!elements.channelsList) return;
                 elements.channelsList.innerHTML = '';
                 
-                if (!channels.length) { 
-                    elements.channelsList.innerHTML = '<div class="no-data">Нет каналов</div>'; 
-                    return; 
+                if (!channels.length) {
+                    elements.channelsList.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 20px;">Нет каналов</div>';
+                    return;
                 }
                 
                 channels.forEach(c => {
                     const div = document.createElement('div');
                     div.className = `channel-item ${selectedChannel?.id === c.id ? 'active' : ''}`;
                     div.innerHTML = `
-                        <div style="font-weight:600;"># ${c.name}</div>
-                        <div style="font-size:12px; color:var(--text-secondary);">${c.description||'Нет описания'}</div>
-                        <div style="font-size:11px; color:var(--text-muted); margin-top:3px;">${c.memberCount||0} уч. • создал ${c.creatorName}</div>
-                        ${c.creatorId === currentUser?.id ? '<div style="font-size:10px; color:var(--text-muted);">Вы создатель</div>' : ''}
+                        <div style="font-weight: 600;"># ${c.name}</div>
+                        <div style="font-size: 12px; color: var(--text-secondary);">${c.description || 'Нет описания'}</div>
+                        <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">
+                            ${c.memberCount || 0} уч. • создал ${c.creatorName}
+                        </div>
                     `;
+                    
                     div.addEventListener('click', () => this.selectChannel(c));
                     elements.channelsList.appendChild(div);
                 });
@@ -1909,30 +1592,29 @@
                 if (!elements.groupsList) return;
                 elements.groupsList.innerHTML = '';
                 
-                if (!groups.length) { 
-                    elements.groupsList.innerHTML = '<div class="no-data">Нет групп</div>'; 
-                    return; 
+                if (!groups.length) {
+                    elements.groupsList.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 20px;">Нет групп</div>';
+                    return;
                 }
                 
                 groups.forEach(g => {
                     const div = document.createElement('div');
                     div.className = `group-item ${selectedGroup?.id === g.id ? 'active' : ''}`;
                     div.innerHTML = `
-                        <div style="font-weight:600;">👥 ${g.name}</div>
-                        <div style="font-size:12px; color:var(--text-secondary);">${g.description||'Нет описания'}</div>
-                        <div style="font-size:11px; color:var(--text-muted); margin-top:3px;">${g.memberCount||0} уч. • создал ${g.creatorName}</div>
-                        ${g.admins?.includes(currentUser?.id) ? '<div style="font-size:10px; color:var(--text-muted);">Вы админ</div>' : ''}
+                        <div style="font-weight: 600;">👥 ${g.name}</div>
+                        <div style="font-size: 12px; color: var(--text-secondary);">${g.description || 'Нет описания'}</div>
+                        <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">
+                            ${g.memberCount || 0} уч. • создал ${g.creatorName}
+                        </div>
                     `;
+                    
                     div.addEventListener('click', () => this.selectGroup(g));
                     elements.groupsList.appendChild(div);
                 });
             },
             
             selectUser: async function(u) {
-                if (u.ban) { 
-                    utils.showNotification('Пользователь заблокирован', 'error'); 
-                    return; 
-                }
+                if (u.ban) { utils.showNotification('Пользователь заблокирован', 'error'); return; }
                 
                 selectedUser = u;
                 
@@ -1946,7 +1628,7 @@
                 elements.privateMessageInput.disabled = false;
                 elements.sendPrivateMessage.disabled = false;
                 
-                this.switchTab('users');
+                this.showScreen('private');
                 
                 firebaseFunctions.subscribeToPrivateMessages(currentUser.id, u.id, (msg) => this.addPrivateMessage(msg));
             },
@@ -1968,9 +1650,7 @@
                     elements.leaveChannelBtn.style.display = 'block';
                     
                     this.showScreen('channel');
-                    this.switchTab('channels');
                     
-                    firebaseFunctions.loadChannels((chs) => this.displayChannels(chs));
                     firebaseFunctions.subscribeToChannelMessages(ch.id, (msg) => this.addChannelMessage(msg));
                 }
             },
@@ -1989,18 +1669,13 @@
                     elements.leaveGroupBtn.style.display = 'block';
                     
                     this.showScreen('group');
-                    this.switchTab('groups');
                     
-                    firebaseFunctions.loadGroups((grs) => this.displayGroups(grs));
                     firebaseFunctions.subscribeToGroupMessages(gr.id, (msg) => this.addGroupMessage(msg));
                 }
             },
             
             sendGlobalMessage: function() {
-                if (!currentUser || currentUser.ban) { 
-                    utils.showNotification('Вы заблокированы', 'error'); 
-                    return; 
-                }
+                if (!currentUser || currentUser.ban) { utils.showNotification('Вы заблокированы', 'error'); return; }
                 const msg = elements.globalMessageInput.value.trim();
                 if (msg && firebaseFunctions.sendGlobalMessage(msg, currentUser)) {
                     elements.globalMessageInput.value = '';
@@ -2017,9 +1692,9 @@
             
             sendChannelMessage: function() {
                 if (!currentUser || !selectedChannel || currentUser.ban) return;
-                if (selectedChannel.creatorId !== currentUser.id) { 
-                    utils.showNotification('Только создатель', 'error'); 
-                    return; 
+                if (selectedChannel.creatorId !== currentUser.id) {
+                    utils.showNotification('Только создатель может писать', 'error');
+                    return;
                 }
                 const msg = elements.channelMessageInput.value.trim();
                 if (msg && firebaseFunctions.sendChannelMessage(msg, currentUser, selectedChannel.id)) {
@@ -2049,7 +1724,7 @@
                 div.innerHTML = `
                     <div class="message-content">${utils.sanitizeInput(m.text)}</div>
                     <div class="message-info">
-                        <span style="display:flex; align-items:center; gap:3px; flex-wrap:wrap;">
+                        <span style="display: flex; align-items: center; gap: 3px;">
                             ${isMe ? 'Вы' : m.username}${badges}
                         </span> • ${utils.formatTime(m.timestamp)}
                     </div>
@@ -2075,7 +1750,7 @@
                 div.innerHTML = `
                     <div class="message-content">${utils.sanitizeInput(m.text)}</div>
                     <div class="message-info">
-                        <span style="display:flex; align-items:center; gap:3px; flex-wrap:wrap;">
+                        <span style="display: flex; align-items: center; gap: 3px;">
                             ${isMe ? 'Вы' : m.fromUsername}${badges}
                         </span> • ${utils.formatTime(m.timestamp)}
                     </div>
@@ -2098,7 +1773,7 @@
                 div.innerHTML = `
                     <div class="message-content">${utils.sanitizeInput(m.text)}</div>
                     <div class="message-info">
-                        <span style="display:flex; align-items:center; gap:3px; flex-wrap:wrap;">
+                        <span style="display: flex; align-items: center; gap: 3px;">
                             ${isMe ? 'Вы' : m.username}${badges}
                         </span> • ${utils.formatTime(m.timestamp)}
                     </div>
@@ -2121,7 +1796,7 @@
                 div.innerHTML = `
                     <div class="message-content">${utils.sanitizeInput(m.text)}</div>
                     <div class="message-info">
-                        <span style="display:flex; align-items:center; gap:3px; flex-wrap:wrap;">
+                        <span style="display: flex; align-items: center; gap: 3px;">
                             ${isMe ? 'Вы' : m.username}${badges}
                         </span> • ${utils.formatTime(m.timestamp)}
                     </div>
@@ -2136,17 +1811,14 @@
                 
                 let visible = false;
                 items.forEach(i => {
-                    const text = i.textContent.toLowerCase();
-                    if (text.includes(term.toLowerCase())) { 
-                        i.style.display = 'block'; 
-                        visible = true; 
-                    } else { 
-                        i.style.display = 'none'; 
-                    }
+                    if (i.textContent.toLowerCase().includes(term.toLowerCase())) {
+                        i.style.display = 'block';
+                        visible = true;
+                    } else i.style.display = 'none';
                 });
                 
                 if (!visible && elements.usersList) {
-                    elements.usersList.innerHTML = '<div class="no-data">Ничего не найдено</div>';
+                    elements.usersList.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 20px;">Ничего не найдено</div>';
                 }
             },
             
@@ -2156,17 +1828,14 @@
                 
                 let visible = false;
                 items.forEach(i => {
-                    const text = i.textContent.toLowerCase();
-                    if (text.includes(term.toLowerCase())) { 
-                        i.style.display = 'block'; 
-                        visible = true; 
-                    } else { 
-                        i.style.display = 'none'; 
-                    }
+                    if (i.textContent.toLowerCase().includes(term.toLowerCase())) {
+                        i.style.display = 'block';
+                        visible = true;
+                    } else i.style.display = 'none';
                 });
                 
                 if (!visible && elements.channelsList) {
-                    elements.channelsList.innerHTML = '<div class="no-data">Ничего не найдено</div>';
+                    elements.channelsList.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 20px;">Ничего не найдено</div>';
                 }
             },
             
@@ -2176,26 +1845,20 @@
                 
                 let visible = false;
                 items.forEach(i => {
-                    const text = i.textContent.toLowerCase();
-                    if (text.includes(term.toLowerCase())) { 
-                        i.style.display = 'block'; 
-                        visible = true; 
-                    } else { 
-                        i.style.display = 'none'; 
-                    }
+                    if (i.textContent.toLowerCase().includes(term.toLowerCase())) {
+                        i.style.display = 'block';
+                        visible = true;
+                    } else i.style.display = 'none';
                 });
                 
                 if (!visible && elements.groupsList) {
-                    elements.groupsList.innerHTML = '<div class="no-data">Ничего не найдено</div>';
+                    elements.groupsList.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 20px;">Ничего не найдено</div>';
                 }
             },
             
             createChannel: async function() {
                 const name = elements.newChannelName.value.trim();
-                if (!name) {
-                    utils.showNotification('Введите название', 'error');
-                    return;
-                }
+                if (!name) { utils.showNotification('Введите название', 'error'); return; }
                 
                 const res = await firebaseFunctions.createChannel(name, elements.newChannelDesc.value.trim(), currentUser);
                 if (res.success) {
@@ -2204,17 +1867,12 @@
                     elements.newChannelName.value = '';
                     elements.newChannelDesc.value = '';
                     this.selectChannel(res.channel);
-                } else {
-                    utils.showNotification(res.message, 'error');
-                }
+                } else utils.showNotification(res.message, 'error');
             },
             
             createGroup: async function() {
                 const name = elements.newGroupName.value.trim();
-                if (!name) {
-                    utils.showNotification('Введите название', 'error');
-                    return;
-                }
+                if (!name) { utils.showNotification('Введите название', 'error'); return; }
                 
                 const res = await firebaseFunctions.createGroup(name, elements.newGroupDesc.value.trim(), currentUser);
                 if (res.success) {
@@ -2223,14 +1881,11 @@
                     elements.newGroupName.value = '';
                     elements.newGroupDesc.value = '';
                     this.selectGroup(res.group);
-                } else {
-                    utils.showNotification(res.message, 'error');
-                }
+                } else utils.showNotification(res.message, 'error');
             },
             
             leaveChannel: function() {
                 if (!currentUser || !selectedChannel) return;
-                
                 utils.showConfirm('Покинуть канал', `Покинуть "${selectedChannel.name}"?`, async () => {
                     const res = await firebaseFunctions.leaveChannel(selectedChannel.id, currentUser.id);
                     if (res.success) {
@@ -2245,7 +1900,6 @@
             
             leaveGroup: function() {
                 if (!currentUser || !selectedGroup) return;
-                
                 utils.showConfirm('Покинуть группу', `Покинуть "${selectedGroup.name}"?`, async () => {
                     const res = await firebaseFunctions.leaveGroup(selectedGroup.id, currentUser.id);
                     if (res.success) {
@@ -2267,16 +1921,10 @@
             
             changeUsername: async function() {
                 const nu = elements.changeUsername.value.trim();
-                if (!nu) {
-                    utils.showNotification('Введите новый ник', 'error');
-                    return;
-                }
+                if (!nu) { utils.showNotification('Введите ник', 'error'); return; }
                 
                 const check = utils.checkBannedWords(nu);
-                if (check.banned) { 
-                    utils.showNotification('Ник содержит запрещённые слова', 'error'); 
-                    return; 
-                }
+                if (check.banned) { utils.showNotification('Ник содержит запрещённые слова', 'error'); return; }
                 
                 await firebaseFunctions.updateUser(currentUser.id, {username: nu});
                 currentUser.username = nu;
@@ -2287,21 +1935,11 @@
             
             changeSearchUsername: async function() {
                 const nsu = elements.changeSearchUsername.value.trim().toLowerCase();
-                if (!nsu) {
-                    utils.showNotification('Введите новый юзернейм', 'error');
-                    return;
-                }
-                
-                if (!utils.validateSearchUsername(nsu)) { 
-                    utils.showNotification('Некорректный юзернейм', 'error'); 
-                    return; 
-                }
+                if (!nsu) { utils.showNotification('Введите юзернейм', 'error'); return; }
+                if (!utils.validateSearchUsername(nsu)) { utils.showNotification('Некорректный юзернейм', 'error'); return; }
                 
                 const check = utils.checkBannedWords(nsu);
-                if (check.banned) { 
-                    utils.showNotification('Юзернейм содержит запрещённые слова', 'error'); 
-                    return; 
-                }
+                if (check.banned) { utils.showNotification('Юзернейм содержит запрещённые слова', 'error'); return; }
                 
                 await firebaseFunctions.updateUser(currentUser.id, {searchUsername: nsu});
                 currentUser.searchUsername = nsu;
@@ -2312,13 +1950,13 @@
             showAccountData: function() {
                 elements.accountData.style.display = 'block';
                 elements.accountData.innerHTML = `
-                    <div class="account-data-item"><strong>ID:</strong> ${currentUser.id}</div>
-                    <div class="account-data-item"><strong>Ник:</strong> ${currentUser.username}</div>
-                    <div class="account-data-item"><strong>Юзернейм:</strong> @${currentUser.searchUsername}</div>
-                    <div class="account-data-item"><strong>Email:</strong> ${currentUser.email}</div>
-                    <div class="account-data-item"><strong>Дата:</strong> ${new Date(currentUser.createdAt).toLocaleDateString()}</div>
-                    <div class="account-data-item"><strong>Статус:</strong> ${currentUser.ban ? 'Заблокирован' : 'Активен'}</div>
-                    <div class="account-data-item"><strong>Галочки:</strong> 
+                    <div style="margin-bottom: 8px;"><strong>ID:</strong> ${currentUser.id}</div>
+                    <div style="margin-bottom: 8px;"><strong>Ник:</strong> ${currentUser.username}</div>
+                    <div style="margin-bottom: 8px;"><strong>Юзернейм:</strong> @${currentUser.searchUsername}</div>
+                    <div style="margin-bottom: 8px;"><strong>Email:</strong> ${currentUser.email}</div>
+                    <div style="margin-bottom: 8px;"><strong>Дата:</strong> ${new Date(currentUser.createdAt).toLocaleDateString()}</div>
+                    <div style="margin-bottom: 8px;"><strong>Статус:</strong> ${currentUser.ban ? 'Заблокирован' : 'Активен'}</div>
+                    <div><strong>Галочки:</strong> 
                         ${currentUser.grant ? '🔵' : ''} 
                         ${currentUser.checkReal ? '🟢' : ''} 
                         ${currentUser.special ? '🌸' : ''}
@@ -2328,11 +1966,8 @@
             
             contactSupport: function() {
                 const sup = allUsers.find(u => u.searchUsername === 'support');
-                if (sup) {
-                    this.selectUser(sup);
-                } else {
-                    utils.showNotification('Поддержка не найдена', 'error');
-                }
+                if (sup) this.selectUser(sup);
+                else utils.showNotification('Поддержка не найдена', 'error');
             }
         };
         
