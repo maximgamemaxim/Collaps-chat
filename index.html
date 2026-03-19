@@ -3,92 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Collaps Chat - Социальная сеть</title>
+    <title>Collaps Chat</title>
     <style>
-        :root {
-            --bg-primary: #ffffff;
-            --bg-secondary: #f8f9fa;
-            --bg-sidebar: #f8f9fa;
-            --bg-header: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --text-primary: #333333;
-            --text-secondary: #666666;
-            --text-muted: #95a5a6;
-            --border-color: #e9ecef;
-            --message-bg: #f1f3f4;
-            --message-sent-bg: #667eea;
-            --message-sent-text: #ffffff;
-            --btn-primary-bg: #ffffff;
-            --btn-primary-text: #667eea;
-            --btn-secondary-bg: #667eea;
-            --btn-secondary-text: #ffffff;
-            --btn-google-bg: #ffffff;
-            --btn-google-text: #333333;
-            --btn-google-border: #dadce0;
-            --btn-disabled-bg: #cccccc;
-            --btn-disabled-text: #666666;
-            --verified-bg: #1DA1F2;
-            --checkreal-bg: #2ecc71;
-            --special-bg: #ff69b4;
-            --banned-bg: #e74c3c;
-            --online-color: #2ecc71;
-            --danger-color: #e74c3c;
-            --shadow: 0 20px 60px rgba(0,0,0,0.1);
-        }
-        
-        [data-theme="dark"] {
-            --bg-primary: #1a1a1a;
-            --bg-secondary: #2d2d2d;
-            --bg-sidebar: #252525;
-            --bg-header: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
-            --text-primary: #ffffff;
-            --text-secondary: #cccccc;
-            --text-muted: #888888;
-            --border-color: #444444;
-            --message-bg: #2d2d2d;
-            --message-sent-bg: #4a5568;
-            --message-sent-text: #ffffff;
-            --btn-primary-bg: #4a5568;
-            --btn-primary-text: #ffffff;
-            --btn-secondary-bg: #667eea;
-            --btn-secondary-text: #ffffff;
-            --btn-google-bg: #2d2d2d;
-            --btn-google-text: #ffffff;
-            --btn-google-border: #444444;
-            --btn-disabled-bg: #444444;
-            --btn-disabled-text: #777777;
-            --verified-bg: #1DA1F2;
-            --checkreal-bg: #2ecc71;
-            --special-bg: #ff69b4;
-            --banned-bg: #e74c3c;
-            --online-color: #2ecc71;
-            --danger-color: #e74c3c;
-            --shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
+        :root {
+            --bg: #ffffff;
+            --bg-secondary: #f5f5f5;
+            --text: #333333;
+            --text-secondary: #666666;
+            --border: #e0e0e0;
+            --primary: #667eea;
+            --message-bg: #f0f0f0;
+            --message-sent: #667eea;
+            --danger: #e53e3e;
+            --online: #48bb78;
+            --badge-blue: #3182ce;
+            --badge-green: #38a169;
+            --badge-pink: #d53f8c;
+        }
+
+        [data-theme="dark"] {
+            --bg: #1a202c;
+            --bg-secondary: #2d3748;
+            --text: #f7fafc;
+            --text-secondary: #cbd5e0;
+            --border: #4a5568;
+            --primary: #667eea;
+            --message-bg: #2d3748;
+            --message-sent: #4c51bf;
+            --danger: #fc8181;
+            --online: #68d391;
+            --badge-blue: #4299e1;
+            --badge-green: #48bb78;
+            --badge-pink: #ed64a6;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
             height: 100vh;
             overflow: hidden;
         }
-        
-        .app-container {
+
+        .app {
             height: 100vh;
             display: flex;
             flex-direction: column;
-            background: var(--bg-primary);
         }
-        
-        /* Шапка */
+
         .header {
-            background: var(--bg-header);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 12px 20px;
             display: flex;
@@ -96,7 +66,7 @@
             align-items: center;
             flex-shrink: 0;
         }
-        
+
         .logo {
             font-size: 20px;
             font-weight: 600;
@@ -104,56 +74,51 @@
             align-items: center;
             gap: 12px;
         }
-        
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .username {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            font-weight: 500;
-        }
-        
-        .theme-toggle {
+
+        .theme-btn {
             background: rgba(255,255,255,0.2);
             border: none;
             color: white;
             padding: 6px 12px;
             border-radius: 20px;
             cursor: pointer;
+            font-size: 13px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .username {
             display: flex;
             align-items: center;
             gap: 4px;
-            font-size: 13px;
         }
-        
-        /* Основной контент */
-        .main-content {
+
+        .main {
             flex: 1;
             display: flex;
             min-height: 0;
-            overflow: hidden;
+            background: var(--bg);
         }
-        
-        /* Сайдбар */
+
         .sidebar {
             width: 260px;
-            background: var(--bg-sidebar);
-            border-right: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border);
             display: flex;
             flex-direction: column;
-            overflow: hidden;
+            flex-shrink: 0;
         }
-        
+
         .tabs {
             display: flex;
-            border-bottom: 2px solid var(--border-color);
+            border-bottom: 2px solid var(--border);
+            flex-shrink: 0;
         }
-        
+
         .tab {
             flex: 1;
             padding: 12px;
@@ -164,72 +129,55 @@
             font-size: 14px;
             border-bottom: 3px solid transparent;
         }
-        
+
         .tab.active {
-            color: #667eea;
-            border-bottom-color: #667eea;
+            color: var(--primary);
+            border-bottom-color: var(--primary);
         }
-        
-        .tab-content-container {
-            flex: 1;
-            overflow: hidden;
-            position: relative;
-        }
-        
+
         .tab-content {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            flex: 1;
             overflow-y: auto;
             padding: 16px;
             display: none;
         }
-        
+
         .tab-content.active {
             display: block;
         }
-        
-        /* Списки */
+
         .users-list, .channels-list, .groups-list {
             display: flex;
             flex-direction: column;
             gap: 8px;
         }
-        
+
         .user-item, .channel-item, .group-item {
             padding: 12px;
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
             cursor: pointer;
         }
-        
+
         .user-item:hover, .channel-item:hover, .group-item:hover {
-            border-color: #667eea;
+            border-color: var(--primary);
         }
-        
-        .user-item.active, .channel-item.active, .group-item.active {
-            border-color: #667eea;
-            background: rgba(102,126,234,0.05);
-        }
-        
-        /* Бейджи */
+
         .badge {
             display: inline-block;
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
             border-radius: 50%;
             margin-left: 4px;
             position: relative;
         }
-        
-        .verified-badge { background: var(--verified-bg); }
-        .checkreal-badge { background: var(--checkreal-bg); }
-        .special-badge { background: var(--special-bg); }
-        .banned-badge { background: var(--banned-bg); }
-        
+
+        .badge-blue { background: var(--badge-blue); }
+        .badge-green { background: var(--badge-green); }
+        .badge-pink { background: var(--badge-pink); }
+        .badge-red { background: var(--danger); }
+
         .badge::after {
             content: '✓';
             position: absolute;
@@ -237,54 +185,51 @@
             left: 50%;
             transform: translate(-50%, -50%);
             color: white;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: bold;
         }
-        
-        .special-badge::after { content: '★'; }
-        .banned-badge::after { content: '⛔'; font-size: 10px; }
-        
-        /* Контентная область */
-        .content {
+
+        .badge-pink::after { content: '★'; }
+        .badge-red::after { content: '⛔'; font-size: 9px; }
+
+        .chat-area {
             flex: 1;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
-            background: var(--bg-primary);
+            background: var(--bg);
+            min-width: 0;
         }
-        
-        /* Экраны */
+
         .screen {
             flex: 1;
             display: none;
             flex-direction: column;
-            overflow: hidden;
+            height: 100%;
         }
-        
+
         .screen.active {
             display: flex;
         }
-        
-        /* Чат */
+
         .chat-container {
             flex: 1;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
             height: 100%;
         }
-        
+
         .chat-header {
             padding: 16px 20px;
             background: var(--bg-secondary);
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-weight: 500;
+            flex-shrink: 0;
         }
-        
-        .chat-messages {
+
+        .messages {
             flex: 1;
             overflow-y: auto;
             padding: 20px;
@@ -292,126 +237,127 @@
             flex-direction: column;
             gap: 12px;
         }
-        
+
         .message {
             max-width: 70%;
             display: flex;
             flex-direction: column;
         }
-        
+
         .message.sent {
             align-self: flex-end;
         }
-        
+
         .message-content {
             padding: 10px 14px;
             border-radius: 18px;
             background: var(--message-bg);
-            color: var(--text-primary);
+            color: var(--text);
             word-break: break-word;
         }
-        
+
         .message.sent .message-content {
-            background: var(--message-sent-bg);
+            background: var(--message-sent);
             color: white;
         }
-        
+
         .message-info {
             font-size: 11px;
-            color: var(--text-muted);
+            color: var(--text-secondary);
             margin-top: 4px;
             display: flex;
             align-items: center;
             gap: 4px;
         }
-        
+
         .chat-input {
             padding: 16px 20px;
             background: var(--bg-secondary);
-            border-top: 1px solid var(--border-color);
+            border-top: 1px solid var(--border);
             display: flex;
             gap: 12px;
+            flex-shrink: 0;
         }
-        
+
         .chat-input input {
             flex: 1;
             padding: 10px 16px;
-            border: 2px solid var(--border-color);
+            border: 2px solid var(--border);
             border-radius: 24px;
-            background: var(--bg-primary);
-            color: var(--text-primary);
+            background: var(--bg);
+            color: var(--text);
             font-size: 14px;
         }
-        
+
         .chat-input input:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: var(--primary);
         }
-        
+
         .chat-input button {
             width: 44px;
             height: 44px;
             border-radius: 50%;
             border: none;
-            background: var(--btn-secondary-bg);
+            background: var(--primary);
             color: white;
             font-size: 18px;
             cursor: pointer;
         }
-        
-        /* Формы */
+
         .form-container {
             max-width: 360px;
             margin: auto;
             padding: 32px;
             background: var(--bg-secondary);
-            border-radius: 20px;
+            border-radius: 16px;
         }
-        
+
         .form-group {
             margin-bottom: 16px;
         }
-        
+
         .form-group label {
             display: block;
             margin-bottom: 6px;
-            font-weight: 500;
             font-size: 14px;
+            font-weight: 500;
         }
-        
+
         .form-group input {
             width: 100%;
-            padding: 12px;
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            font-size: 14px;
+            padding: 10px 12px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg);
+            color: var(--text);
         }
-        
+
         .btn {
-            padding: 12px 20px;
+            padding: 10px 20px;
             border: none;
-            border-radius: 12px;
+            border-radius: 8px;
             font-weight: 600;
             font-size: 14px;
             cursor: pointer;
         }
-        
+
         .btn-primary {
-            background: var(--btn-primary-bg);
-            color: var(--btn-primary-text);
-        }
-        
-        .btn-secondary {
-            background: var(--btn-secondary-bg);
+            background: var(--primary);
             color: white;
+            width: 100%;
         }
-        
+
+        .btn-secondary {
+            background: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
         .btn-google {
-            background: var(--btn-google-bg);
-            color: var(--btn-google-text);
-            border: 1px solid var(--btn-google-border);
+            background: white;
+            color: #333;
+            border: 1px solid #ddd;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -419,69 +365,67 @@
             width: 100%;
             margin-bottom: 16px;
         }
-        
-        .btn-danger {
-            background: var(--danger-color);
+
+        [data-theme="dark"] .btn-google {
+            background: #2d3748;
             color: white;
+            border-color: #4a5568;
         }
-        
+
         .divider {
             display: flex;
             align-items: center;
             gap: 8px;
             margin: 16px 0;
-            color: var(--text-muted);
+            color: var(--text-secondary);
         }
-        
+
         .divider-line {
             flex: 1;
             height: 1px;
-            background: var(--border-color);
+            background: var(--border);
         }
-        
+
         .checkbox-group {
             display: flex;
             align-items: center;
             gap: 8px;
             margin: 16px 0;
         }
-        
-        /* Настройки */
+
         .settings-form {
             max-width: 500px;
             margin: 20px auto;
             padding: 24px;
             background: var(--bg-secondary);
-            border-radius: 20px;
+            border-radius: 16px;
         }
-        
+
         .settings-section {
             margin-bottom: 24px;
         }
-        
+
         .settings-section h3 {
             margin-bottom: 12px;
             font-size: 16px;
         }
-        
+
         .account-data {
-            background: var(--bg-primary);
+            background: var(--bg);
             padding: 16px;
-            border-radius: 12px;
+            border-radius: 8px;
             margin-top: 12px;
         }
-        
-        /* Футер */
+
         .footer {
             padding: 10px;
             text-align: center;
             background: var(--bg-secondary);
-            border-top: 1px solid var(--border-color);
+            border-top: 1px solid var(--border);
             font-size: 12px;
             flex-shrink: 0;
         }
-        
-        /* Модалка */
+
         .modal {
             position: fixed;
             top: 0;
@@ -494,90 +438,72 @@
             align-items: center;
             z-index: 1000;
         }
-        
+
         .modal-content {
-            background: var(--bg-primary);
+            background: var(--bg);
             padding: 24px;
-            border-radius: 20px;
+            border-radius: 16px;
             max-width: 400px;
             width: 90%;
         }
-        
+
         .modal-buttons {
             display: flex;
             gap: 12px;
             margin-top: 20px;
         }
-        
-        .modal-buttons button {
-            flex: 1;
-            padding: 12px;
-        }
-        
-        /* Уведомления */
+
         .notification {
             position: fixed;
             top: 20px;
             left: 50%;
             transform: translateX(-50%);
-            background: var(--bg-primary);
-            color: var(--text-primary);
+            background: var(--bg);
+            color: var(--text);
             padding: 12px 24px;
             border-radius: 30px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             z-index: 1001;
             display: none;
         }
-        
-        /* Адаптация */
+
         @media (max-width: 768px) {
-            .main-content {
+            .main {
                 flex-direction: column;
             }
-            
+
             .sidebar {
                 width: 100%;
                 height: 140px;
                 border-right: none;
-                border-bottom: 1px solid var(--border-color);
+                border-bottom: 1px solid var(--border);
             }
-            
-            .tabs {
-                height: 48px;
-            }
-            
+
             .message {
                 max-width: 85%;
-            }
-            
-            .form-container {
-                margin: 16px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <!-- Шапка -->
+    <div class="app">
         <div class="header">
             <div class="logo">
                 <span>Collaps Chat</span>
-                <button class="theme-toggle" id="themeToggle">
+                <button class="theme-btn" id="themeToggle">
                     <span id="themeIcon">🌙</span>
                     <span id="themeText">Тёмная</span>
                 </button>
             </div>
             <div class="user-info" id="userInfo">
                 <span class="username" id="usernameDisplay">Гость</span>
-                <button class="btn btn-primary" id="logoutBtn" style="display: none;">Выйти</button>
-                <button class="btn btn-primary" id="settingsBtn" style="display: none;">⚙️</button>
+                <button class="btn" id="logoutBtn" style="display: none;">Выйти</button>
+                <button class="btn" id="settingsBtn" style="display: none;">⚙️</button>
             </div>
         </div>
-        
-        <!-- Основной контент -->
-        <div class="main-content">
-            <!-- Сайдбар (после входа) -->
+
+        <div class="main">
             <div class="sidebar" id="sidebar" style="display: none;">
                 <div class="tabs">
                     <div class="tab active" data-tab="global">💬 Общий</div>
@@ -585,71 +511,60 @@
                     <div class="tab" data-tab="groups">👥 Группы</div>
                     <div class="tab" data-tab="users">👤 Люди</div>
                 </div>
-                
-                <div class="tab-content-container">
-                    <!-- Общий чат -->
-                    <div class="tab-content active" id="globalTabContent">
-                        <div style="margin-bottom: 12px; color: var(--text-secondary);" id="globalUsersCount">0 онлайн</div>
-                        <div class="chat-container" style="height: calc(100% - 40px);">
-                            <div class="chat-messages" id="globalMessages"></div>
-                            <div class="chat-input">
-                                <input type="text" id="globalMessageInput" placeholder="Сообщение...">
-                                <button id="sendGlobalMessage">➤</button>
-                            </div>
-                        </div>
+
+                <div class="tab-content active" id="globalTabContent">
+                    <div style="margin-bottom: 12px; color: var(--text-secondary);" id="globalUsersCount">0 онлайн</div>
+                    <div class="messages" id="globalMessages" style="height: calc(100% - 100px);"></div>
+                    <div style="display: flex; gap: 8px; margin-top: 12px;">
+                        <input type="text" id="globalMessageInput" placeholder="Сообщение..." style="flex: 1; padding: 8px 12px; border: 1px solid var(--border); border-radius: 20px; background: var(--bg); color: var(--text);">
+                        <button class="btn" id="sendGlobalMessage" style="width: 40px; height: 40px; border-radius: 50%; background: var(--primary); color: white;">➤</button>
                     </div>
-                    
-                    <!-- Каналы -->
-                    <div class="tab-content" id="channelsTabContent">
-                        <input type="text" id="searchChannel" placeholder="Поиск канала..." style="width: 100%; padding: 10px; margin-bottom: 12px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-primary); color: var(--text-primary);">
-                        <div class="channels-list" id="channelsList"></div>
-                        <button class="btn btn-secondary" id="createChannelBtn" style="width: 100%; margin-top: 12px;">+ Создать канал</button>
-                        <div class="channel-form" id="channelForm" style="display: none; margin-top: 12px;">
-                            <input type="text" id="newChannelName" placeholder="Название" style="width: 100%; margin-bottom: 8px;">
-                            <textarea id="newChannelDesc" placeholder="Описание" rows="2" style="width: 100%; margin-bottom: 8px;"></textarea>
-                            <div style="display: flex; gap: 8px;">
-                                <button class="btn btn-secondary" id="saveChannelBtn" style="flex: 1;">Создать</button>
-                                <button class="btn btn-primary" id="cancelChannelBtn" style="flex: 1;">Отмена</button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Группы -->
-                    <div class="tab-content" id="groupsTabContent">
-                        <input type="text" id="searchGroup" placeholder="Поиск группы..." style="width: 100%; padding: 10px; margin-bottom: 12px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-primary); color: var(--text-primary);">
-                        <div class="groups-list" id="groupsList"></div>
-                        <button class="btn btn-secondary" id="createGroupBtn" style="width: 100%; margin-top: 12px;">+ Создать группу</button>
-                        <div class="group-form" id="groupForm" style="display: none; margin-top: 12px;">
-                            <input type="text" id="newGroupName" placeholder="Название" style="width: 100%; margin-bottom: 8px;">
-                            <textarea id="newGroupDesc" placeholder="Описание" rows="2" style="width: 100%; margin-bottom: 8px;"></textarea>
-                            <div style="display: flex; gap: 8px;">
-                                <button class="btn btn-secondary" id="saveGroupBtn" style="flex: 1;">Создать</button>
-                                <button class="btn btn-primary" id="cancelGroupBtn" style="flex: 1;">Отмена</button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Пользователи -->
-                    <div class="tab-content" id="usersTabContent">
-                        <div class="users-header" id="usersToggle" style="display: flex; justify-content: space-between; padding: 10px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; margin-bottom: 12px; cursor: pointer;">
-                            <span>Все пользователи</span>
-                            <span id="usersToggleIcon">▼</span>
-                        </div>
-                        <div class="users-collapsed" id="usersCollapsed">
-                            <input type="text" id="searchUser" placeholder="Поиск пользователя..." style="width: 100%; padding: 10px; margin-bottom: 12px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-primary); color: var(--text-primary);">
-                            <div class="users-list" id="usersList"></div>
+                </div>
+
+                <div class="tab-content" id="channelsTabContent">
+                    <input type="text" id="searchChannel" placeholder="Поиск канала..." style="width: 100%; padding: 8px; margin-bottom: 12px; border: 1px solid var(--border); border-radius: 4px; background: var(--bg); color: var(--text);">
+                    <div class="channels-list" id="channelsList"></div>
+                    <button class="btn btn-secondary" id="createChannelBtn" style="width: 100%; margin-top: 12px;">+ Создать канал</button>
+                    <div id="channelForm" style="display: none; margin-top: 12px;">
+                        <input type="text" id="newChannelName" placeholder="Название" style="width: 100%; margin-bottom: 8px; padding: 8px;">
+                        <textarea id="newChannelDesc" placeholder="Описание" rows="2" style="width: 100%; margin-bottom: 8px; padding: 8px;"></textarea>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn-secondary" id="saveChannelBtn" style="flex: 1;">Создать</button>
+                            <button class="btn" id="cancelChannelBtn" style="flex: 1;">Отмена</button>
                         </div>
                     </div>
                 </div>
+
+                <div class="tab-content" id="groupsTabContent">
+                    <input type="text" id="searchGroup" placeholder="Поиск группы..." style="width: 100%; padding: 8px; margin-bottom: 12px; border: 1px solid var(--border); border-radius: 4px; background: var(--bg); color: var(--text);">
+                    <div class="groups-list" id="groupsList"></div>
+                    <button class="btn btn-secondary" id="createGroupBtn" style="width: 100%; margin-top: 12px;">+ Создать группу</button>
+                    <div id="groupForm" style="display: none; margin-top: 12px;">
+                        <input type="text" id="newGroupName" placeholder="Название" style="width: 100%; margin-bottom: 8px; padding: 8px;">
+                        <textarea id="newGroupDesc" placeholder="Описание" rows="2" style="width: 100%; margin-bottom: 8px; padding: 8px;"></textarea>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn-secondary" id="saveGroupBtn" style="flex: 1;">Создать</button>
+                            <button class="btn" id="cancelGroupBtn" style="flex: 1;">Отмена</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="usersTabContent">
+                    <div style="display: flex; justify-content: space-between; padding: 8px; background: var(--bg); border: 1px solid var(--border); border-radius: 4px; margin-bottom: 12px; cursor: pointer;" id="usersToggle">
+                        <span>Все пользователи</span>
+                        <span id="usersToggleIcon">▼</span>
+                    </div>
+                    <div id="usersCollapsed">
+                        <input type="text" id="searchUser" placeholder="Поиск пользователя..." style="width: 100%; padding: 8px; margin-bottom: 12px; border: 1px solid var(--border); border-radius: 4px; background: var(--bg); color: var(--text);">
+                        <div class="users-list" id="usersList"></div>
+                    </div>
+                </div>
             </div>
-            
-            <!-- Контентная область -->
-            <div class="content">
-                <!-- Экран входа -->
+
+            <div class="chat-area">
                 <div class="screen active" id="loginScreen">
                     <div class="form-container">
                         <h2 style="text-align: center; margin-bottom: 24px;">Вход</h2>
-                        
                         <button class="btn btn-google" id="googleLoginBtn">
                             <svg width="18" height="18" viewBox="0 0 24 24">
                                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -657,35 +572,31 @@
                                 <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
                                 <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                             </svg>
-                            Войти через Google
+                            Google
                         </button>
-                        
                         <div class="divider">
                             <span class="divider-line"></span>
                             <span>или</span>
                             <span class="divider-line"></span>
                         </div>
-                        
                         <div class="form-group">
                             <label>Юзернейм или email</label>
-                            <input type="text" id="loginUsername" placeholder="Введите...">
+                            <input type="text" id="loginUsername">
                         </div>
                         <div class="form-group">
                             <label>Пароль</label>
-                            <input type="password" id="loginPassword" placeholder="Введите...">
+                            <input type="password" id="loginPassword">
                         </div>
-                        <button class="btn btn-primary" style="width: 100%;" id="loginBtn">Войти</button>
+                        <button class="btn btn-primary" id="loginBtn">Войти</button>
                         <p style="text-align: center; margin-top: 16px;">
                             Нет аккаунта? <a href="#" id="showRegister">Регистрация</a>
                         </p>
                     </div>
                 </div>
-                
-                <!-- Экран регистрации -->
+
                 <div class="screen" id="registerScreen">
                     <div class="form-container">
                         <h2 style="text-align: center; margin-bottom: 24px;">Регистрация</h2>
-                        
                         <button class="btn btn-google" id="googleRegisterBtn">
                             <svg width="18" height="18" viewBox="0 0 24 24">
                                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -693,162 +604,144 @@
                                 <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
                                 <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                             </svg>
-                            Зарегистрироваться через Google
+                            Google
                         </button>
-                        
                         <div class="divider">
                             <span class="divider-line"></span>
                             <span>или</span>
                             <span class="divider-line"></span>
                         </div>
-                        
                         <div class="form-group">
                             <label>Юзернейм</label>
-                            <input type="text" id="regUsername" placeholder="Придумайте...">
+                            <input type="text" id="regUsername">
                         </div>
                         <div class="form-group">
                             <label>Юзернейм для поиска</label>
-                            <input type="text" id="regSearchUsername" placeholder="Латиница, цифры, _">
+                            <input type="text" id="regSearchUsername" placeholder="латиница, цифры, _">
                         </div>
                         <div class="form-group">
                             <label>Email</label>
-                            <input type="email" id="regEmail" placeholder="example@mail.com">
+                            <input type="email" id="regEmail">
                         </div>
                         <div class="form-group">
                             <label>Пароль</label>
-                            <input type="password" id="regPassword" placeholder="Не менее 6 символов">
+                            <input type="password" id="regPassword">
                         </div>
-                        
                         <div class="checkbox-group">
                             <input type="checkbox" id="privacyCheckbox">
-                            <label for="privacyCheckbox">Я принимаю <a href="privacy.html" target="_blank">Политику</a></label>
+                            <label>Я принимаю <a href="privacy.html" target="_blank">Политику</a></label>
                         </div>
-                        
-                        <button class="btn btn-primary" style="width: 100%;" id="registerBtn" disabled>Зарегистрироваться</button>
+                        <button class="btn btn-primary" id="registerBtn" disabled>Зарегистрироваться</button>
                         <p style="text-align: center; margin-top: 16px;">
                             Уже есть аккаунт? <a href="#" id="showLogin">Войти</a>
                         </p>
                     </div>
                 </div>
-                
-                <!-- Экран канала -->
+
                 <div class="screen" id="channelScreen">
                     <div class="chat-container">
                         <div class="chat-header">
                             <span id="channelTitle">Канал</span>
                             <div style="display: flex; gap: 12px;">
                                 <span id="channelMembers">0</span>
-                                <button class="btn btn-danger" id="leaveChannelBtn" style="display: none;">Покинуть</button>
+                                <button class="btn" id="leaveChannelBtn" style="display: none; background: var(--danger); color: white;">Покинуть</button>
                             </div>
                         </div>
-                        <div class="chat-messages" id="channelMessages"></div>
+                        <div class="messages" id="channelMessages"></div>
                         <div class="chat-input">
                             <input type="text" id="channelMessageInput" placeholder="Только создатель может писать" disabled>
                             <button id="sendChannelMessage" disabled>➤</button>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Экран группы -->
+
                 <div class="screen" id="groupScreen">
                     <div class="chat-container">
                         <div class="chat-header">
                             <span id="groupTitle">Группа</span>
                             <div style="display: flex; gap: 12px;">
                                 <span id="groupMembers">0</span>
-                                <button class="btn btn-danger" id="leaveGroupBtn" style="display: none;">Покинуть</button>
+                                <button class="btn" id="leaveGroupBtn" style="display: none; background: var(--danger); color: white;">Покинуть</button>
                             </div>
                         </div>
-                        <div class="chat-messages" id="groupMessages"></div>
+                        <div class="messages" id="groupMessages"></div>
                         <div class="chat-input">
                             <input type="text" id="groupMessageInput" placeholder="Сообщение...">
                             <button id="sendGroupMessage">➤</button>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Экран личных сообщений -->
+
                 <div class="screen" id="privateChatScreen">
                     <div class="chat-container">
-                        <div class="chat-header" id="privateChatHeader">💭 Личные сообщения</div>
-                        <div class="chat-messages" id="privateMessages"></div>
+                        <div class="chat-header" id="privateChatHeader">💭 Личные</div>
+                        <div class="messages" id="privateMessages"></div>
                         <div class="chat-input">
                             <input type="text" id="privateMessageInput" placeholder="Сообщение...">
                             <button id="sendPrivateMessage">➤</button>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Экран настроек -->
+
                 <div class="screen" id="settingsScreen">
                     <div class="settings-form">
                         <h2 style="text-align: center; margin-bottom: 24px;">Настройки</h2>
-                        
                         <div class="settings-section">
                             <h3>📝 Сменить ник</h3>
                             <input type="text" id="changeUsername" placeholder="Новый ник" style="width: 100%; margin-bottom: 12px;">
                             <button class="btn btn-secondary" id="saveUsernameBtn" style="width: 100%;">Сохранить</button>
                         </div>
-                        
                         <div class="settings-section">
                             <h3>🔗 Сменить юзернейм</h3>
                             <input type="text" id="changeSearchUsername" placeholder="Новый юзернейм" style="width: 100%; margin-bottom: 12px;">
                             <button class="btn btn-secondary" id="saveSearchUsernameBtn" style="width: 100%;">Сохранить</button>
                         </div>
-                        
                         <div class="settings-section">
                             <h3>🎨 Тема</h3>
                             <button class="btn btn-secondary" id="toggleThemeBtn" style="width: 100%;">Переключить</button>
                         </div>
-                        
                         <div class="settings-section">
                             <h3>📊 Данные аккаунта</h3>
                             <button class="btn btn-secondary" id="showAccountDataBtn" style="width: 100%; margin-bottom: 12px;">Показать</button>
                             <div class="account-data" id="accountData" style="display: none;"></div>
                         </div>
-                        
                         <div class="settings-section">
                             <h3>⚠️ Опасная зона</h3>
-                            <button class="btn btn-danger" id="deleteAccountBtn" style="width: 100%;">Удалить аккаунт</button>
+                            <button class="btn" id="deleteAccountBtn" style="width: 100%; background: var(--danger); color: white;">Удалить аккаунт</button>
                         </div>
-                        
                         <div class="settings-section">
                             <h3>🆘 Поддержка</h3>
                             <button class="btn btn-secondary" id="contactSupportBtn" style="width: 100%;">@support</button>
                         </div>
-                        
-                        <button class="btn btn-primary" id="backToChatBtn" style="width: 100%;">← Назад</button>
+                        <button class="btn btn-secondary" id="backToChatBtn" style="width: 100%;">← Назад</button>
                     </div>
                 </div>
             </div>
         </div>
-        
-        <!-- Футер -->
+
         <div class="footer">
-            © 2026 Collaps Chat | <a href="privacy.html" target="_blank">Политика конфиденциальности</a>
+            © 2026 Collaps Chat | <a href="privacy.html" target="_blank">Политика</a>
         </div>
     </div>
-    
-    <!-- Модалка подтверждения -->
+
     <div class="modal" id="confirmModal">
         <div class="modal-content">
             <h3 id="confirmTitle">Подтверждение</h3>
             <p id="confirmMessage" style="margin: 16px 0;">Вы уверены?</p>
             <div class="modal-buttons">
-                <button class="btn btn-danger" id="confirmYes">Да</button>
-                <button class="btn btn-primary" id="confirmNo">Нет</button>
+                <button class="btn" id="confirmYes" style="background: var(--danger); color: white;">Да</button>
+                <button class="btn btn-secondary" id="confirmNo">Нет</button>
             </div>
         </div>
     </div>
-    
-    <!-- Уведомления -->
+
     <div class="notification" id="notification"></div>
-    
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
         import { getDatabase, ref, set, push, onChildAdded, query, orderByChild, equalTo, get, onValue, remove, update } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
-        
+
         const firebaseConfig = {
             apiKey: "AIzaSyDdey6ZroD4KsiPiD2dnVfQe3I3OW3MPV8",
             authDomain: "max-chat-f9319.firebaseapp.com",
@@ -858,21 +751,21 @@
             messagingSenderId: "1013158224179",
             appId: "1:1013158224179:web:c4a052ca2e86034de59e46"
         };
-        
+
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
-        
+
         const bannedWords = ['блять', 'блядь', 'хуй', 'пизда', 'ебать', 'fuck', 'shit', 'bitch'];
-        
+
         let currentUser = null;
         let selectedUser = null;
         let selectedChannel = null;
         let selectedGroup = null;
         let allUsers = [];
         let pendingAction = null;
-        
+
         const elements = {
             loginBtn: document.getElementById('loginBtn'),
             registerBtn: document.getElementById('registerBtn'),
@@ -964,7 +857,7 @@
             confirmMessage: document.getElementById('confirmMessage'),
             tabs: document.querySelectorAll('.tab')
         };
-        
+
         const utils = {
             showNotification: (msg, type = 'success') => {
                 elements.notification.textContent = msg;
@@ -984,9 +877,9 @@
                 return new Date(ts).toLocaleDateString('ru-RU');
             },
             formatOnlineStatus: (u) => {
-                if (u.ban) return '<span style="color:var(--banned-bg);">⛔ заблокирован</span>';
-                if (u.online) return '<span style="color:var(--online-color);">● онлайн</span>';
-                return '<span style="color:var(--text-muted);">● офлайн</span>';
+                if (u.ban) return '<span style="color: var(--danger);">⛔ заблокирован</span>';
+                if (u.online) return '<span style="color: var(--online);">● онлайн</span>';
+                return '<span style="color: var(--text-secondary);">● офлайн</span>';
             },
             showConfirm: (title, msg, cb) => {
                 elements.confirmTitle.textContent = title;
@@ -1008,7 +901,7 @@
             },
             sanitizeInput: (text) => text.replace(/[<>"']/g, (c) => ({'<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'})[c])
         };
-        
+
         const firebaseFunctions = {
             checkUserBan: async (id) => {
                 const snap = await get(ref(database, `users/${id}`));
@@ -1243,7 +1136,7 @@
                 }
             }
         };
-        
+
         const eventHandlers = {
             init: function() {
                 if (localStorage.getItem('collapsChatTheme') === 'dark') this.toggleTheme();
@@ -1469,10 +1362,10 @@
             
             updateUsernameDisplay: function() {
                 let html = currentUser.username;
-                if (currentUser.grant) html += ' <span class="badge verified-badge"></span>';
-                else if (currentUser.checkReal) html += ' <span class="badge checkreal-badge"></span>';
-                else if (currentUser.special) html += ' <span class="badge special-badge"></span>';
-                if (currentUser.ban) html += ' <span class="badge banned-badge"></span>';
+                if (currentUser.grant) html += ' <span class="badge badge-blue"></span>';
+                else if (currentUser.checkReal) html += ' <span class="badge badge-green"></span>';
+                else if (currentUser.special) html += ' <span class="badge badge-pink"></span>';
+                if (currentUser.ban) html += ' <span class="badge badge-red"></span>';
                 elements.usernameDisplay.innerHTML = html;
             },
             
@@ -1506,24 +1399,18 @@
                 } else if (tab === 'channels') {
                     elements.channelsTabContent.classList.add('active');
                     if (!selectedChannel) {
-                        elements.channelMessages.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 20px;">Выберите канал</div>';
-                        elements.channelMessageInput.disabled = true;
-                        elements.sendChannelMessage.disabled = true;
-                        elements.leaveChannelBtn.style.display = 'none';
+                        elements.channelMessages.innerHTML = '<div style="text-align: center; color: var(--text-secondary); padding: 20px;">Выберите канал</div>';
                     }
                 } else if (tab === 'groups') {
                     elements.groupsTabContent.classList.add('active');
                     if (!selectedGroup) {
-                        elements.groupMessages.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 20px;">Выберите группу</div>';
-                        elements.groupMessageInput.disabled = true;
-                        elements.sendGroupMessage.disabled = true;
-                        elements.leaveGroupBtn.style.display = 'none';
+                        elements.groupMessages.innerHTML = '<div style="text-align: center; color: var(--text-secondary); padding: 20px;">Выберите группу</div>';
                     }
                 } else if (tab === 'users') {
                     elements.usersTabContent.classList.add('active');
                     if (!selectedUser) {
                         elements.privateChatHeader.innerHTML = '💭 Личные сообщения';
-                        elements.privateMessages.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 20px;">Выберите пользователя</div>';
+                        elements.privateMessages.innerHTML = '<div style="text-align: center; color: var(--text-secondary); padding: 20px;">Выберите пользователя</div>';
                         elements.privateMessageInput.disabled = true;
                         elements.sendPrivateMessage.disabled = true;
                     }
@@ -1536,7 +1423,7 @@
                 
                 const filtered = users.filter(u => !currentUser || u.id !== currentUser.id);
                 if (!filtered.length) {
-                    elements.usersList.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 20px;">Нет пользователей</div>';
+                    elements.usersList.innerHTML = '<div style="text-align: center; color: var(--text-secondary); padding: 20px;">Нет пользователей</div>';
                     return;
                 }
                 
@@ -1545,10 +1432,10 @@
                     div.className = 'user-item';
                     
                     let badges = '';
-                    if (u.grant) badges += '<span class="badge verified-badge"></span>';
-                    else if (u.checkReal) badges += '<span class="badge checkreal-badge"></span>';
-                    else if (u.special) badges += '<span class="badge special-badge"></span>';
-                    if (u.ban) badges += '<span class="badge banned-badge"></span>';
+                    if (u.grant) badges += '<span class="badge badge-blue"></span>';
+                    else if (u.checkReal) badges += '<span class="badge badge-green"></span>';
+                    else if (u.special) badges += '<span class="badge badge-pink"></span>';
+                    if (u.ban) badges += '<span class="badge badge-red"></span>';
                     
                     div.innerHTML = `
                         <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 4px;">
@@ -1568,7 +1455,7 @@
                 elements.channelsList.innerHTML = '';
                 
                 if (!channels.length) {
-                    elements.channelsList.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 20px;">Нет каналов</div>';
+                    elements.channelsList.innerHTML = '<div style="text-align: center; color: var(--text-secondary); padding: 20px;">Нет каналов</div>';
                     return;
                 }
                 
@@ -1578,7 +1465,7 @@
                     div.innerHTML = `
                         <div style="font-weight: 600;"># ${c.name}</div>
                         <div style="font-size: 12px; color: var(--text-secondary);">${c.description || 'Нет описания'}</div>
-                        <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">
+                        <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">
                             ${c.memberCount || 0} уч. • создал ${c.creatorName}
                         </div>
                     `;
@@ -1593,7 +1480,7 @@
                 elements.groupsList.innerHTML = '';
                 
                 if (!groups.length) {
-                    elements.groupsList.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 20px;">Нет групп</div>';
+                    elements.groupsList.innerHTML = '<div style="text-align: center; color: var(--text-secondary); padding: 20px;">Нет групп</div>';
                     return;
                 }
                 
@@ -1603,7 +1490,7 @@
                     div.innerHTML = `
                         <div style="font-weight: 600;">👥 ${g.name}</div>
                         <div style="font-size: 12px; color: var(--text-secondary);">${g.description || 'Нет описания'}</div>
-                        <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">
+                        <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">
                             ${g.memberCount || 0} уч. • создал ${g.creatorName}
                         </div>
                     `;
@@ -1619,9 +1506,9 @@
                 selectedUser = u;
                 
                 let badges = '';
-                if (u.grant) badges += '<span class="badge verified-badge"></span>';
-                else if (u.checkReal) badges += '<span class="badge checkreal-badge"></span>';
-                else if (u.special) badges += '<span class="badge special-badge"></span>';
+                if (u.grant) badges += '<span class="badge badge-blue"></span>';
+                else if (u.checkReal) badges += '<span class="badge badge-green"></span>';
+                else if (u.special) badges += '<span class="badge badge-pink"></span>';
                 
                 elements.privateChatHeader.innerHTML = `💭 ${u.username} ${badges}`;
                 elements.privateMessages.innerHTML = '';
@@ -1715,9 +1602,9 @@
                 const isMe = currentUser && m.userId === currentUser.id;
                 
                 let badges = '';
-                if (m.grant) badges = '<span class="badge verified-badge"></span>';
-                else if (m.checkReal) badges = '<span class="badge checkreal-badge"></span>';
-                else if (m.special) badges = '<span class="badge special-badge"></span>';
+                if (m.grant) badges = '<span class="badge badge-blue"></span>';
+                else if (m.checkReal) badges = '<span class="badge badge-green"></span>';
+                else if (m.special) badges = '<span class="badge badge-pink"></span>';
                 
                 const div = document.createElement('div');
                 div.className = `message ${isMe ? 'sent' : ''}`;
@@ -1740,9 +1627,9 @@
                 const showBadge = isMe ? (m.toCheckReal||m.toGrant||m.toSpecial) : (m.fromCheckReal||m.fromGrant||m.fromSpecial);
                 let badges = '';
                 if (showBadge) {
-                    if (isMe ? m.toGrant : m.fromGrant) badges = '<span class="badge verified-badge"></span>';
-                    else if (isMe ? m.toCheckReal : m.fromCheckReal) badges = '<span class="badge checkreal-badge"></span>';
-                    else if (isMe ? m.toSpecial : m.fromSpecial) badges = '<span class="badge special-badge"></span>';
+                    if (isMe ? m.toGrant : m.fromGrant) badges = '<span class="badge badge-blue"></span>';
+                    else if (isMe ? m.toCheckReal : m.fromCheckReal) badges = '<span class="badge badge-green"></span>';
+                    else if (isMe ? m.toSpecial : m.fromSpecial) badges = '<span class="badge badge-pink"></span>';
                 }
                 
                 const div = document.createElement('div');
@@ -1764,9 +1651,9 @@
                 const isMe = currentUser && m.userId === currentUser.id;
                 
                 let badges = '';
-                if (m.grant) badges = '<span class="badge verified-badge"></span>';
-                else if (m.checkReal) badges = '<span class="badge checkreal-badge"></span>';
-                else if (m.special) badges = '<span class="badge special-badge"></span>';
+                if (m.grant) badges = '<span class="badge badge-blue"></span>';
+                else if (m.checkReal) badges = '<span class="badge badge-green"></span>';
+                else if (m.special) badges = '<span class="badge badge-pink"></span>';
                 
                 const div = document.createElement('div');
                 div.className = `message ${isMe ? 'sent' : ''}`;
@@ -1787,9 +1674,9 @@
                 const isMe = currentUser && m.userId === currentUser.id;
                 
                 let badges = '';
-                if (m.grant) badges = '<span class="badge verified-badge"></span>';
-                else if (m.checkReal) badges = '<span class="badge checkreal-badge"></span>';
-                else if (m.special) badges = '<span class="badge special-badge"></span>';
+                if (m.grant) badges = '<span class="badge badge-blue"></span>';
+                else if (m.checkReal) badges = '<span class="badge badge-green"></span>';
+                else if (m.special) badges = '<span class="badge badge-pink"></span>';
                 
                 const div = document.createElement('div');
                 div.className = `message ${isMe ? 'sent' : ''}`;
@@ -1818,7 +1705,7 @@
                 });
                 
                 if (!visible && elements.usersList) {
-                    elements.usersList.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 20px;">Ничего не найдено</div>';
+                    elements.usersList.innerHTML = '<div style="text-align: center; color: var(--text-secondary); padding: 20px;">Ничего не найдено</div>';
                 }
             },
             
@@ -1835,7 +1722,7 @@
                 });
                 
                 if (!visible && elements.channelsList) {
-                    elements.channelsList.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 20px;">Ничего не найдено</div>';
+                    elements.channelsList.innerHTML = '<div style="text-align: center; color: var(--text-secondary); padding: 20px;">Ничего не найдено</div>';
                 }
             },
             
@@ -1852,7 +1739,7 @@
                 });
                 
                 if (!visible && elements.groupsList) {
-                    elements.groupsList.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 20px;">Ничего не найдено</div>';
+                    elements.groupsList.innerHTML = '<div style="text-align: center; color: var(--text-secondary); padding: 20px;">Ничего не найдено</div>';
                 }
             },
             
@@ -1970,7 +1857,7 @@
                 else utils.showNotification('Поддержка не найдена', 'error');
             }
         };
-        
+
         document.addEventListener('DOMContentLoaded', () => eventHandlers.init());
     </script>
 </body>
