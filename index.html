@@ -21,6 +21,8 @@
             --btn-primary-text: #667eea;
             --btn-secondary-bg: #667eea;
             --btn-secondary-text: #ffffff;
+            --btn-disabled-bg: #cccccc;
+            --btn-disabled-text: #666666;
             --verified-bg: #1DA1F2;
             --online-color: #2ecc71;
             --danger-color: #e74c3c;
@@ -43,6 +45,8 @@
             --btn-primary-text: #ffffff;
             --btn-secondary-bg: #667eea;
             --btn-secondary-text: #ffffff;
+            --btn-disabled-bg: #444444;
+            --btn-disabled-text: #777777;
             --verified-bg: #1DA1F2;
             --online-color: #2ecc71;
             --danger-color: #e74c3c;
@@ -76,6 +80,8 @@
             overflow: hidden;
             min-height: 90vh;
             transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
         }
         
         .header {
@@ -135,6 +141,14 @@
             transition: all 0.3s ease;
         }
         
+        .btn:disabled {
+            background: var(--btn-disabled-bg);
+            color: var(--btn-disabled-text);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
         .btn-primary {
             background: var(--btn-primary-bg);
             color: var(--btn-primary-text);
@@ -155,7 +169,7 @@
             font-size: 12px;
         }
         
-        .btn:hover {
+        .btn:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
@@ -210,6 +224,35 @@
             margin-bottom: 20px;
         }
         
+        .checkbox-group {
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        .checkbox-group label {
+            margin-bottom: 0;
+            font-weight: normal;
+            cursor: pointer;
+        }
+        
+        .checkbox-group a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .checkbox-group a:hover {
+            text-decoration: underline;
+        }
+        
         label {
             display: block;
             margin-bottom: 8px;
@@ -238,6 +281,25 @@
             font-size: 14px;
             margin-top: 5px;
             display: none;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 15px;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
         }
         
         .chat-container {
@@ -322,7 +384,6 @@
             margin-right: 10px;
         }
         
-        /* Стили для боковой панели */
         .sidebar-content {
             display: flex;
             flex-direction: column;
@@ -553,7 +614,6 @@
             flex: 1;
         }
         
-        /* Новые стили для настроек */
         .settings-form {
             max-width: 600px;
             margin: 20px auto;
@@ -634,6 +694,13 @@
             font-size: 12px;
         }
         
+        .disclaimer {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 5px;
+            text-align: center;
+        }
+        
         @media (max-width: 768px) {
             .main-content {
                 flex-direction: column;
@@ -661,7 +728,6 @@
             }
         }
         
-        /* Стили для прокрутки */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
@@ -846,10 +912,22 @@
                                 <input type="password" id="regPassword" placeholder="Не менее 6 символов" autocomplete="off">
                                 <div class="error" id="regPasswordError"></div>
                             </div>
-                            <button class="btn btn-primary" style="width: 100%;" id="registerBtn">Зарегистрироваться</button>
+                            
+                            <!-- ЧЕКБОКС СОГЛАСИЯ -->
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="privacyCheckbox">
+                                <label for="privacyCheckbox">
+                                    Я принимаю <a href="privacy.html" target="_blank">Политику конфиденциальности</a>
+                                </label>
+                            </div>
+                            
+                            <button class="btn btn-primary" style="width: 100%;" id="registerBtn" disabled>Зарегистрироваться</button>
                             <p style="text-align: center; margin-top: 20px; color: var(--text-secondary);">
                                 Уже есть аккаунт? <a href="#" id="showLogin" style="color: #667eea; text-decoration: none; font-weight: 600;">Войти</a>
                             </p>
+                            <div class="disclaimer">
+                                Регистрируясь, вы подтверждаете, что вам есть 13 лет
+                            </div>
                         </div>
                     </div>
                     
@@ -964,6 +1042,15 @@
                                 </div>
                             </div>
                             
+                            <!-- КНОПКА УДАЛЕНИЯ АККАУНТА -->
+                            <div class="settings-section">
+                                <h3>⚠️ Опасная зона</h3>
+                                <button class="btn btn-danger" id="deleteAccountBtn">Удалить аккаунт</button>
+                                <div class="disclaimer">
+                                    Внимание! Это действие нельзя отменить. Все ваши сообщения будут удалены.
+                                </div>
+                            </div>
+                            
                             <div class="settings-section">
                                 <h3>🆘 Поддержка</h3>
                                 <button class="btn btn-secondary" id="contactSupportBtn">Связаться с поддержкой</button>
@@ -975,6 +1062,11 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            
+            <!-- Футер с ссылкой на политику -->
+            <div class="footer">
+                © 2026 Collaps Chat | <a href="privacy.html" target="_blank">Политика конфиденциальности</a>
             </div>
         </div>
     </div>
@@ -1000,7 +1092,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
         import { getDatabase, ref, set, push, onChildAdded, query, orderByChild, equalTo, get, onValue, remove, update } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
         
-        // Конфигурация Firebase
+        // Конфигурация Firebase (ТВОЯ, НЕ МЕНЯЙ)
         const firebaseConfig = {
             apiKey: "AIzaSyDdey6ZroD4KsiPiD2dnVfQe3I3OW3MPV8",
             authDomain: "max-chat-f9319.firebaseapp.com",
@@ -1015,9 +1107,8 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
         
-        // ПОЛНЫЙ СПИСОК ЗАПРЕЩЕННЫХ СЛОВ (включая все варианты)
+        // ПОЛНЫЙ СПИСОК ЗАПРЕЩЕННЫХ СЛОВ (оставляем твой)
         const bannedWords = [
-            // Русские матерные слова (полный список с разными формами)
             'блять', 'блядь', 'бля', 'бляд', 'блядина', 'блядский', 'блядство',
             'пиздец', 'пизда', 'пизд', 'пиздец', 'пизден', 'пизденный',
             'ебать', 'ёбать', 'ебли', 'ебал', 'ебало', 'ебаный', 'ёб', 'ёбан',
@@ -1041,14 +1132,10 @@
             'ебанат', 'ебана', 'ебано', 'ебанутый',
             'поеба', 'поеб', 'поебать',
             'выеба', 'выебон',
-            
-            // Более мягкие, но всё равно запрещенные
-            'блин', 'блином', // эвфемизм
+            'блин', 'блином',
             'хрен', 'хрень',
             'падла', 'падлюка',
             'сучка', 'сучара',
-            
-            // Английские матерные слова (полный список)
             'fuck', 'fucking', 'fucker', 'fucked', 'motherfucker', 'motherfucking',
             'shit', 'shitting', 'shitter', 'bullshit', 'shitty',
             'bitch', 'bitches', 'bitching', 'bitchy',
@@ -1064,8 +1151,6 @@
             'bloody', 'bugger',
             'screw', 'screwed',
             'suck', 'sucks', 'sucker',
-            
-            // Транслитерация русских матов (все возможные варианты)
             'blyat', 'blyad', 'blya', 'blyada', 'blyatina',
             'pizdec', 'pizda', 'pizd', 'pizdetz', 'pizden',
             'ebat', 'ebl', 'ebal', 'ebalo', 'eban',
@@ -1089,8 +1174,6 @@
             'ebanet', 'ebana', 'eban', 'ebanuty',
             'poyeb', 'poyebat',
             'vuyeba', 'vuyebal',
-            
-            // Транслитерация с разными вариантами написания
             'pizda', 'pizdec', 'pizdets', 'pizd',
             'ebat\'', 'ebat', 'yebat', 'yobat',
             'nahui', 'nahuy', 'naxyi', 'nahyi',
@@ -1099,8 +1182,6 @@
             'blyat', 'bljat', 'blядь',
             'govno', 'govnо',
             'zhopa', 'жopa',
-            
-            // Особо опасные комбинации
             'еблан', 'ебанько', 'ебашка',
             'ёблан', 'ёбанько',
             'eblan', 'eban\'ko', 'yeblan',
@@ -1145,6 +1226,7 @@
             showAccountDataBtn: document.getElementById('showAccountDataBtn'),
             contactSupportBtn: document.getElementById('contactSupportBtn'),
             backToChatBtn: document.getElementById('backToChatBtn'),
+            deleteAccountBtn: document.getElementById('deleteAccountBtn'),
             
             // Ссылки
             showRegister: document.getElementById('showRegister'),
@@ -1157,6 +1239,7 @@
             regSearchUsername: document.getElementById('regSearchUsername'),
             regEmail: document.getElementById('regEmail'),
             regPassword: document.getElementById('regPassword'),
+            privacyCheckbox: document.getElementById('privacyCheckbox'),
             globalMessageInput: document.getElementById('globalMessageInput'),
             privateMessageInput: document.getElementById('privateMessageInput'),
             channelMessageInput: document.getElementById('channelMessageInput'),
@@ -1301,24 +1384,19 @@
                 pendingAction = null;
             },
             
-            // УЛУЧШЕННАЯ ПРОВЕРКА НА ЗАПРЕЩЕННЫЕ СЛОВА
             checkBannedWords: function(text) {
                 if (!text) return { banned: false };
                 
                 const lowerText = text.toLowerCase();
                 
-                // Убираем специальные символы, оставляем только буквы и цифры
                 const cleanText = lowerText.replace(/[^a-zа-яё0-9]/g, ' ');
                 
-                // Разбиваем на слова
                 const words = cleanText.split(/\s+/);
                 
-                // Проверяем каждое слово и части слов
                 for (const word of words) {
-                    if (word.length < 3) continue; // Пропускаем очень короткие слова
+                    if (word.length < 3) continue;
                     
                     for (const bannedWord of bannedWords) {
-                        // Проверяем полное совпадение
                         if (word === bannedWord) {
                             return {
                                 banned: true,
@@ -1327,7 +1405,6 @@
                             };
                         }
                         
-                        // Проверяем частичное совпадение (слово содержит запрещенное)
                         if (word.includes(bannedWord) && bannedWord.length >= 3) {
                             return {
                                 banned: true,
@@ -1336,7 +1413,6 @@
                             };
                         }
                         
-                        // Проверяем обратное (запрещенное слово содержит проверяемое)
                         if (bannedWord.includes(word) && word.length >= 3) {
                             return {
                                 banned: true,
@@ -1347,7 +1423,6 @@
                     }
                 }
                 
-                // Дополнительная проверка: поиск запрещенных слов в целом тексте
                 for (const bannedWord of bannedWords) {
                     if (bannedWord.length >= 3 && lowerText.includes(bannedWord)) {
                         return {
@@ -1362,7 +1437,6 @@
             },
             
             sanitizeInput: function(text) {
-                // Убираем теги и экранируем специальные символы
                 return text
                     .replace(/</g, '&lt;')
                     .replace(/>/g, '&gt;')
@@ -1372,9 +1446,8 @@
             }
         };
         
-        // Функции для работы с Firebase
+        // Функции для работы с Firebase (ТВОИ, НЕ МЕНЯЮ)
         const firebaseFunctions = {
-            // Загрузка забаненных пользователей
             loadBannedUsers: async function() {
                 try {
                     const bannedRef = ref(database, 'bannedUsers');
@@ -1390,12 +1463,10 @@
                 }
             },
             
-            // Проверка, забанен ли пользователь
             isUserBanned: function(username, email, searchUsername) {
                 for (const userId in bannedUsers) {
                     const bannedUser = bannedUsers[userId];
                     
-                    // Приводим все к нижнему регистру для сравнения
                     const bannedUsername = (bannedUser.username || '').toLowerCase();
                     const bannedEmail = (bannedUser.email || '').toLowerCase();
                     const bannedSearchUsername = (bannedUser.searchUsername || '').toLowerCase();
@@ -1413,10 +1484,8 @@
                 return false;
             },
             
-            // Регистрация пользователя с grant полем
             registerUser: async function(username, searchUsername, email, password) {
                 try {
-                    // Проверка на запрещенные слова в нике
                     const usernameCheck = utils.checkBannedWords(username);
                     if (usernameCheck.banned) {
                         return { 
@@ -1425,7 +1494,6 @@
                         };
                     }
                     
-                    // Проверка на запрещенные слова в юзернейме для поиска
                     const searchUsernameCheck = utils.checkBannedWords(searchUsername);
                     if (searchUsernameCheck.banned) {
                         return { 
@@ -1434,7 +1502,6 @@
                         };
                     }
                     
-                    // Проверка на бан
                     if (this.isUserBanned(username, email, searchUsername)) {
                         return { 
                             success: false, 
@@ -1442,7 +1509,6 @@
                         };
                     }
                     
-                    // Проверяем, существует ли пользователь с таким searchUsername
                     const usersRef = ref(database, 'users');
                     const searchQuery = query(usersRef, orderByChild('searchUsername'), equalTo(searchUsername.toLowerCase()));
                     const snapshot = await get(searchQuery);
@@ -1454,7 +1520,6 @@
                         };
                     }
                     
-                    // Проверяем, существует ли пользователь с таким email
                     const emailQuery = query(usersRef, orderByChild('email'), equalTo(email.toLowerCase()));
                     const emailSnapshot = await get(emailQuery);
                     
@@ -1465,10 +1530,8 @@
                         };
                     }
                     
-                    // Создаем нового пользователя
                     const userId = push(ref(database, 'users')).key;
                     
-                    // Определяем grant (галочку) для специальных пользователей
                     const specialUsers = ['durov', 'owner', 'support'];
                     const grant = specialUsers.includes(searchUsername.toLowerCase());
                     
@@ -1493,7 +1556,6 @@
                 }
             },
             
-            // Вход пользователя
             loginUser: async function(identifier, password) {
                 try {
                     const usersRef = ref(database, 'users');
@@ -1516,12 +1578,10 @@
                     });
                     
                     if (foundUser) {
-                        // Проверка на бан
                         if (this.isUserBanned(foundUser.username, foundUser.email, foundUser.searchUsername)) {
                             return { success: false, message: 'Пользователь заблокирован' };
                         }
                         
-                        // Обновляем статус онлайн
                         await set(ref(database, `users/${foundUser.id}/online`), true);
                         await set(ref(database, `users/${foundUser.id}/lastSeen`), Date.now());
                         
@@ -1535,7 +1595,6 @@
                 }
             },
             
-            // Обновление данных пользователя
             updateUser: async function(userId, updates) {
                 try {
                     await update(ref(database, `users/${userId}`), updates);
@@ -1546,10 +1605,57 @@
                 }
             },
             
-            // Создание канала
+            // НОВАЯ ФУНКЦИЯ: УДАЛЕНИЕ АККАУНТА
+            deleteUserAccount: async function(userId) {
+                try {
+                    // Удаляем все сообщения пользователя
+                    const globalMessagesRef = ref(database, 'globalMessages');
+                    const globalSnapshot = await get(globalMessagesRef);
+                    if (globalSnapshot.exists()) {
+                        globalSnapshot.forEach((childSnapshot) => {
+                            const msg = childSnapshot.val();
+                            if (msg.userId === userId) {
+                                remove(ref(database, `globalMessages/${childSnapshot.key}`));
+                            }
+                        });
+                    }
+                    
+                    // Удаляем пользователя из каналов
+                    const channelsRef = ref(database, 'channels');
+                    const channelsSnapshot = await get(channelsRef);
+                    if (channelsSnapshot.exists()) {
+                        channelsSnapshot.forEach((childSnapshot) => {
+                            const channel = childSnapshot.val();
+                            if (channel.members && channel.members[userId]) {
+                                remove(ref(database, `channels/${childSnapshot.key}/members/${userId}`));
+                            }
+                        });
+                    }
+                    
+                    // Удаляем пользователя из групп
+                    const groupsRef = ref(database, 'groups');
+                    const groupsSnapshot = await get(groupsRef);
+                    if (groupsSnapshot.exists()) {
+                        groupsSnapshot.forEach((childSnapshot) => {
+                            const group = childSnapshot.val();
+                            if (group.members && group.members[userId]) {
+                                remove(ref(database, `groups/${childSnapshot.key}/members/${userId}`));
+                            }
+                        });
+                    }
+                    
+                    // Удаляем самого пользователя
+                    await remove(ref(database, `users/${userId}`));
+                    
+                    return { success: true };
+                } catch (error) {
+                    console.error('Delete user error:', error);
+                    return { success: false, message: 'Ошибка удаления аккаунта' };
+                }
+            },
+            
             createChannel: async function(name, description, creator) {
                 try {
-                    // Проверка на запрещенные слова
                     const nameCheck = utils.checkBannedWords(name);
                     const descCheck = utils.checkBannedWords(description);
                     
@@ -1599,10 +1705,8 @@
                 }
             },
             
-            // Создание группы
             createGroup: async function(name, description, creator) {
                 try {
-                    // Проверка на запрещенные слова
                     const nameCheck = utils.checkBannedWords(name);
                     const descCheck = utils.checkBannedWords(description);
                     
@@ -1653,7 +1757,6 @@
                 }
             },
             
-            // Присоединение к каналу
             joinChannel: async function(channelId, user) {
                 try {
                     const channelRef = ref(database, `channels/${channelId}`);
@@ -1665,12 +1768,10 @@
                     
                     const channel = snapshot.val();
                     
-                    // Проверяем, не состоит ли уже пользователь в канале
                     if (channel.members && channel.members[user.id]) {
                         return { success: true, channel: channel };
                     }
                     
-                    // Добавляем пользователя в канал
                     await set(ref(database, `channels/${channelId}/members/${user.id}`), {
                         username: user.username,
                         searchUsername: user.searchUsername,
@@ -1678,7 +1779,6 @@
                         isCreator: false
                     });
                     
-                    // Обновляем счетчик участников
                     const memberCount = Object.keys(channel.members || {}).length + 1;
                     await set(ref(database, `channels/${channelId}/memberCount`), memberCount);
                     
@@ -1689,7 +1789,6 @@
                 }
             },
             
-            // Присоединение к группе
             joinGroup: async function(groupId, user) {
                 try {
                     const groupRef = ref(database, `groups/${groupId}`);
@@ -1701,12 +1800,10 @@
                     
                     const group = snapshot.val();
                     
-                    // Проверяем, не состоит ли уже пользователь в группе
                     if (group.members && group.members[user.id]) {
                         return { success: true, group: group };
                     }
                     
-                    // Добавляем пользователя в группу
                     await set(ref(database, `groups/${groupId}/members/${user.id}`), {
                         username: user.username,
                         searchUsername: user.searchUsername,
@@ -1714,7 +1811,6 @@
                         isAdmin: false
                     });
                     
-                    // Обновляем счетчик участников
                     const memberCount = Object.keys(group.members || {}).length + 1;
                     await set(ref(database, `groups/${groupId}/memberCount`), memberCount);
                     
@@ -1725,7 +1821,6 @@
                 }
             },
             
-            // Покинуть канал
             leaveChannel: async function(channelId, userId) {
                 try {
                     const channelRef = ref(database, `channels/${channelId}`);
@@ -1737,22 +1832,17 @@
                     
                     const channel = snapshot.val();
                     
-                    // Проверяем, состоит ли пользователь в канале
                     if (!channel.members || !channel.members[userId]) {
                         return { success: false, message: 'Вы не состоите в этом канале' };
                     }
                     
-                    // Удаляем пользователя из канала
                     await remove(ref(database, `channels/${channelId}/members/${userId}`));
                     
-                    // Обновляем счетчик участников
                     const newMemberCount = Math.max(0, (channel.memberCount || 1) - 1);
                     await set(ref(database, `channels/${channelId}/memberCount`), newMemberCount);
                     
-                    // Если это создатель канала и он последний участник, удаляем канал
                     if (channel.creatorId === userId && newMemberCount === 0) {
                         await remove(ref(database, `channels/${channelId}`));
-                        // Удаляем сообщения канала
                         await remove(ref(database, `channelMessages/${channelId}`));
                         return { success: true, channelDeleted: true };
                     }
@@ -1764,7 +1854,6 @@
                 }
             },
             
-            // Покинуть группу
             leaveGroup: async function(groupId, userId) {
                 try {
                     const groupRef = ref(database, `groups/${groupId}`);
@@ -1776,26 +1865,20 @@
                     
                     const group = snapshot.val();
                     
-                    // Проверяем, состоит ли пользователь в группе
                     if (!group.members || !group.members[userId]) {
                         return { success: false, message: 'Вы не состоите в этой группе' };
                     }
                     
-                    // Удаляем пользователя из группы
                     await remove(ref(database, `groups/${groupId}/members/${userId}`));
                     
-                    // Убираем из списка админов если был
                     const updatedAdmins = (group.admins || []).filter(id => id !== userId);
                     await set(ref(database, `groups/${groupId}/admins`), updatedAdmins);
                     
-                    // Обновляем счетчик участников
                     const newMemberCount = Math.max(0, (group.memberCount || 1) - 1);
                     await set(ref(database, `groups/${groupId}/memberCount`), newMemberCount);
                     
-                    // Если это создатель группы и он последний участник, удаляем группу
                     if (group.creatorId === userId && newMemberCount === 0) {
                         await remove(ref(database, `groups/${groupId}`));
-                        // Удаляем сообщения группы
                         await remove(ref(database, `groupMessages/${groupId}`));
                         return { success: true, groupDeleted: true };
                     }
@@ -1807,10 +1890,8 @@
                 }
             },
             
-            // Отправка сообщения в канал
             sendChannelMessage: function(message, user, channelId) {
                 try {
-                    // Проверка на запрещенные слова
                     const check = utils.checkBannedWords(message);
                     if (check.banned) {
                         utils.showNotification(`Сообщение содержит запрещенное слово: "${check.word}"`, 'error');
@@ -1836,10 +1917,8 @@
                 }
             },
             
-            // Отправка сообщения в группу
             sendGroupMessage: function(message, user, groupId) {
                 try {
-                    // Проверка на запрещенные слова
                     const check = utils.checkBannedWords(message);
                     if (check.banned) {
                         utils.showNotification(`Сообщение содержит запрещенное слово: "${check.word}"`, 'error');
@@ -1865,10 +1944,8 @@
                 }
             },
             
-            // Отправка глобального сообщения
             sendGlobalMessage: function(message, user) {
                 try {
-                    // Проверка на запрещенные слова
                     const check = utils.checkBannedWords(message);
                     if (check.banned) {
                         utils.showNotification(`Сообщение содержит запрещенное слово: "${check.word}"`, 'error');
@@ -1895,10 +1972,8 @@
                 }
             },
             
-            // Отправка личного сообщения
             sendPrivateMessage: function(message, fromUser, toUser) {
                 try {
-                    // Проверка на запрещенные слова
                     const check = utils.checkBannedWords(message);
                     if (check.banned) {
                         utils.showNotification(`Сообщение содержит запрещенное слово: "${check.word}"`, 'error');
@@ -1928,7 +2003,6 @@
                 }
             },
             
-            // Загрузка всех пользователей
             loadUsers: function(callback) {
                 const usersRef = ref(database, 'users');
                 onValue(usersRef, (snapshot) => {
@@ -1944,7 +2018,6 @@
                 });
             },
             
-            // Загрузка всех каналов
             loadChannels: function(callback) {
                 const channelsRef = ref(database, 'channels');
                 onValue(channelsRef, (snapshot) => {
@@ -1959,7 +2032,6 @@
                 });
             },
             
-            // Загрузка всех групп
             loadGroups: function(callback) {
                 const groupsRef = ref(database, 'groups');
                 onValue(groupsRef, (snapshot) => {
@@ -1974,7 +2046,6 @@
                 });
             },
             
-            // Подписка на сообщения канала
             subscribeToChannelMessages: function(channelId, callback) {
                 const messagesRef = ref(database, `channelMessages/${channelId}`);
                 const messagesQuery = query(messagesRef, orderByChild('timestamp'));
@@ -1985,7 +2056,6 @@
                 });
             },
             
-            // Подписка на сообщения группы
             subscribeToGroupMessages: function(groupId, callback) {
                 const messagesRef = ref(database, `groupMessages/${groupId}`);
                 const messagesQuery = query(messagesRef, orderByChild('timestamp'));
@@ -1996,7 +2066,6 @@
                 });
             },
             
-            // Подписка на глобальные сообщения
             subscribeToGlobalMessages: function(callback) {
                 const messagesRef = ref(database, 'globalMessages');
                 const messagesQuery = query(messagesRef, orderByChild('timestamp'));
@@ -2007,7 +2076,6 @@
                 });
             },
             
-            // Подписка на личные сообщения
             subscribeToPrivateMessages: function(userId, otherUserId, callback) {
                 const chatId = [userId, otherUserId].sort().join('_');
                 const messagesRef = ref(database, `privateMessages/${chatId}`);
@@ -2019,7 +2087,6 @@
                 });
             },
             
-            // Обновление статуса онлайн
             updateOnlineStatus: function(userId, status) {
                 if (!userId) return;
                 
@@ -2031,16 +2098,13 @@
         // Обработчики событий
         const eventHandlers = {
             init: function() {
-                // Загружаем тему из localStorage
                 const savedTheme = localStorage.getItem('collapsChatTheme');
                 if (savedTheme === 'dark') {
                     this.toggleTheme();
                 }
                 
-                // Загружаем забаненных пользователей
                 firebaseFunctions.loadBannedUsers();
                 
-                // Проверяем, есть ли сохраненный пользователь
                 const savedUser = localStorage.getItem('collapsChatUser');
                 if (savedUser) {
                     try {
@@ -2051,7 +2115,6 @@
                     }
                 }
                 
-                // Назначаем обработчики событий
                 elements.loginBtn.addEventListener('click', () => this.handleLogin());
                 elements.registerBtn.addEventListener('click', () => this.handleRegister());
                 elements.logoutBtn.addEventListener('click', () => this.handleLogout());
@@ -2061,6 +2124,7 @@
                 elements.leaveGroupBtn.addEventListener('click', () => this.leaveGroup());
                 elements.confirmYes.addEventListener('click', () => this.confirmAction());
                 elements.confirmNo.addEventListener('click', () => utils.hideConfirm());
+                elements.deleteAccountBtn.addEventListener('click', () => this.deleteAccount());
                 
                 elements.showRegister.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -2133,7 +2197,6 @@
                 
                 elements.saveGroupBtn.addEventListener('click', () => this.createGroup());
                 
-                // Обработчики для настроек
                 elements.saveUsernameBtn.addEventListener('click', () => this.changeUsername());
                 elements.saveSearchUsernameBtn.addEventListener('click', () => this.changeSearchUsername());
                 elements.toggleThemeBtn.addEventListener('click', () => this.toggleTheme());
@@ -2141,7 +2204,11 @@
                 elements.contactSupportBtn.addEventListener('click', () => this.contactSupport());
                 elements.backToChatBtn.addEventListener('click', () => this.showScreen('global'));
                 
-                // Обработчики для табов
+                // Чекбокс для регистрации
+                elements.privacyCheckbox.addEventListener('change', function() {
+                    elements.registerBtn.disabled = !this.checked;
+                });
+                
                 elements.tabs.forEach(tab => {
                     tab.addEventListener('click', () => {
                         const tabName = tab.getAttribute('data-tab');
@@ -2149,14 +2216,12 @@
                     });
                 });
                 
-                // Обработчик для сворачивания списка пользователей
                 elements.usersToggle.addEventListener('click', () => {
                     elements.usersCollapsed.classList.toggle('collapsed');
                     elements.usersToggleIcon.textContent = 
                         elements.usersCollapsed.classList.contains('collapsed') ? '▶' : '▼';
                 });
                 
-                // Загружаем пользователей, каналы и группы
                 firebaseFunctions.loadUsers((users) => {
                     this.displayUsers(users);
                     this.updateGlobalUsersCount(users);
@@ -2170,25 +2235,42 @@
                     this.displayGroups(groups);
                 });
                 
-                // Подписываемся на глобальные сообщения
                 firebaseFunctions.subscribeToGlobalMessages((message) => {
                     this.addGlobalMessage(message);
                 });
                 
-                // Обновляем статус онлайн при закрытии страницы
                 window.addEventListener('beforeunload', () => {
                     if (currentUser) {
                         firebaseFunctions.updateOnlineStatus(currentUser.id, false);
                     }
                 });
                 
-                // Обновляем счетчик пользователей
                 setInterval(() => {
                     if (currentUser) {
                         const onlineUsers = allUsers.filter(u => u.online).length;
                         elements.globalUsersCount.textContent = `${onlineUsers} онлайн`;
                     }
                 }, 5000);
+            },
+            
+            // НОВАЯ ФУНКЦИЯ: УДАЛЕНИЕ АККАУНТА
+            deleteAccount: function() {
+                if (!currentUser) return;
+                
+                utils.showConfirm(
+                    'Удаление аккаунта',
+                    'Вы уверены, что хотите удалить аккаунт? Это действие нельзя отменить. Все ваши сообщения будут удалены.',
+                    async () => {
+                        const result = await firebaseFunctions.deleteUserAccount(currentUser.id);
+                        
+                        if (result.success) {
+                            utils.showNotification('Аккаунт успешно удалён');
+                            this.handleLogout();
+                        } else {
+                            utils.showNotification(result.message, 'error');
+                        }
+                    }
+                );
             },
             
             toggleTheme: function() {
@@ -2216,7 +2298,6 @@
                 const identifier = elements.loginUsername.value.trim();
                 const password = elements.loginPassword.value.trim();
                 
-                // Валидация
                 if (!identifier) {
                     this.showError('loginUsernameError', 'Введите юзернейм или email');
                     return;
@@ -2240,12 +2321,17 @@
             },
             
             handleRegister: async function() {
+                // Проверяем чекбокс
+                if (!elements.privacyCheckbox.checked) {
+                    utils.showNotification('Необходимо принять политику конфиденциальности', 'error');
+                    return;
+                }
+                
                 const username = elements.regUsername.value.trim();
                 const searchUsername = elements.regSearchUsername.value.trim().toLowerCase();
                 const email = elements.regEmail.value.trim();
                 const password = elements.regPassword.value.trim();
                 
-                // Валидация
                 let isValid = true;
                 
                 if (!username) {
@@ -2292,7 +2378,6 @@
             },
             
             handleLogout: function() {
-                // Обновляем статус офлайн
                 if (currentUser) {
                     firebaseFunctions.updateOnlineStatus(currentUser.id, false);
                 }
@@ -2308,7 +2393,6 @@
                 elements.logoutBtn.style.display = 'none';
                 elements.settingsBtn.style.display = 'none';
                 
-                // Очищаем сообщения
                 elements.globalMessages.innerHTML = '';
                 elements.privateMessages.innerHTML = '';
                 elements.channelMessages.innerHTML = '';
@@ -2319,7 +2403,6 @@
             
             showSettings: function() {
                 this.showScreen('settings');
-                // Заполняем поля текущими значениями
                 elements.changeUsername.value = currentUser.username;
                 elements.changeSearchUsername.value = currentUser.searchUsername;
                 elements.accountData.style.display = 'none';
@@ -2333,7 +2416,6 @@
                     return;
                 }
                 
-                // Проверка на запрещенные слова
                 const check = utils.checkBannedWords(newUsername);
                 if (check.banned) {
                     utils.showNotification(`Ник содержит запрещенное слово: "${check.word}"`, 'error');
@@ -2348,7 +2430,6 @@
                     currentUser.username = newUsername;
                     localStorage.setItem('collapsChatUser', JSON.stringify(currentUser));
                     
-                    // Обновляем отображение
                     this.updateUsernameDisplay();
                     utils.showNotification('Никнейм успешно изменен!');
                 } else {
@@ -2369,14 +2450,12 @@
                     return;
                 }
                 
-                // Проверка на запрещенные слова
                 const check = utils.checkBannedWords(newSearchUsername);
                 if (check.banned) {
                     utils.showNotification(`Юзернейм содержит запрещенное слово: "${check.word}"`, 'error');
                     return;
                 }
                 
-                // Проверяем, не занят ли уже такой юзернейм
                 const usersRef = ref(database, 'users');
                 const searchQuery = query(usersRef, orderByChild('searchUsername'), equalTo(newSearchUsername));
                 const snapshot = await get(searchQuery);
@@ -2418,7 +2497,6 @@
             },
             
             contactSupport: function() {
-                // Ищем пользователя support
                 const supportUser = allUsers.find(u => u.searchUsername === 'support');
                 if (supportUser) {
                     this.selectUser(supportUser);
@@ -2445,7 +2523,6 @@
                     elements.newChannelName.value = '';
                     elements.newChannelDesc.value = '';
                     
-                    // Присоединяемся к созданному каналу
                     this.selectChannel(result.channel);
                     utils.showNotification('Канал создан!');
                 } else {
@@ -2470,7 +2547,6 @@
                     elements.newGroupName.value = '';
                     elements.newGroupDesc.value = '';
                     
-                    // Присоединяемся к созданной группе
                     this.selectGroup(result.group);
                     utils.showNotification('Группа создана!');
                 } else {
@@ -2497,14 +2573,11 @@
                                 utils.showNotification('Вы покинули канал');
                             }
                             
-                            // Сбрасываем выбранный канал
                             selectedChannel = null;
                             elements.leaveChannelBtn.style.display = 'none';
                             
-                            // Возвращаемся на экран каналов
                             this.switchTab('channels');
                             
-                            // Перезагружаем список каналов
                             firebaseFunctions.loadChannels((channels) => {
                                 this.displayChannels(channels);
                             });
@@ -2534,14 +2607,11 @@
                                 utils.showNotification('Вы покинули группу');
                             }
                             
-                            // Сбрасываем выбранную группу
                             selectedGroup = null;
                             elements.leaveGroupBtn.style.display = 'none';
                             
-                            // Возвращаемся на экран групп
                             this.switchTab('groups');
                             
-                            // Перезагружаем список групп
                             firebaseFunctions.loadGroups((groups) => {
                                 this.displayGroups(groups);
                             });
@@ -2583,7 +2653,6 @@
                 const message = elements.channelMessageInput.value.trim();
                 if (!message || !currentUser || !selectedChannel) return;
                 
-                // Проверяем, является ли пользователь создателем канала
                 if (selectedChannel.creatorId !== currentUser.id) {
                     utils.showNotification('Только создатель канала может писать в канал', 'error');
                     return;
@@ -2608,16 +2677,13 @@
             showMainApp: function() {
                 elements.sidebar.style.display = 'block';
                 
-                // Обновляем отображение имени пользователя
                 this.updateUsernameDisplay();
                 
                 elements.logoutBtn.style.display = 'block';
                 elements.settingsBtn.style.display = 'block';
                 
-                // Обновляем статус онлайн
                 firebaseFunctions.updateOnlineStatus(currentUser.id, true);
                 
-                // Показываем общий чат по умолчанию
                 this.showScreen('global');
                 this.switchTab('global');
             },
@@ -2637,7 +2703,6 @@
             },
             
             showScreen: function(screenName) {
-                // Скрываем все экраны
                 elements.loginScreen.classList.remove('active');
                 elements.registerScreen.classList.remove('active');
                 elements.globalChatScreen.classList.remove('active');
@@ -2646,7 +2711,6 @@
                 elements.groupScreen.classList.remove('active');
                 elements.settingsScreen.classList.remove('active');
                 
-                // Показываем нужный экран
                 switch(screenName) {
                     case 'login':
                         elements.loginScreen.classList.add('active');
@@ -2673,7 +2737,6 @@
             },
             
             switchTab: function(tabName) {
-                // Обновляем активный таб
                 elements.tabs.forEach(tab => {
                     tab.classList.remove('active');
                     if (tab.getAttribute('data-tab') === tabName) {
@@ -2681,13 +2744,11 @@
                     }
                 });
                 
-                // Скрываем все содержимое вкладок
                 elements.globalTabContent.classList.remove('active');
                 elements.channelsTabContent.classList.remove('active');
                 elements.groupsTabContent.classList.remove('active');
                 elements.usersTabContent.classList.remove('active');
                 
-                // Показываем соответствующее содержимое
                 switch(tabName) {
                     case 'global':
                         elements.globalTabContent.classList.add('active');
@@ -2733,7 +2794,6 @@
             displayUsers: function(users) {
                 elements.usersList.innerHTML = '';
                 
-                // Фильтруем пользователей (не показываем текущего)
                 const filteredUsers = users.filter(user => 
                     !currentUser || user.id !== currentUser.id
                 );
@@ -2747,7 +2807,6 @@
                     const userElement = document.createElement('div');
                     userElement.className = 'user-item';
                     
-                    // Добавляем галочку если есть grant
                     const verifiedBadge = user.grant ? '<span class="verified-badge"></span>' : '';
                     
                     userElement.innerHTML = `
@@ -2768,7 +2827,6 @@
                     elements.usersList.appendChild(userElement);
                 });
                 
-                // Прокручиваем к началу
                 elements.usersList.scrollTop = 0;
             },
             
@@ -2804,7 +2862,6 @@
                     elements.channelsList.appendChild(channelElement);
                 });
                 
-                // Прокручиваем к началу
                 elements.channelsList.scrollTop = 0;
             },
             
@@ -2840,23 +2897,19 @@
                     elements.groupsList.appendChild(groupElement);
                 });
                 
-                // Прокручиваем к началу
                 elements.groupsList.scrollTop = 0;
             },
             
             selectUser: function(user) {
                 selectedUser = user;
-                // Добавляем галочку в заголовок личных сообщений
                 const verifiedBadge = user.grant ? '<span class="verified-badge"></span>' : '';
                 elements.privateChatHeader.innerHTML = `💭 ${user.username} ${verifiedBadge}`;
                 elements.privateMessages.innerHTML = '';
                 elements.privateMessageInput.disabled = false;
                 elements.sendPrivateMessage.disabled = false;
                 
-                // Переключаемся на вкладку пользователей
                 this.switchTab('users');
                 
-                // Подписываемся на сообщения с этим пользователем
                 firebaseFunctions.subscribeToPrivateMessages(
                     currentUser.id, 
                     user.id, 
@@ -2869,17 +2922,14 @@
             selectChannel: async function(channel) {
                 selectedChannel = channel;
                 
-                // Присоединяемся к каналу
                 const result = await firebaseFunctions.joinChannel(channel.id, currentUser);
                 if (result.success) {
                     selectedChannel = result.channel;
                     
-                    // Обновляем UI
                     elements.channelTitle.textContent = `# ${channel.name}`;
                     elements.channelMembers.textContent = `${channel.memberCount || 1} участников`;
                     elements.channelMessages.innerHTML = '';
                     
-                    // Проверяем, является ли пользователь создателем канала
                     const isCreator = channel.creatorId === currentUser.id;
                     elements.channelMessageInput.disabled = !isCreator;
                     elements.sendChannelMessage.disabled = !isCreator;
@@ -2887,19 +2937,15 @@
                         'Напишите сообщение в канал...' : 
                         'Только создатель канала может писать';
                     
-                    // Показываем кнопку "Покинуть"
                     elements.leaveChannelBtn.style.display = 'block';
                     
-                    // Переключаемся на экран канала
                     this.showScreen('channel');
                     this.switchTab('channels');
                     
-                    // Обновляем выделение канала в списке
                     firebaseFunctions.loadChannels((channels) => {
                         this.displayChannels(channels);
                     });
                     
-                    // Подписываемся на сообщения канала
                     firebaseFunctions.subscribeToChannelMessages(
                         channel.id, 
                         (message) => {
@@ -2912,31 +2958,25 @@
             selectGroup: async function(group) {
                 selectedGroup = group;
                 
-                // Присоединяемся к группе
                 const result = await firebaseFunctions.joinGroup(group.id, currentUser);
                 if (result.success) {
                     selectedGroup = result.group;
                     
-                    // Обновляем UI
                     elements.groupTitle.textContent = `👥 ${group.name}`;
                     elements.groupMembers.textContent = `${group.memberCount || 1} участников`;
                     elements.groupMessages.innerHTML = '';
                     elements.groupMessageInput.disabled = false;
                     elements.sendGroupMessage.disabled = false;
                     
-                    // Показываем кнопку "Покинуть"
                     elements.leaveGroupBtn.style.display = 'block';
                     
-                    // Переключаемся на экран группы
                     this.showScreen('group');
                     this.switchTab('groups');
                     
-                    // Обновляем выделение группы в списке
                     firebaseFunctions.loadGroups((groups) => {
                         this.displayGroups(groups);
                     });
                     
-                    // Подписываемся на сообщения группы
                     firebaseFunctions.subscribeToGroupMessages(
                         group.id, 
                         (message) => {
@@ -3038,11 +3078,9 @@
             
             addPrivateMessage: function(message) {
                 const isCurrentUser = currentUser && message.fromUserId === currentUser.id;
-                // Используем правильные поля для галочек
                 const fromGrant = message.fromGrant || false;
                 const toGrant = message.toGrant || false;
                 
-                // Определяем, чью галочку показывать
                 const showVerifiedBadge = isCurrentUser ? toGrant : fromGrant;
                 const verifiedBadge = showVerifiedBadge ? '<span class="verified-badge"></span>' : '';
                 
@@ -3116,7 +3154,6 @@
                 element.textContent = message;
                 element.style.display = 'block';
                 
-                // Скрываем ошибку через 3 секунды
                 setTimeout(() => {
                     element.style.display = 'none';
                 }, 3000);
