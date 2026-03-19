@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Политика конфиденциальности - Collaps Chat</title>
     <style>
         :root {
@@ -16,6 +16,7 @@
             --btn-primary-text: #ffffff;
             --verified-bg: #1DA1F2;
             --checkreal-bg: #2ecc71;
+            --special-bg: #ff69b4;
             --banned-bg: #e74c3c;
             --shadow: 0 20px 60px rgba(0,0,0,0.1);
         }
@@ -31,6 +32,7 @@
             --btn-primary-text: #ffffff;
             --verified-bg: #1DA1F2;
             --checkreal-bg: #2ecc71;
+            --special-bg: #ff69b4;
             --banned-bg: #e74c3c;
             --shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
@@ -46,7 +48,7 @@
             background: var(--bg-primary);
             color: var(--text-primary);
             line-height: 1.6;
-            padding: 15px;
+            padding: 20px;
             transition: background 0.3s ease, color 0.3s ease;
         }
         
@@ -56,7 +58,7 @@
             background: var(--bg-secondary);
             border-radius: 20px;
             box-shadow: var(--shadow);
-            padding: 30px 20px;
+            padding: 30px;
         }
         
         h1 {
@@ -77,7 +79,6 @@
         p {
             margin-bottom: 15px;
             color: var(--text-secondary);
-            font-size: 15px;
         }
         
         ul {
@@ -88,7 +89,6 @@
         
         li {
             margin-bottom: 8px;
-            font-size: 15px;
         }
         
         .badge-example {
@@ -102,6 +102,7 @@
         
         .badge-blue { background: var(--verified-bg); }
         .badge-green { background: var(--checkreal-bg); }
+        .badge-pink { background: var(--special-bg); }
         .badge-red { background: var(--banned-bg); }
         
         .last-updated {
@@ -132,8 +133,8 @@
         
         .theme-toggle {
             position: fixed;
-            top: 15px;
-            right: 15px;
+            top: 20px;
+            right: 20px;
             background: var(--btn-primary-bg);
             color: var(--btn-primary-text);
             border: none;
@@ -141,18 +142,16 @@
             border-radius: 50px;
             cursor: pointer;
             font-weight: 600;
-            font-size: 14px;
             transition: all 0.3s ease;
             z-index: 1000;
-            box-shadow: var(--shadow);
         }
         
         @media (max-width: 768px) {
             body { padding: 10px; }
-            .container { padding: 20px 15px; }
+            .container { padding: 20px; }
             h1 { font-size: 24px; }
             h2 { font-size: 20px; }
-            .theme-toggle { top: 10px; right: 10px; padding: 6px 12px; font-size: 13px; }
+            .theme-toggle { top: 10px; right: 10px; }
         }
     </style>
 </head>
@@ -182,73 +181,49 @@
             <li>Для отображения вашего профиля другим пользователям</li>
             <li>Для модерации контента (проверка на запрещённые слова)</li>
             <li>Для технической поддержки</li>
-            <li>Для пометки "зелёная галочка" (<span class="badge-example badge-green"></span>) — подтверждение, что аккаунт реальный (выдаётся администрацией)</li>
         </ul>
         
         <h2>3. Статусы аккаунтов</h2>
         <p>В Collaps Chat используются следующие обозначения:</p>
         <ul>
             <li><span class="badge-example badge-blue"></span> <strong>Синяя галочка (grant: true)</strong> — официальный аккаунт (администрация, поддержка)</li>
-            <li><span class="badge-example badge-green"></span> <strong>Зелёная галочка (checkReal: true)</strong> — подтверждённый реальный пользователь (выдаётся за хорошее поведение или по запросу)</li>
+            <li><span class="badge-example badge-green"></span> <strong>Зелёная галочка (checkReal: true)</strong> — подтверждённый реальный пользователь</li>
+            <li><span class="badge-example badge-pink"></span> <strong>Розовая галочка (special: true)</strong> — особый статус (выдаётся за вклад в проект)</li>
             <li><span class="badge-example badge-red"></span> <strong>Красный значок (ban: true)</strong> — аккаунт заблокирован за нарушения</li>
         </ul>
         
         <h2>4. Блокировка аккаунтов</h2>
-        <p>Мы оставляем за собой право блокировать аккаунты (ban: true) в следующих случаях:</p>
+        <p>Мы блокируем аккаунты (ban: true) за:</p>
         <ul>
             <li>Использование запрещённых слов и оскорблений</li>
-            <li>Спам и рассылка рекламы</li>
-            <li>Попытки взлома или мошенничество</li>
+            <li>Спам и рекламу</li>
+            <li>Попытки взлома</li>
             <li>Неоднократные нарушения правил</li>
         </ul>
-        <p>Заблокированные пользователи:</p>
-        <ul>
-            <li>Не могут входить в аккаунт (при попытке входа выдаётся ошибка)</li>
-            <li>Не могут отправлять сообщения</li>
-            <li>В списке пользователей отображаются с красным значком ⛔</li>
-            <li>Если блокировка произошла во время сессии, пользователь будет автоматически разлогинен</li>
-        </ul>
+        <p>Заблокированные пользователи не могут входить и отправлять сообщения.</p>
         
         <h2>5. Где хранятся данные</h2>
-        <p>Все данные хранятся в <strong>Firebase (Google Cloud)</strong>, серверы находятся в Европе (регион europe-west1). Firebase соответствует международным стандартам безопасности (ISO 27001, SOC 1/2/3).</p>
-        <p>При входе через Google мы получаем только базовую информацию (имя и email) и не имеем доступа к паролю от вашего Google-аккаунта.</p>
+        <p>Все данные хранятся в <strong>Firebase (Google Cloud)</strong>, серверы в Европе.</p>
         
-        <h2>6. Передача данных третьим лицам</h2>
-        <p>Мы <strong>НЕ передаём</strong> ваши персональные данные третьим лицам. Исключение: только по запросу государственных органов в соответствии с законодательством РФ.</p>
-        
-        <h2>7. Защита данных</h2>
+        <h2>6. Ваши права</h2>
         <ul>
-            <li>Пароли хранятся в зашифрованном виде (кроме входа через Google — там используется OAuth)</li>
-            <li>Доступ к базе данных защищён правилами Firebase Security</li>
-            <li>Мы используем HTTPS для шифрования трафика</li>
+            <li>Запросить копию данных: <strong>collapschat.legal@bk.ru</strong></li>
+            <li>Исправить данные (в настройках)</li>
+            <li>Удалить аккаунт (в настройках)</li>
         </ul>
         
-        <h2>8. Ваши права</h2>
-        <p>Вы имеете право:</p>
+        <h2>7. Удаление аккаунта</h2>
+        <p>Удалить аккаунт можно:</p>
         <ul>
-            <li>Запросить копию всех ваших данных (напишите на support@collapschat.dpdns.org)</li>
-            <li>Исправить неточные данные (в настройках профиля)</li>
-            <li>Удалить свой аккаунт и все данные (кнопка в настройках или письмо на support)</li>
-            <li>Отозвать согласие на обработку данных (удалив аккаунт)</li>
+            <li>В настройках → Опасная зона → Удалить аккаунт</li>
+            <li>По email: <strong>collapschat.legal@bk.ru</strong></li>
+            <li>Через поддержку @support</li>
         </ul>
         
-        <h2>9. Удаление аккаунта</h2>
-        <p>Чтобы удалить аккаунт и все связанные с ним данные:</p>
+        <h2>8. Контакты</h2>
         <ul>
-            <li><strong>Способ 1:</strong> Войдите в настройки и нажмите кнопку "Удалить аккаунт" в разделе "Опасная зона"</li>
-            <li><strong>Способ 2:</strong> Напишите письмо на support@collapschat.dpdns.org с вашего email, указанного при регистрации</li>
-            <li><strong>Способ 3:</strong> Напишите в чат поддержки (@support)</li>
-        </ul>
-        <p>При удалении стираются: профиль, все сообщения, история чатов. Действие необратимо.</p>
-        
-        <h2>10. Изменения в политике</h2>
-        <p>Мы можем обновлять эту политику. При значительных изменениях мы уведомим вас через сайт или по email.</p>
-        
-        <h2>11. Контакты</h2>
-        <p>По всем вопросам, связанным с персональными данными, пишите:</p>
-        <ul>
-            <li>Email: <strong>support@collapschat.dpdns.org</strong></li>
-            <li>Чат с поддержкой: <strong>@support</strong> в Collaps Chat</li>
+            <li>Email: <strong>collapschat.legal@bk.ru</strong></li>
+            <li>Поддержка: @support</li>
         </ul>
         
         <div style="text-align: center;">
@@ -256,7 +231,7 @@
         </div>
         
         <div class="last-updated">
-            © 2026 Collaps Chat. Все права защищены.
+            © 2026 Collaps Chat
         </div>
     </div>
     
