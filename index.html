@@ -367,7 +367,7 @@
             color: var(--text-primary);
         }
 
-        /* ПОИСК (только в списке чатов) */
+        /* ПОИСК */
         .search-container {
             padding: 12px 16px;
             background: var(--bg-tertiary);
@@ -403,7 +403,6 @@
             background: var(--bg-primary);
         }
 
-        /* Результаты поиска внутри списка чатов */
         .search-results-container {
             flex: 1;
             overflow-y: auto;
@@ -462,11 +461,6 @@
             color: var(--text-secondary);
         }
 
-        .search-result-status {
-            font-size: 11px;
-            color: var(--online-color);
-        }
-
         .search-result-action {
             padding: 6px 12px;
             background: var(--accent-color);
@@ -483,7 +477,6 @@
             background: var(--accent-hover);
         }
 
-        /* Список чатов (обычный) */
         .chats-list-container {
             flex: 1;
             overflow-y: auto;
@@ -570,7 +563,6 @@
             text-overflow: ellipsis;
         }
 
-        /* Чат область */
         .chat-area {
             flex: 1;
             display: none;
@@ -767,7 +759,6 @@
             background: var(--accent-hover);
         }
 
-        /* Профиль */
         .profile-screen {
             position: fixed;
             top: 0;
@@ -900,7 +891,6 @@
             background: #c62828;
         }
 
-        /* Настройки */
         .settings-screen {
             position: fixed;
             top: 0;
@@ -1675,12 +1665,14 @@
         }
 
         async function getOrCreatePrivateChat(otherUserId) {
+            // Проверяем существующий чат
             for (const [chatId, chatData] of Object.entries(allChats)) {
                 if (chatData.type === 'private' && chatData.participants && chatData.participants[otherUserId] && chatData.participants[currentUserId]) {
                     return chatId;
                 }
             }
             
+            // Создаём новый чат
             const newChatId = 'private_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
             const otherUser = allUsers[otherUserId];
             
@@ -1851,7 +1843,7 @@
                 loadUserChats();
                 showNotification('Вход выполнен!', 'success');
             } catch (error) {
-                showNotification('Ошибка входа через Google', 'error');
+                showNotification('Ошибка входа через Google: ' + error.message, 'error');
             }
         }
 
@@ -1866,7 +1858,10 @@
             
             const usersRef = ref(database, 'users');
             const snapshot = await get(usersRef);
-            if (!snapshot.exists()) return;
+            if (!snapshot.exists()) {
+                showNotification('Пользователь не найден. Зарегистрируйтесь', 'error');
+                return;
+            }
             
             let found = null;
             snapshot.forEach(child => {
@@ -1994,7 +1989,6 @@
         }
 
         function showSupport() {
-            // Ищем поддержку или создаём
             const supportUser = Object.values(allUsers).find(u => u.searchUsername === 'support');
             if (supportUser) {
                 getOrCreatePrivateChat(supportUser.id).then(chatId => {
