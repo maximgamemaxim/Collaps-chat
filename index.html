@@ -311,15 +311,19 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            flex-wrap: wrap;
             margin-bottom: 4px;
         }
 
+        /* Множественные галочки */
         .badge {
             display: inline-block;
-            width: 16px;
-            height: 16px;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
             position: relative;
+            margin-left: 2px;
+            flex-shrink: 0;
         }
 
         .badge-verified { background: var(--verified-color); }
@@ -334,12 +338,19 @@
             left: 50%;
             transform: translate(-50%, -50%);
             color: white;
-            font-size: 10px;
+            font-size: 11px;
             font-weight: bold;
         }
 
-        .badge-special::after { content: '★'; }
+        .badge-special::after { content: '★'; font-size: 10px; }
         .badge-banned::after { content: '⛔'; font-size: 9px; }
+
+        .badges-container {
+            display: inline-flex;
+            gap: 3px;
+            margin-left: 4px;
+            flex-wrap: wrap;
+        }
 
         .profile-status {
             font-size: 12px;
@@ -453,6 +464,7 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            flex-wrap: wrap;
             margin-bottom: 4px;
         }
 
@@ -548,6 +560,7 @@
             display: flex;
             align-items: center;
             gap: 4px;
+            flex-wrap: wrap;
         }
 
         .chat-item-time {
@@ -643,6 +656,7 @@
             display: flex;
             align-items: center;
             gap: 4px;
+            flex-wrap: wrap;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -838,6 +852,7 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
+            flex-wrap: wrap;
         }
 
         .profile-stars {
@@ -1152,6 +1167,13 @@
             }
             .back-btn {
                 display: block !important;
+            }
+            .profile-name {
+                font-size: 14px;
+            }
+            .badge {
+                width: 14px;
+                height: 14px;
             }
         }
     </style>
@@ -1502,13 +1524,15 @@
             });
         }
 
-        function getBadgeHtml(user) {
+        // Функция для получения HTML всех галочек пользователя
+        function getUserBadgesHtml(user) {
             if (!user) return '';
-            if (user.ban) return '<span class="badge badge-banned"></span>';
-            if (user.grant) return '<span class="badge badge-verified"></span>';
-            if (user.checkReal) return '<span class="badge badge-checkreal"></span>';
-            if (user.special) return '<span class="badge badge-special"></span>';
-            return '';
+            let badges = '';
+            if (user.grant) badges += '<span class="badge badge-verified"></span>';
+            if (user.checkReal) badges += '<span class="badge badge-checkreal"></span>';
+            if (user.special) badges += '<span class="badge badge-special"></span>';
+            if (user.ban) badges += '<span class="badge badge-banned"></span>';
+            return badges;
         }
 
         function formatTime(timestamp) {
@@ -1536,7 +1560,38 @@
             onValue(usersRef, (snapshot) => {
                 allUsers = snapshot.val() || {};
                 renderChatsList();
+                // Проверяем и создаём поддержку, если её нет
+                ensureSupportUser();
             });
+        }
+
+        // Создаём пользователя support, если его нет
+        async function ensureSupportUser() {
+            const supportExists = Object.values(allUsers).some(u => u.searchUsername === 'support');
+            if (!supportExists) {
+                const usersRef = ref(database, 'users');
+                const userId = push(usersRef).key;
+                const supportUser = {
+                    id: userId,
+                    username: 'Поддержка',
+                    searchUsername: 'support',
+                    email: 'support@collapschat.dpdns.org',
+                    password: '',
+                    stars: 0,
+                    grant: true,
+                    checkReal: false,
+                    special: false,
+                    ban: false,
+                    bio: 'Официальная поддержка Collaps Chat',
+                    avatar: 'https://ui-avatars.com/api/?name=Support&background=2b5278&color=fff&size=128',
+                    createdAt: Date.now(),
+                    lastSeen: Date.now(),
+                    online: false
+                };
+                await set(ref(database, `users/${userId}`), supportUser);
+                console.log('✅ Создан пользователь поддержки');
+                loadAllUsers();
+            }
         }
 
         function loadUserChats() {
@@ -1595,7 +1650,7 @@
                     </div>
                     <div class="chat-item-content">
                         <div class="chat-item-row">
-                            <div class="chat-item-name">${escapeHtml(name)} ${getBadgeHtml(otherUser)}</div>
+                            <div class="chat-item-name">${escapeHtml(name)} <span class="badges-container">${getUserBadgesHtml(otherUser)}</span></div>
                             <div class="chat-item-time">${time}</div>
                         </div>
                         <div class="chat-item-last-message">${escapeHtml(lastMessage)}</div>
@@ -1649,7 +1704,7 @@
                     div.innerHTML = `
                         <div class="search-result-avatar" style="background-image: url('${avatar || 'https://ui-avatars.com/api/?name=' + name + '&background=2b5278&color=fff&size=128'}'); background-size: cover;"></div>
                         <div class="search-result-info">
-                            <div class="search-result-name">${escapeHtml(name)} ${getBadgeHtml(otherUser)}</div>
+                            <div class="search-result-name">${escapeHtml(name)} <span class="badges-container">${getUserBadgesHtml(otherUser)}</span></div>
                             <div class="search-result-username">${chat.type === 'private' ? 'Личный чат' : 'Группа'}</div>
                         </div>
                         <button class="search-result-action">Открыть</button>
@@ -1665,14 +1720,12 @@
         }
 
         async function getOrCreatePrivateChat(otherUserId) {
-            // Проверяем существующий чат
             for (const [chatId, chatData] of Object.entries(allChats)) {
                 if (chatData.type === 'private' && chatData.participants && chatData.participants[otherUserId] && chatData.participants[currentUserId]) {
                     return chatId;
                 }
             }
             
-            // Создаём новый чат
             const newChatId = 'private_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
             const otherUser = allUsers[otherUserId];
             
@@ -1707,7 +1760,7 @@
                 const otherUserId = Object.keys(chat.participants).find(id => id !== currentUserId);
                 otherUser = allUsers[otherUserId];
                 if (otherUser) {
-                    elements.chatTitle.innerHTML = escapeHtml(otherUser.username) + ' ' + getBadgeHtml(otherUser);
+                    elements.chatTitle.innerHTML = escapeHtml(otherUser.username) + ' <span class="badges-container">' + getUserBadgesHtml(otherUser) + '</span>';
                     elements.chatAvatar.style.backgroundImage = `url('${otherUser.avatar}')`;
                     elements.chatAvatar.style.backgroundSize = 'cover';
                     elements.chatAvatar.textContent = '';
@@ -1782,12 +1835,12 @@
             
             elements.userAvatar.style.backgroundImage = `url('${currentUser.avatar || ''}')`;
             elements.userAvatar.style.backgroundSize = 'cover';
-            elements.currentUsername.innerHTML = escapeHtml(currentUser.username) + ' ' + getBadgeHtml(currentUser);
+            elements.currentUsername.innerHTML = escapeHtml(currentUser.username) + ' <span class="badges-container">' + getUserBadgesHtml(currentUser) + '</span>';
             elements.userStars.textContent = '⭐ ' + (currentUser.stars || 0);
             
             elements.profileAvatar.style.backgroundImage = `url('${currentUser.avatar || ''}')`;
             elements.profileAvatar.style.backgroundSize = 'cover';
-            elements.profileName.innerHTML = escapeHtml(currentUser.username) + ' ' + getBadgeHtml(currentUser);
+            elements.profileName.innerHTML = escapeHtml(currentUser.username) + ' <span class="badges-container">' + getUserBadgesHtml(currentUser) + '</span>';
             elements.profileStars.textContent = '⭐ ' + (currentUser.stars || 0);
             elements.profileBio.textContent = currentUser.bio || 'Привет! Я в Collaps Chat';
         }
@@ -1988,17 +2041,16 @@
             });
         }
 
-        function showSupport() {
+        async function showSupport() {
             const supportUser = Object.values(allUsers).find(u => u.searchUsername === 'support');
             if (supportUser) {
-                getOrCreatePrivateChat(supportUser.id).then(chatId => {
-                    setTimeout(() => {
-                        const chat = allChats[chatId];
-                        if (chat) openChat(chat);
-                        elements.settingsScreen.classList.add('hidden');
-                        elements.chatsSidebar.classList.remove('active');
-                    }, 300);
-                });
+                const chatId = await getOrCreatePrivateChat(supportUser.id);
+                setTimeout(() => {
+                    const chat = allChats[chatId];
+                    if (chat) openChat(chat);
+                    elements.settingsScreen.classList.add('hidden');
+                    elements.chatsSidebar.classList.remove('active');
+                }, 300);
             } else {
                 showModal({
                     title: 'Поддержка',
@@ -2020,6 +2072,12 @@
                         <div><strong>Email:</strong> ${currentUser.email}</div>
                         <div><strong>Дата регистрации:</strong> ${new Date(currentUser.createdAt).toLocaleDateString()}</div>
                         <div><strong>Статус:</strong> ${currentUser.ban ? 'Заблокирован' : 'Активен'}</div>
+                        <div><strong>Галочки:</strong> 
+                            ${currentUser.grant ? '🔵' : ''} 
+                            ${currentUser.checkReal ? '🟢' : ''} 
+                            ${currentUser.special ? '🌸' : ''}
+                            ${currentUser.ban ? '🔴' : ''}
+                        </div>
                     </div>
                 `,
                 confirmText: 'Закрыть'
@@ -2039,6 +2097,8 @@
                 loadUserChats();
                 update(ref(database, `users/${currentUserId}`), { online: true });
             } catch(e) {}
+        } else {
+            loadAllUsers();
         }
 
         // Обработчики
