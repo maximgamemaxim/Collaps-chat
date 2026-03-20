@@ -5,92 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Политика конфиденциальности - Collaps Chat</title>
     <style>
-        :root {
-            --bg-primary: #ffffff;
-            --bg-secondary: #f8f9fa;
-            --text-primary: #333333;
-            --text-secondary: #666666;
-            --text-muted: #95a5a6;
-            --border-color: #e9ecef;
-            --btn-primary-bg: #667eea;
-            --btn-primary-text: #ffffff;
-            --verified-bg: #1DA1F2;
-            --checkreal-bg: #2ecc71;
-            --special-bg: #ff69b4;
-            --banned-bg: #e74c3c;
-            --shadow: 0 20px 60px rgba(0,0,0,0.1);
-        }
-        
-        [data-theme="dark"] {
-            --bg-primary: #1a1a1a;
-            --bg-secondary: #2d2d2d;
-            --text-primary: #ffffff;
-            --text-secondary: #cccccc;
-            --text-muted: #888888;
-            --border-color: #444444;
-            --btn-primary-bg: #4a5568;
-            --btn-primary-text: #ffffff;
-            --verified-bg: #1DA1F2;
-            --checkreal-bg: #2ecc71;
-            --special-bg: #ff69b4;
-            --banned-bg: #e74c3c;
-            --shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #17212b;
+            color: #ffffff;
             padding: 20px;
-            transition: background 0.3s ease, color 0.3s ease;
+            line-height: 1.6;
         }
-        
         .container {
             max-width: 800px;
             margin: 0 auto;
-            background: var(--bg-secondary);
+            background: #1e2b37;
             border-radius: 20px;
-            box-shadow: var(--shadow);
-            padding: 30px;
+            padding: 40px;
         }
-        
         h1 {
-            color: #667eea;
+            color: #2b5278;
             margin-bottom: 20px;
             text-align: center;
-            font-size: 28px;
         }
-        
         h2 {
-            color: var(--text-primary);
             margin: 25px 0 15px;
             font-size: 22px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 8px;
         }
-        
-        p {
-            margin-bottom: 15px;
-            color: var(--text-secondary);
+        p, li {
+            color: #8e9cae;
+            margin-bottom: 12px;
         }
-        
         ul {
-            margin-bottom: 20px;
             padding-left: 25px;
-            color: var(--text-secondary);
+            margin-bottom: 20px;
         }
-        
-        li {
-            margin-bottom: 8px;
-        }
-        
         .badge-example {
             display: inline-block;
             width: 18px;
@@ -99,165 +49,83 @@
             margin: 0 3px;
             vertical-align: middle;
         }
-        
-        .badge-blue { background: var(--verified-bg); }
-        .badge-green { background: var(--checkreal-bg); }
-        .badge-pink { background: var(--special-bg); }
-        .badge-red { background: var(--banned-bg); }
-        
+        .badge-blue { background: #4caf50; }
+        .badge-green { background: #2ecc71; }
+        .badge-pink { background: #ff69b4; }
+        .badge-red { background: #e74c3c; }
         .last-updated {
             text-align: center;
-            color: var(--text-muted);
-            font-size: 13px;
-            margin-top: 30px;
+            color: #6b7a8d;
+            margin-top: 40px;
             padding-top: 20px;
-            border-top: 1px solid var(--border-color);
+            border-top: 1px solid #0f1b26;
         }
-        
         .back-btn {
             display: inline-block;
-            background: var(--btn-primary-bg);
-            color: var(--btn-primary-text);
+            background: #2b5278;
+            color: white;
             padding: 10px 25px;
-            border-radius: 50px;
+            border-radius: 30px;
             text-decoration: none;
-            font-weight: 600;
-            margin: 20px 0 10px;
-            transition: all 0.3s ease;
+            margin-top: 20px;
         }
-        
-        .back-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-        
-        .theme-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: var(--btn-primary-bg);
-            color: var(--btn-primary-text);
-            border: none;
-            padding: 8px 16px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            z-index: 1000;
-        }
-        
         @media (max-width: 768px) {
-            body { padding: 10px; }
             .container { padding: 20px; }
-            h1 { font-size: 24px; }
-            h2 { font-size: 20px; }
-            .theme-toggle { top: 10px; right: 10px; }
         }
     </style>
 </head>
 <body>
-    <button class="theme-toggle" id="themeToggle">🌙 Тёмная тема</button>
-    
     <div class="container">
         <h1>Политика конфиденциальности Collaps Chat</h1>
-        
         <p><strong>Последнее обновление:</strong> 20 марта 2026 г.</p>
-        
+
         <h2>1. Какие данные мы собираем</h2>
-        <p>При регистрации и использовании Collaps Chat мы собираем следующую информацию:</p>
         <ul>
             <li><strong>Имя пользователя (никнейм)</strong> — для отображения в чате</li>
             <li><strong>Юзернейм для поиска</strong> — для поиска вас другими пользователями</li>
             <li><strong>Email</strong> — для входа в аккаунт и восстановления пароля</li>
             <li><strong>Пароль</strong> — хранится в зашифрованном виде</li>
-            <li><strong>Сообщения</strong> — которые вы отправляете в чатах, каналах и группах</li>
-            <li><strong>Время последнего визита и статус онлайн</strong> — для отображения активности</li>
+            <li><strong>Сообщения</strong> — которые вы отправляете в чатах</li>
             <li><strong>Данные аккаунта Google</strong> (имя, email) — если вы входите через Google</li>
         </ul>
-        
-        <h2>2. Как мы используем ваши данные</h2>
+
+        <h2>2. Статусы аккаунтов</h2>
         <ul>
-            <li>Для обеспечения работы мессенджера (вход, отправка сообщений)</li>
-            <li>Для отображения вашего профиля другим пользователям</li>
-            <li>Для модерации контента (проверка на запрещённые слова)</li>
-            <li>Для технической поддержки</li>
+            <li><span class="badge-example badge-blue"></span> <strong>Синяя галочка (grant)</strong> — официальный аккаунт (администрация)</li>
+            <li><span class="badge-example badge-green"></span> <strong>Зелёная галочка (checkReal)</strong> — подтверждённый реальный пользователь</li>
+            <li><span class="badge-example badge-pink"></span> <strong>Розовая галочка (special)</strong> — особый статус (за вклад в проект)</li>
+            <li><span class="badge-example badge-red"></span> <strong>Красный значок (ban)</strong> — аккаунт заблокирован за нарушения</li>
         </ul>
-        
-        <h2>3. Статусы аккаунтов</h2>
-        <p>В Collaps Chat используются следующие обозначения:</p>
-        <ul>
-            <li><span class="badge-example badge-blue"></span> <strong>Синяя галочка (grant: true)</strong> — официальный аккаунт (администрация, поддержка)</li>
-            <li><span class="badge-example badge-green"></span> <strong>Зелёная галочка (checkReal: true)</strong> — подтверждённый реальный пользователь</li>
-            <li><span class="badge-example badge-pink"></span> <strong>Розовая галочка (special: true)</strong> — особый статус (выдаётся за вклад в проект)</li>
-            <li><span class="badge-example badge-red"></span> <strong>Красный значок (ban: true)</strong> — аккаунт заблокирован за нарушения</li>
-        </ul>
-        
-        <h2>4. Блокировка аккаунтов</h2>
-        <p>Мы блокируем аккаунты (ban: true) за:</p>
+
+        <h2>3. Блокировка аккаунтов</h2>
+        <p>Мы блокируем аккаунты за:</p>
         <ul>
             <li>Использование запрещённых слов и оскорблений</li>
             <li>Спам и рекламу</li>
             <li>Попытки взлома</li>
-            <li>Неоднократные нарушения правил</li>
         </ul>
-        <p>Заблокированные пользователи не могут входить и отправлять сообщения.</p>
-        
-        <h2>5. Где хранятся данные</h2>
-        <p>Все данные хранятся в <strong>Firebase (Google Cloud)</strong>, серверы в Европе.</p>
-        
-        <h2>6. Ваши права</h2>
+
+        <h2>4. Где хранятся данные</h2>
+        <p>Все данные хранятся в <strong>Firebase (Google Cloud)</strong>, серверы находятся в Европе.</p>
+
+        <h2>5. Ваши права</h2>
         <ul>
             <li>Запросить копию данных: <strong>collapschat.legal@bk.ru</strong></li>
             <li>Исправить данные (в настройках)</li>
             <li>Удалить аккаунт (в настройках)</li>
         </ul>
-        
-        <h2>7. Удаление аккаунта</h2>
-        <p>Удалить аккаунт можно:</p>
-        <ul>
-            <li>В настройках → Опасная зона → Удалить аккаунт</li>
-            <li>По email: <strong>collapschat.legal@bk.ru</strong></li>
-            <li>Через поддержку @support</li>
-        </ul>
-        
-        <h2>8. Контакты</h2>
+
+        <h2>6. Контакты</h2>
         <ul>
             <li>Email: <strong>collapschat.legal@bk.ru</strong></li>
-            <li>Поддержка: @support</li>
         </ul>
-        
+
         <div style="text-align: center;">
             <a href="index.html" class="back-btn">← Вернуться в чат</a>
         </div>
-        
         <div class="last-updated">
             © 2026 Collaps Chat
         </div>
     </div>
-    
-    <script>
-        const themeToggle = document.getElementById('themeToggle');
-        const savedTheme = localStorage.getItem('collapsChatTheme');
-        
-        if (savedTheme === 'dark') {
-            document.documentElement.setAttribute('data-theme', 'dark');
-            themeToggle.textContent = '☀️ Светлая тема';
-        }
-        
-        themeToggle.addEventListener('click', () => {
-            const html = document.documentElement;
-            const isDark = html.getAttribute('data-theme') === 'dark';
-            
-            if (isDark) {
-                html.removeAttribute('data-theme');
-                themeToggle.textContent = '🌙 Тёмная тема';
-                localStorage.setItem('collapsChatTheme', 'light');
-            } else {
-                html.setAttribute('data-theme', 'dark');
-                themeToggle.textContent = '☀️ Светлая тема';
-                localStorage.setItem('collapsChatTheme', 'dark');
-            }
-        });
-    </script>
 </body>
 </html>
