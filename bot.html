@@ -94,7 +94,7 @@ bot.run()</pre>
     var DB_URL = "https://max-chat-f9319-default-rtdb.europe-west1.firebasedatabase.app";
     var firebaseConfig = {
         apiKey: "AIzaSyDdey6ZroD4KsiPiD2dnVfQe3I3OW3MPV8",
-        authDomain: "max-chat-f9319.firebaseapp.com",
+        authDomain: "collapschatproxy.makcimgamemakcim.workers.dev",
         databaseURL: DB_URL,
         projectId: "max-chat-f9319"
     };
@@ -103,8 +103,7 @@ bot.run()</pre>
     try {
         if (window.firebase && firebase.initializeApp) {
             firebase.initializeApp(firebaseConfig);
-            db = firebase.database();
-        }
+            db = firebase.da
     } catch (e) {
         console.warn('Firebase SDK init failed, REST fallback will be used:', e);
     }
