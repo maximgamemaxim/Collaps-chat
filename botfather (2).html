@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Collaps BotFather</title>
+<style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; background:#17212b; color:#fff; min-height:100vh; padding:20px; }
+    .wrap { max-width:680px; margin:0 auto; }
+    h1 { font-size:24px; margin-bottom:4px; }
+    .sub { color:#8e9cae; margin-bottom:24px; font-size:14px; }
+    .card { background:#1e2b37; border:1px solid #0f1b26; border-radius:14px; padding:18px; margin-bottom:16px; }
+    .card h2 { font-size:16px; margin-bottom:12px; }
+    label { display:block; font-size:12px; color:#8e9cae; margin:10px 0 4px; }
+    input, textarea { width:100%; background:#242f3d; border:1px solid #0f1b26; border-radius:8px; padding:10px 12px; color:#fff; font-size:14px; font-family:inherit; }
+    textarea { resize:vertical; min-height:72px; }
+    button { background:#2b5278; color:#fff; border:none; border-radius:8px; padding:10px 16px; font-size:14px; cursor:pointer; margin-top:14px; }
+    button:hover { background:#3a6d99; }
+    button.sec { background:#33414f; }
+    button.danger { background:#b53b3b; padding:6px 12px; margin:0; font-size:12px; }
+    .bot { background:#242f3d; border-radius:10px; padding:12px; margin-bottom:10px; }
+    .bot-top { display:flex; justify-content:space-between; align-items:center; gap:8px; }
+    .bot-name { font-weight:600; }
+    .bot-uname { color:#8e9cae; font-size:13px; }
+    .token { display:flex; gap:8px; margin-top:8px; }
+    .token code { flex:1; background:#17212b; padding:8px 10px; border-radius:8px; font-size:12px; word-break:break-all; color:#7fd1a3; }
+    .token button { margin:0; padding:8px 12px; font-size:12px; }
+    .empty { color:#8e9cae; font-size:14px; }
+    pre { background:#17212b; border-radius:10px; padding:14px; overflow:auto; font-size:12px; line-height:1.5; color:#cdd6e0; }
+    .ok { color:#4caf50; } .err { color:#e74c3c; }
+    a { color:#6db3f2; }
+    .msg { font-size:13px; margin-top:8px; min-height:16px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+    <h1>🤖 Collaps BotFather</h1>
+    <div class="sub">Создавай ботов и получай API-токен — пиши логику на Python, как в Telegram.</div>
+
+    <div class="card">
+        <h2>Новый бот</h2>
+        <label>Имя бота</label>
+        <input id="f-name" placeholder="Мой бот">
+        <label>@юзернейм (латиница, цифры, _)</label>
+        <input id="f-uname" placeholder="my_bot">
+        <label>Описание (необязательно)</label>
+        <input id="f-bio" placeholder="Что умеет бот">
+        <button id="create-btn">Создать бота и получить токен</button>
+        <div class="msg" id="create-msg"></div>
+    </div>
+
+    <div class="card">
+        <h2>Мои боты</h2>
+        <div id="bots-list"><div class="empty">Загрузка…</div></div>
+    </div>
+
+
+    <div class="card">
+        <h2>📦 Установка библиотеки</h2>
+        <p class="sub" style="margin-bottom:10px">После публикации пакета на PyPI установка будет такой:</p>
+        <pre>pip install collaps-bot</pre>
+        <p class="sub" style="margin:10px 0">Импорт в коде отличается от имени пакета — это нормально:</p>
+        <pre>from collaps_bot import CollapsBot</pre>
+        <p class="sub" style="margin-top:10px">Если пакет ещё не опубликован на PyPI, положите файл <b>collaps_bot.py</b> рядом с вашим ботом и используйте тот же импорт.</p>
+    </div>
+
+    <div class="card">
+        <h2>🐍 Как запустить бота на Python</h2>
+        <p class="sub" style="margin-bottom:10px">Скачай файл <b>collaps_bot.py</b>, вставь свой токен и запусти: <code>python3 mybot.py</code>. Библиотека без зависимостей (только Python 3).</p>
+        <pre id="py-example">from collaps_bot import CollapsBot
+
+bot = CollapsBot("ВСТАВЬ_ТОКЕН")
+
+@bot.command("start")
+def start(u):
+    u.reply("Привет! Я бот на Python 🐍")
+
+@bot.command("help")
+def help_cmd(u):
+    u.reply("Команды: /start /help")
+
+@bot.message
+def echo(u):
+    u.reply("Вы написали: " + u.text)
+
+bot.run()</pre>
+    </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+<script>
+    var DB_URL = "https://max-chat-f9319-default-rtdb.europe-west1.firebasedatabase.app";
+    var firebaseConfig = {
+        apiKey: "AIzaSyDdey6ZroD4KsiPiD2dnVfQe3I3OW3MPV8",
+        authDomain: "max-chat-f9319.firebaseapp.com",
+        databaseURL: DB_URL,
+        projectId: "max-chat-f9319"
+    };
+
+    var db = null;
+    try {
+        if (window.firebase && firebase.initializeApp) {
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.database();
+        }
+    } catch (e) {
+        console.warn('Firebase SDK init failed, REST fallback will be used:', e);
+    }
+
+    // стабильный id создателя для этого браузера
+    var creatorId = localStorage.getItem('collaps_creator_id');
+    if (!creatorId) {
+        creatorId = 'bf_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+        localStorage.setItem('collaps_creator_id', creatorId);
+    }
+
+    function randSecret() {
+        var s = '';
+        var chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        if (window.crypto && crypto.getRandomValues) {
+            var arr = new Uint32Array(32);
+            crypto.getRandomValues(arr);
+            for (var i = 0; i < arr.length; i++) s += chars.charAt(arr[i] % chars.length);
+            return s;
+        }
+        for (var j = 0; j < 32; j++) s += chars.charAt(Math.floor(Math.random() * chars.length));
+        return s;
+    }
+
+    function makePushId() {
+        return 'bot_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 12);
+    }
+
+    function esc(s) {
+        return (s || '').replace(/[&<>"]/g, function (m) {
+            return ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' })[m];
+        });
+    }
+
+    function errText(e) {
+        if (!e) return 'unknown error';
+        return e.message || e.code || String(e);
+    }
+
+    function setMsg(t, ok) {
+        var e = document.getElementById('create-msg');
+        e.textContent = t;
+        e.className = 'msg ' + (ok ? 'ok' : 'err');
+    }
+
+    async function restGet(path) {
+        var r = await fetch(DB_URL + '/' + path + '.json');
+        if (!r.ok) throw new Error('REST GET ' + r.status + ': ' + await r.text());
+        return await r.json();
+    }
+
+    async function restSet(path, data) {
+        var r = await fetch(DB_URL + '/' + path + '.json', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        if (!r.ok) throw new Error('REST PUT ' + r.status + ': ' + await r.text());
+        return await r.json();
+    }
+
+    async function getUsers() {
+        if (db) {
+            try {
+                var snap = await db.ref('users').once('value');
+                return snap.val() || {};
+            } catch (e) {
+                console.warn('SDK read failed, trying REST:', e);
+            }
+        }
+        return (await restGet('users')) || {};
+    }
+
+    async function saveUser(id, data) {
+        if (db) {
+            try {
+                await db.ref('users/' + id).set(data);
+                return;
+            } catch (e) {
+                console.warn('SDK write failed, trying REST:', e);
+            }
+        }
+        await restSet('users/' + id, data);
+    }
+
+    document.getElementById('create-btn').addEventListener('click', async function () {
+        var btn = document.getElementById('create-btn');
+        var name = document.getElementById('f-name').value.trim();
+        var uname = document.getElementById('f-uname').value.trim().replace(/^@/, '').toLowerCase();
+        var bio = document.getElementById('f-bio').value.trim();
+        try {
+            if (!name) { setMsg('Введите имя бота', false); return; }
+            if (!/^[a-z0-9_]+$/.test(uname)) { setMsg('Юзернейм: только латиница, цифры и _', false); return; }
+            btn.disabled = true;
+            btn.textContent = 'Создаю…';
+            setMsg('Проверяю юзернейм…', true);
+
+            var users = await getUsers();
+            var taken = Object.keys(users).some(function (k) { return users[k] && users[k].searchUsername === uname; });
+            if (taken) { setMsg('Юзернейм @' + uname + ' уже занят', false); return; }
+
+            var botId = db ? db.ref('users').push().key : makePushId();
+            var secret = randSecret();
+            var bot = {
+                id: botId,
+                username: name,
+                searchUsername: uname,
+                isBot: true,
+                botType: 'api',
+                ownerId: creatorId,
+                apiSecret: secret,
+                bio: bio || 'Бот Collaps Chat',
+                avatar: 'https://ui-avatars.com/api/?name=' + encodeURIComponent(name) + '&background=8e44ad&color=fff&size=128',
+                email: '', password: '', stars: 0, grant: false, checkReal: false, special: false, ban: false,
+                createdAt: Date.now(), lastSeen: Date.now(), online: false
+            };
+            await saveUser(botId, bot);
+
+            document.getElementById('f-name').value = '';
+            document.getElementById('f-uname').value = '';
+            document.getElementById('f-bio').value = '';
+            setMsg('Готово! Токен ниже: ' + botId + ':' + secret, true);
+            await renderBots();
+        } catch (e) {
+            console.error(e);
+            setMsg('Ошибка: ' + errText(e), false);
+            alert('Ошибка создания токена:\n' + errText(e) + '\n\nОткрой F12 → Console, если нужно прислать точную ошибку.');
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Создать бота и получить токен';
+        }
+    });
+
+    function copyToken(t) {
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(t).then(function () { alert('Токен скопирован'); });
+        } else {
+            prompt('Скопируйте токен:', t);
+        }
+    }
+
+    async function deleteBot(id) {
+        if (!confirm('Удалить бота?')) return;
+        try {
+            if (db) await db.ref('users/' + id).remove();
+            else await fetch(DB_URL + '/users/' + id + '.json', { method: 'DELETE' });
+            await renderBots();
+        } catch (e) {
+            alert('Ошибка удаления: ' + errText(e));
+        }
+    }
+
+    async function renderBots() {
+        var box = document.getElementById('bots-list');
+        try {
+            var users = await getUsers();
+            var mine = Object.keys(users).map(function (k) { return users[k]; })
+                .filter(function (u) { return u && u.isBot && u.botType === 'api' && u.ownerId === creatorId; });
+            if (!mine.length) {
+                box.innerHTML = '<div class="empty">У вас пока нет ботов. Создайте первого выше.</div>';
+                return;
+            }
+            box.innerHTML = mine.map(function (u) {
+                var token = u.id + ':' + u.apiSecret;
+                return '<div class="bot">' +
+                    '<div class="bot-top"><div><span class="bot-name">' + esc(u.username) + '</span> <span class="bot-uname">@' + esc(u.searchUsername) + '</span></div>' +
+                    '<button class="danger" onclick="deleteBot(\'' + u.id + '\')">Удалить</button></div>' +
+                    '<div class="token"><code>' + esc(token) + '</code><button onclick="copyToken(\'' + esc(token) + '\')">Копировать</button></div>' +
+                    '</div>';
+            }).join('');
+        } catch (e) {
+            console.error(e);
+            box.innerHTML = '<div class="empty err">Ошибка загрузки ботов: ' + esc(errText(e)) + '</div>';
+        }
+    }
+
+    renderBots();
+</script>
+</body>
+</html>
