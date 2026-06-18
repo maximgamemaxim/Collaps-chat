@@ -1687,17 +1687,26 @@
         function equalTo(value) { return function (q) { return q.equalTo(value); }; }
         function signInWithPopup(authInst, prov) { return authInst.signInWithPopup(prov); }
 
-                  // Хак для перехвата заблокированных запросов авторизации Google Token
-          const originalFetch = window.fetch;
-          window.fetch = async function(...args) {
-            let url = args[0];
-            if (typeof url === 'string' && url.includes('securetoken.googleapis.com')) {
-              // Перенаправляем запрос токена на твой прокси в Cloudflare
-              url = url.replace('https://securetoken.googleapis.com', 'https://collapschatproxy.makcimgamemakcim.workers.dev');
-              args[0] = url;
-            }
-            return originalFetch.apply(this, args);
-          };
+               // Хак для перехвата ВСЕХ заблокированных запросов Google (Токены + Авторизация)
+      const originalFetch = window.fetch;
+      window.fetch = async function(...args) {
+        let resource = args[0];
+        let urlString = typeof resource === 'string' ? resource : (resource && resource.url) ? resource.url : '';
+    
+        // Перехватываем и securetoken, и identitytoolkit
+        if (urlString.includes('securetoken.googleapis.com') || urlString.includes('identitytoolkit.googleapis.com')) {
+          const proxyUrl = urlString
+            .replace('https://securetoken.googleapis.com', 'https://collapschatproxy.makcimgamemakcim.workers.dev')
+            .replace('https://identitytoolkit.googleapis.com', 'https://collapschatproxy.makcimgamemakcim.workers.dev');
+          
+          if (typeof resource === 'string') {
+            args[0] = proxyUrl;
+          } else {
+            args[0] = new Request(proxyUrl, resource);
+          }
+        }
+        return originalFetch.apply(this, args);
+      };
 
         const firebaseConfig = {
             apiKey: "AIzaSyDdey6ZroD4KsiPiD2dnVfQe3I3OW3MPV8",
