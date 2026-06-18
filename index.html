@@ -1180,6 +1180,18 @@
                 height: 14px;
             }
         }
+        /* ===== Профиль в стиле Telegram ===== */
+        .tg-profile-hero { text-align: center; padding: 8px 0 20px; }
+        .tg-profile-substatus { color: var(--text-secondary); font-size: 14px; margin-top: 6px; }
+        .tg-action-row { display: flex; gap: 8px; margin-bottom: 20px; }
+        .tg-action-btn { flex: 1; background: var(--bg-secondary); border: none; border-radius: 12px; padding: 12px 4px; color: var(--accent-hover); display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; font-size: 12px; transition: background 0.2s; }
+        .tg-action-btn:hover { background: var(--bg-hover); }
+        .tg-action-ic { font-size: 20px; line-height: 1; }
+        .tg-info-list { background: var(--bg-secondary); border-radius: 12px; overflow: hidden; margin-bottom: 16px; }
+        .tg-info-row { padding: 12px 16px; border-bottom: 1px solid var(--border-color); }
+        .tg-info-row:last-child { border-bottom: none; }
+        .tg-info-label { color: var(--text-secondary); font-size: 12px; margin-bottom: 3px; }
+        .tg-info-value { font-size: 15px; word-break: break-word; }
     </style>
 </head>
 <body>
@@ -1339,19 +1351,25 @@
             <div id="profile-screen" class="profile-screen hidden">
                 <div class="profile-header">
                     <button class="back-btn" id="back-from-profile">←</button>
-                    <h3>Профиль</h3>
+                    <h3 id="profile-header-title">Профиль</h3>
                     <button class="edit-btn" id="edit-profile-btn">✎</button>
                 </div>
                 <div class="profile-content">
-                    <div class="profile-avatar-large" id="profile-avatar"></div>
-                    <div class="profile-name-large" id="profile-name"></div>
-                    <div class="profile-stars" id="profile-stars">⭐ 0</div>
-                    <div class="profile-section">
-                        <h4>О себе</h4>
-                        <div class="profile-bio-text" id="profile-bio">...</div>
+                    <div class="tg-profile-hero">
+                        <div class="profile-avatar-large" id="profile-avatar"></div>
+                        <div class="profile-name-large" id="profile-name"></div>
+                        <div class="tg-profile-substatus" id="profile-substatus"></div>
                     </div>
-                    <button class="profile-action-btn" id="send-message-to-profile">Написать сообщение</button>
-                    <button class="profile-action-btn danger" id="delete-account-btn">Удалить аккаунт</button>
+                    <div class="tg-action-row" id="tg-action-row">
+                        <button class="tg-action-btn" id="tg-act-message"><div class="tg-action-ic">💬</div><span>Чат</span></button>
+                        <button class="tg-action-btn" id="tg-act-mute"><div class="tg-action-ic">🔔</div><span>Звук</span></button>
+                        <button class="tg-action-btn" id="tg-act-call"><div class="tg-action-ic">📞</div><span>Звонок</span></button>
+                        <button class="tg-action-btn" id="tg-act-more"><div class="tg-action-ic">⋯</div><span>Ещё</span></button>
+                    </div>
+                    <div class="tg-info-list" id="tg-info-list"></div>
+                    <div id="profile-self-extra">
+                        <button class="profile-action-btn danger" id="delete-account-btn">Удалить аккаунт</button>
+                    </div>
                 </div>
             </div>
 ​
@@ -1400,10 +1418,23 @@
         </div>
     </div>
 ​
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-        import { getDatabase, ref, set, push, onChildAdded, query, orderByChild, equalTo, get, onValue, remove, update } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script>
+        // === Слой совместимости с модульным API Firebase ===
+        function ref(db, path) { return db.ref(path); }
+        function set(reference, value) { return reference.set(value); }
+        function push(reference, value) { return value === undefined ? reference.push() : reference.push(value); }
+        function update(reference, value) { return reference.update(value); }
+        function remove(reference) { return reference.remove(); }
+        function get(refOrQuery) { return refOrQuery.get(); }
+        function onValue(refOrQuery, cb) { refOrQuery.on('value', cb); return function () { refOrQuery.off('value', cb); }; }
+        function onChildAdded(refOrQuery, cb) { refOrQuery.on('child_added', cb); return function () { refOrQuery.off('child_added', cb); }; }
+        function query(reference) { var cs = Array.prototype.slice.call(arguments, 1); var q = reference; cs.forEach(function (c) { q = c(q); }); return q; }
+        function orderByChild(key) { return function (q) { return q.orderByChild(key); }; }
+        function equalTo(value) { return function (q) { return q.equalTo(value); }; }
+        function signInWithPopup(authInst, prov) { return authInst.signInWithPopup(prov); }
 ​
         const firebaseConfig = {
             apiKey: "AIzaSyDdey6ZroD4KsiPiD2dnVfQe3I3OW3MPV8",
@@ -1415,10 +1446,10 @@
             appId: "1:1013158224179:web:c4a052ca2e86034de59e46"
         };
 ​
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
-        const auth = getAuth(app);
-        const provider = new GoogleAuthProvider();
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const auth = firebase.auth();
+        const provider = new firebase.auth.GoogleAuthProvider();
 ​
         let currentUser = null;
         let currentUserId = null;
@@ -1477,10 +1508,10 @@
             messageInputArea: document.getElementById('message-input-area'),
             profileAvatar: document.getElementById('profile-avatar'),
             profileName: document.getElementById('profile-name'),
-            profileStars: document.getElementById('profile-stars'),
-            profileBio: document.getElementById('profile-bio'),
+            profileSubstatus: document.getElementById('profile-substatus'),
+            tgInfoList: document.getElementById('tg-info-list'),
+            tgActionRow: document.getElementById('tg-action-row'),
             editProfileBtn: document.getElementById('edit-profile-btn'),
-            sendMessageToProfile: document.getElementById('send-message-to-profile'),
             deleteAccountBtn: document.getElementById('delete-account-btn'),
             notificationContainer: document.getElementById('notification-container'),
             modalOverlay: document.getElementById('modal-overlay'),
@@ -1729,7 +1760,7 @@
                 `;
                 const btn = div.querySelector('.search-result-action');
                 btn.addEventListener('click', (e) => { e.stopPropagation(); startChatWithUser(userId); });
-                div.addEventListener('click', () => startChatWithUser(userId));
+                div.addEventListener('click', () => openUserProfile(userId));
                 elements.searchResultsList.appendChild(div);
             });
 ​
@@ -1758,6 +1789,7 @@
         // Открыть или создать личный чат с найденным пользователем
         async function startChatWithUser(otherUserId) {
             if (!otherUserId) return;
+            elements.profileScreen.classList.add('hidden');
             const chatId = await getOrCreatePrivateChat(otherUserId);
             elements.searchInput.value = '';
             elements.searchResultsContainer.classList.remove('active');
@@ -1776,6 +1808,63 @@
                 }
             };
             tryOpen();
+        }
+​
+        let viewedProfileUserId = null;
+        let mutedState = false;
+​
+        function formatLastSeen(ts) {
+            if (!ts) return '';
+            const d = new Date(ts);
+            const now = new Date();
+            if (d.toDateString() === now.toDateString()) {
+                return 'сегодня в ' + d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+            }
+            return d.toLocaleDateString('ru-RU') + ' в ' + d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+        }
+​
+        function tgStatusText(user) {
+            if (!user) return '';
+            if (user.online) return 'в сети';
+            if (user.ban) return 'аккаунт заблокирован';
+            if (user.lastSeen) return 'был(а) в сети ' + formatLastSeen(user.lastSeen);
+            return 'не в сети';
+        }
+​
+        // Профиль в стиле Telegram (для себя и других)
+        function openUserProfile(userId) {
+            const isSelf = userId === currentUserId;
+            const user = isSelf ? currentUser : allUsers[userId];
+            if (!user) { showNotification('Пользователь не найден', 'error'); return; }
+            viewedProfileUserId = userId;
+            const avatar = user.avatar || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.username || 'U') + '&background=2b5278&color=fff&size=256';
+            elements.profileAvatar.style.backgroundImage = `url('${avatar}')`;
+            elements.profileAvatar.style.backgroundSize = 'cover';
+            elements.profileName.innerHTML = escapeHtml(user.username || '') + ' <span class="badges-container">' + getUserBadgesHtml(user) + '</span>';
+            elements.profileSubstatus.textContent = isSelf ? 'это вы' : tgStatusText(user);
+            const rows = [];
+            if (user.bio) rows.push({ label: 'О себе', value: escapeHtml(user.bio) });
+            if (user.searchUsername) rows.push({ label: 'Имя пользователя', value: '@' + escapeHtml(user.searchUsername) });
+            rows.push({ label: 'ID', value: escapeHtml(String(user.id || userId)) });
+            if (typeof user.stars !== 'undefined') rows.push({ label: 'Звёзды', value: '⭐ ' + (user.stars || 0) });
+            if (user.createdAt) rows.push({ label: 'В Collaps Chat с', value: new Date(user.createdAt).toLocaleDateString('ru-RU') });
+            if (isSelf && user.email) rows.push({ label: 'Email', value: escapeHtml(user.email) });
+            elements.tgInfoList.innerHTML = rows.map(function (r) { return '<div class="tg-info-row"><div class="tg-info-label">' + r.label + '</div><div class="tg-info-value">' + r.value + '</div></div>'; }).join('');
+            elements.tgActionRow.style.display = isSelf ? 'none' : 'flex';
+            elements.editProfileBtn.style.display = isSelf ? 'flex' : 'none';
+            const selfExtra = document.getElementById('profile-self-extra');
+            if (selfExtra) selfExtra.style.display = isSelf ? 'block' : 'none';
+            const headerTitle = document.getElementById('profile-header-title');
+            if (headerTitle) headerTitle.textContent = isSelf ? 'Мой профиль' : 'Профиль';
+            elements.chatsSidebar.classList.remove('active');
+            elements.settingsScreen.classList.add('hidden');
+            elements.profileScreen.classList.remove('hidden');
+        }
+​
+        function openCurrentChatProfile() {
+            if (!currentChat || currentChat.type !== 'private' || !currentChat.participants) return;
+            const otherId = Object.keys(currentChat.participants).find(function (id) { return id !== currentUserId; });
+            if (otherId) openUserProfile(otherId);
         }
 ​
         async function getOrCreatePrivateChat(otherUserId) {
@@ -1897,11 +1986,6 @@
             elements.currentUsername.innerHTML = escapeHtml(currentUser.username) + ' <span class="badges-container">' + getUserBadgesHtml(currentUser) + '</span>';
             elements.userStars.textContent = '⭐ ' + (currentUser.stars || 0);
             
-            elements.profileAvatar.style.backgroundImage = `url('${currentUser.avatar || ''}')`;
-            elements.profileAvatar.style.backgroundSize = 'cover';
-            elements.profileName.innerHTML = escapeHtml(currentUser.username) + ' <span class="badges-container">' + getUserBadgesHtml(currentUser) + '</span>';
-            elements.profileStars.textContent = '⭐ ' + (currentUser.stars || 0);
-            elements.profileBio.textContent = currentUser.bio || 'Привет! Я в Collaps Chat';
         }
 ​
         async function handleGoogleLogin() {
@@ -2199,8 +2283,7 @@
         });
         
         elements.userInfo.addEventListener('click', () => {
-            elements.chatsSidebar.classList.remove('active');
-            elements.profileScreen.classList.remove('hidden');
+            openUserProfile(currentUserId);
         });
         
         elements.searchBtn.addEventListener('click', () => {
@@ -2226,17 +2309,14 @@
                     if (bio && currentUserId) {
                         update(ref(database, `users/${currentUserId}`), { bio: bio });
                         currentUser.bio = bio;
-                        elements.profileBio.textContent = bio;
+                        openUserProfile(currentUserId);
                         showNotification('Профиль обновлён', 'success');
                     }
                 }
             });
         });
         
-        elements.sendMessageToProfile.addEventListener('click', () => {
-            elements.profileScreen.classList.add('hidden');
-            elements.chatsSidebar.classList.add('active');
-        });
+        // кнопка "написать" заменена действиями профиля
         
         elements.chatInfoBtn.addEventListener('click', () => {
             if (currentChat) {
@@ -2252,6 +2332,37 @@
         elements.settingsAccount.addEventListener('click', showAccountData);
         elements.settingsDelete.addEventListener('click', deleteAccount);
         
+        // Действия в профиле (Telegram-стиль)
+        const tgActMessage = document.getElementById('tg-act-message');
+        const tgActMute = document.getElementById('tg-act-mute');
+        const tgActCall = document.getElementById('tg-act-call');
+        const tgActMore = document.getElementById('tg-act-more');
+        if (tgActMessage) tgActMessage.addEventListener('click', () => {
+            if (viewedProfileUserId && viewedProfileUserId !== currentUserId) startChatWithUser(viewedProfileUserId);
+        });
+        if (tgActMute) tgActMute.addEventListener('click', () => {
+            mutedState = !mutedState;
+            showNotification(mutedState ? 'Уведомления отключены' : 'Уведомления включены', 'info');
+        });
+        if (tgActCall) tgActCall.addEventListener('click', () => {
+            showNotification('Звонки скоро появятся', 'info');
+        });
+        if (tgActMore) tgActMore.addEventListener('click', () => {
+            const u = (viewedProfileUserId === currentUserId) ? currentUser : allUsers[viewedProfileUserId];
+            if (!u) return;
+            showModal({
+                title: escapeHtml(u.username || 'Профиль'),
+                content: '<div style="text-align:left;line-height:1.8;">' +
+                    (u.searchUsername ? '<div>Юзернейм: @' + escapeHtml(u.searchUsername) + '</div>' : '') +
+                    '<div>ID: ' + escapeHtml(String(u.id || viewedProfileUserId)) + '</div>' +
+                    (u.bio ? '<div>О себе: ' + escapeHtml(u.bio) + '</div>' : '') +
+                    '</div>',
+                confirmText: 'Закрыть'
+            });
+        });
+        const chatHeaderInfoEl = document.getElementById('chat-header-info');
+        if (chatHeaderInfoEl) chatHeaderInfoEl.addEventListener('click', openCurrentChatProfile);
+​
         if (window.innerWidth <= 768) {
             elements.chatArea.classList.remove('active');
             elements.chatsSidebar.classList.add('active');
