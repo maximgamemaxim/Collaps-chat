@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Collaps Chat</title>
-    <meta name="description" content="Collaps Chat — мессенджер с историями, каналами и группами">
+    <meta name="description" content="Collaps Chat — secure messenger">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Rounded" rel="stylesheet">
-
     <style>
         *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif}
         :root{--bg:#17212b;--bg2:#1e2b37;--bg3:#242f3d;--hover:#2b3b4a;--text:#fff;--gray:#8e9cae;--accent:#2b5278;--accentH:#3a6d99;--border:#0f1b26;--msgIn:#182533;--msgOut:#2b5278;--red:#e74c3c;--green:#2ecc71;--online:#2ecc71;--story:#2ecc71;--storySeen:#8e9cae;--channel:#e74c3c;--group:#3498db;--verified:#2ecc71;--checkreal:#2ecc71;--special:#ff69b4;--banned:#e74c3c}
@@ -24,8 +23,6 @@
         .btn-google{background:#fff;color:#333;border:none;display:flex;align-items:center;justify-content:center;gap:12px;width:100%;padding:14px;border-radius:12px;font-weight:600;font-size:15px;cursor:pointer;margin-bottom:16px}
         .divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--gray);font-size:13px}
         .divider-line{flex:1;height:1px;background:var(--border)}
-        .checkbox-group{display:flex;align-items:center;gap:10px;margin:16px 0;text-align:left}
-        .checkbox-group input{width:18px;height:18px;cursor:pointer;accent-color:var(--accent)}
         .main-screen{height:100vh;display:none;overflow:hidden}.main-screen.active{display:flex}
         .chats-sidebar{width:360px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;height:100%}
         .chats-header{height:60px;padding:0 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);flex-shrink:0}
@@ -34,17 +31,14 @@
         .icon-btn:hover{background:var(--hover);color:var(--text)}.icon-btn .material-symbols-rounded{font-size:22px}
         .profile-bar{padding:12px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);cursor:pointer;flex-shrink:0}
         .profile-bar:hover{background:var(--hover)}.profile-avatar{width:48px;height:48px;border-radius:50%;background-size:cover;background-position:center;background-color:var(--accent);flex-shrink:0}
-        .profile-details{flex:1;min-width:0}.profile-name{font-weight:600;font-size:15px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-        .badge{display:inline-block;width:18px;height:18px;border-radius:50%;position:relative;margin-left:2px;flex-shrink:0}
+        .profile-name{font-weight:600;font-size:15px;display:flex;align-items:center;gap:6px}
+        .badge{display:inline-block;width:18px;height:18px;border-radius:50%;position:relative;flex-shrink:0}
         .badge-verified{background:var(--verified)}.badge-checkreal{background:var(--checkreal)}.badge-special{background:var(--special)}.badge-banned{background:var(--banned)}
         .badge::after{content:'✓';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;font-size:11px;font-weight:700}
         .badge-special::after{content:'★';font-size:10px}.badge-banned::after{content:'⛔';font-size:9px}
-        .badges-container{display:inline-flex;gap:3px;margin-left:4px;flex-wrap:wrap}
         .badge-bot-label{display:inline-block;background:#8e44ad;color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:6px;margin-left:4px}
         .announcements-container{padding:0 16px 8px;border-bottom:1px solid var(--border);flex-shrink:0;max-height:200px;overflow-y:auto}
         .announcement-item{background:var(--bg3);border-radius:12px;padding:12px;margin-top:8px;border-left:4px solid var(--accent);cursor:pointer}
-        .announcement-header{display:flex;align-items:center;gap:8px;margin-bottom:4px}
-        .announcement-text{font-size:12px;color:var(--gray)}.announcement-time{font-size:10px;color:var(--gray);margin-top:4px;text-align:right}
         .stories-container{padding:12px 16px;border-bottom:1px solid var(--border);overflow-x:auto;display:flex;gap:14px;flex-shrink:0}
         .stories-container::-webkit-scrollbar{height:0}
         .story-item{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;flex-shrink:0;min-width:64px}
@@ -55,7 +49,7 @@
         .story-name{font-size:11px;color:var(--gray);max-width:64px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center}
         .story-viewer{position:fixed;top:0;left:0;right:0;bottom:0;background:#000;z-index:5000;display:none;flex-direction:column}
         .story-viewer.active{display:flex}.story-viewer-header{padding:16px;display:flex;align-items:center;gap:12px}
-        .story-viewer-avatar{width:36px;height:36px;border-radius:50%;background-size:cover;background-color:var(--accent)}
+        .story-viewer-avatar{width:36px;height:36px;border-radius:50%;background-size:cover}
         .story-viewer-name{color:#fff;font-weight:600;font-size:15px}.story-viewer-time{color:#999;font-size:12px}
         .story-viewer-close{margin-left:auto;background:transparent;border:none;color:#fff;cursor:pointer;padding:8px}
         .story-viewer-content{flex:1;display:flex;align-items:center;justify-content:center}
@@ -71,22 +65,27 @@
         .tabs-container{display:flex;padding:8px 16px;gap:4px;border-bottom:1px solid var(--border);flex-shrink:0}
         .tab-btn{flex:1;padding:10px 8px;background:transparent;border:none;color:var(--gray);font-size:13px;font-weight:500;cursor:pointer;border-radius:8px;display:flex;align-items:center;justify-content:center;gap:6px}
         .tab-btn .material-symbols-rounded{font-size:18px}.tab-btn.active{background:var(--accent);color:#fff}
-        .chats-list-container{flex:1;overflow-y:auto}.chats-list-container.hidden{display:none}
+        .chats-list-container{flex:1;overflow-y:auto}
         .chat-item{display:flex;align-items:center;padding:12px 16px;cursor:pointer;transition:background .2s;border-bottom:1px solid var(--border)}
-        .chat-item:hover{background:var(--hover)}.avatar-img{width:54px;height:54px;border-radius:50%;background-size:cover;background-position:center;background-color:var(--accent);display:flex;align-items:center;justify-content:center}
+        .chat-item:hover{background:var(--hover)}
+        .avatar-img{width:54px;height:54px;border-radius:50%;background-size:cover;background-position:center;background-color:var(--accent);display:flex;align-items:center;justify-content:center}
         .online-dot{position:absolute;bottom:2px;right:2px;width:12px;height:12px;border-radius:50%;background:var(--online);border:2px solid var(--bg2)}
-        .chat-item-name{font-weight:600;font-size:15px}.chat-type-badge{font-size:10px;padding:2px 6px;border-radius:8px;font-weight:600}
+        .chat-type-badge{font-size:10px;padding:2px 6px;border-radius:8px;font-weight:600}
         .chat-type-channel{background:var(--channel);color:#fff}.chat-type-group{background:var(--group);color:#fff}
         .chat-area{flex:1;display:none;flex-direction:column;background:var(--bg)}.chat-area.active{display:flex}
         .chat-header{height:60px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:12px;flex-shrink:0}
-        .chat-avatar{width:40px;height:40px;border-radius:50%;background-size:cover;background-position:center;background-color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+        .chat-header-info{flex:1;display:flex;align-items:center;gap:12px;cursor:pointer;min-width:0}
+        .chat-avatar{width:40px;height:40px;border-radius:50%;background-size:cover;background-position:center;background-color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+        .chat-avatar .material-symbols-rounded{font-size:22px;color:#fff}
+        .chat-title{font-weight:600;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .chat-subtitle{font-size:12px;color:var(--gray);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
         .messages-container{flex:1;overflow-y:auto;padding:20px 16px;display:flex;flex-direction:column;gap:8px}
         .message{display:flex;margin-bottom:8px}.message.outgoing{justify-content:flex-end}
         .message-bubble{max-width:80%;padding:10px 14px;border-radius:18px;word-wrap:break-word}
         .message.incoming .message-bubble{background:var(--msgIn)}.message.outgoing .message-bubble{background:var(--msgOut)}
         .message-meta{font-size:11px;color:var(--gray);text-align:right;margin-top:4px}
         .message-sender{font-size:12px;color:var(--accent);font-weight:600;margin-bottom:2px}
-        .message-image{max-width:240px;max-height:320px;border-radius:12px;cursor:pointer;display:block}
+        .message-image{max-width:240px;max-height:320px;border-radius:12px;cursor:pointer}
         .message-video{max-width:280px;max-height:360px;border-radius:12px;background:#000}
         .message-text{white-space:pre-wrap;word-break:break-word;line-height:1.4}
         .message-input-area{background:var(--bg2);border-top:1px solid var(--border);padding:8px 12px;flex-shrink:0;display:flex;align-items:center;gap:8px}
@@ -99,7 +98,6 @@
         .profile-header,.settings-header{height:60px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:12px;flex-shrink:0}
         .profile-content,.settings-content{padding:24px;flex:1}
         .profile-avatar-large{width:120px;height:120px;border-radius:50%;background-size:cover;background-position:center;background-color:var(--accent);margin:0 auto 24px}
-        .profile-name-large{text-align:center;font-size:22px;font-weight:700;margin-bottom:8px}
         .tg-action-row{display:flex;gap:8px;margin-bottom:20px}
         .tg-action-btn{flex:1;background:var(--bg2);border:none;border-radius:12px;padding:14px 8px;color:var(--accentH);display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;font-size:12px}
         .tg-info-list{background:var(--bg2);border-radius:12px;overflow:hidden;margin-bottom:16px}
@@ -119,6 +117,7 @@
         .modal-footer{padding:16px 20px;border-top:1px solid var(--border);display:flex;gap:10px}
         .modal-btn{flex:1;padding:12px;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer}.modal-btn.confirm{background:var(--accent);color:#fff}
         .hidden{display:none!important}@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+        @media(max-width:768px){.chats-sidebar{width:100%;position:absolute;z-index:10;display:none}.chats-sidebar.active{display:flex}.chat-area{width:100%;display:none}.chat-area.active{display:flex}}
     </style>
 </head>
 <body>
@@ -147,7 +146,7 @@
                     <input type="text" id="register-username" placeholder="Display Name" class="auth-input">
                     <input type="email" id="register-email" placeholder="Email" class="auth-input">
                     <input type="password" id="register-password" placeholder="Password (min 6)" class="auth-input">
-                    <div class="checkbox-group"><input type="checkbox" id="privacy-checkbox"><label style="font-size:13px;color:var(--gray)">I accept <a href="privacy.html" target="_blank" style="color:var(--accent)">Privacy Policy</a></label></div>
+                    <div style="display:flex;align-items:center;gap:10px;margin:16px 0"><input type="checkbox" id="privacy-checkbox" style="width:18px;height:18px;accent-color:var(--accent)"><span style="font-size:13px;color:var(--gray)">I accept <a href="privacy.html" style="color:var(--accent)">Privacy Policy</a></span></div>
                     <button id="register-btn" class="auth-btn" disabled>Create Account</button>
                     <div class="auth-links"><a href="#" id="show-login">Sign In</a></div>
                 </div>
@@ -157,563 +156,155 @@
         <div id="main-screen" class="main-screen">
             <div id="chats-sidebar" class="chats-sidebar active">
                 <div class="chats-header"><div class="chats-title">Collaps Chat</div><div class="header-buttons"><button class="icon-btn" id="create-chat-btn"><span class="material-symbols-rounded">add_circle</span></button><button class="icon-btn" id="search-btn"><span class="material-symbols-rounded">search</span></button><button class="icon-btn" id="settings-menu-btn"><span class="material-symbols-rounded">settings</span></button></div></div>
-                <div class="profile-bar" id="user-info"><div class="profile-avatar" id="user-avatar"></div><div class="profile-details"><span class="profile-name" id="current-username">Loading...</span><span style="font-size:12px;color:var(--gray)" id="user-stars">0 stars</span></div><button class="icon-btn" id="logout-btn"><span class="material-symbols-rounded">logout</span></button></div>
+                <div class="profile-bar" id="user-info"><div class="profile-avatar" id="user-avatar"></div><div style="flex:1"><span class="profile-name" id="current-username">Loading...</span><br><span style="font-size:12px;color:var(--gray)" id="user-stars">0 stars</span></div><button class="icon-btn" id="logout-btn"><span class="material-symbols-rounded">logout</span></button></div>
                 <div class="announcements-container" id="announcements-container" style="display:none"></div>
                 <div class="stories-container" id="stories-container"></div>
                 <div class="search-container"><input type="text" id="search-input" placeholder="Search..." class="search-input"></div>
-                <div class="tabs-container">
-                    <button class="tab-btn active" data-tab="chats"><span class="material-symbols-rounded">chat_bubble</span> Chats</button>
-                    <button class="tab-btn" data-tab="channels"><span class="material-symbols-rounded">campaign</span> Channels</button>
-                    <button class="tab-btn" data-tab="groups"><span class="material-symbols-rounded">groups</span> Groups</button>
-                </div>
+                <div class="tabs-container"><button class="tab-btn active" data-tab="chats"><span class="material-symbols-rounded">chat_bubble</span> Chats</button><button class="tab-btn" data-tab="channels"><span class="material-symbols-rounded">campaign</span> Channels</button><button class="tab-btn" data-tab="groups"><span class="material-symbols-rounded">groups</span> Groups</button></div>
                 <div id="search-results-container" class="search-results-container"><div class="search-results-list" id="search-results-list" style="padding:8px"></div></div>
                 <div id="chats-list-container" class="chats-list-container"><div id="chats-list"></div></div>
             </div>
 
             <div id="chat-area" class="chat-area">
-                <div class="chat-header"><button class="icon-btn" id="back-to-chats"><span class="material-symbols-rounded">arrow_back</span></button><div class="chat-header-info" id="chat-header-info"><div class="chat-avatar" id="chat-avatar"><span class="material-symbols-rounded">person</span></div><div><div class="chat-item-name" id="chat-title">Select chat</div><div style="font-size:12px;color:var(--gray)" id="chat-subtitle"></div></div></div><button class="icon-btn" id="chat-info-btn"><span class="material-symbols-rounded">info</span></button></div>
+                <div class="chat-header">
+                    <button class="icon-btn" id="back-to-chats" style="display:none"><span class="material-symbols-rounded">arrow_back</span></button>
+                    <div class="chat-header-info" id="chat-header-info">
+                        <div class="chat-avatar" id="chat-avatar"><span class="material-symbols-rounded">person</span></div>
+                        <div style="min-width:0;flex:1"><div class="chat-title" id="chat-title">Select chat</div><div class="chat-subtitle" id="chat-subtitle"></div></div>
+                    </div>
+                    <button class="icon-btn" id="chat-info-btn"><span class="material-symbols-rounded">info</span></button>
+                </div>
                 <div class="messages-container" id="messages-container"></div>
                 <div class="message-input-area" id="message-input-area" style="display:none"><label for="file-upload" class="icon-btn" style="cursor:pointer"><span class="material-symbols-rounded">attach_file</span></label><input type="file" id="file-upload" accept="image/*,video/*" style="display:none"><div class="input-wrapper"><input type="text" id="message-input" placeholder="Message" autocomplete="off"></div><button class="send-btn" id="send-btn"><span class="material-symbols-rounded">send</span></button></div>
                 <div class="channel-locked" id="channel-locked" style="display:none">Only admins can post in this channel</div>
             </div>
 
             <div id="profile-screen" class="profile-screen hidden">
-                <div class="profile-header"><button class="icon-btn" id="back-from-profile"><span class="material-symbols-rounded">arrow_back</span></button><h3 id="profile-header-title">Profile</h3><button class="icon-btn" id="edit-profile-btn"><span class="material-symbols-rounded">edit</span></button></div>
-                <div class="profile-content"><div class="profile-avatar-large" id="profile-avatar"></div><div class="profile-name-large" id="profile-name"></div><div style="color:var(--gray);font-size:14px;text-align:center;margin-bottom:20px" id="profile-substatus"></div><div class="tg-action-row" id="tg-action-row"><button class="tg-action-btn" id="tg-act-message"><span class="material-symbols-rounded">chat_bubble</span> Chat</button><button class="tg-action-btn" id="tg-act-mute"><span class="material-symbols-rounded">notifications</span> Sound</button><button class="tg-action-btn" id="tg-act-more"><span class="material-symbols-rounded">more_horiz</span> More</button></div><div class="tg-info-list" id="tg-info-list"></div><button class="profile-action-btn danger" id="delete-account-btn"><span class="material-symbols-rounded" style="font-size:18px;vertical-align:middle;margin-right:8px">delete_forever</span> Delete Account</button></div>
+                <div class="profile-header"><button class="icon-btn" id="back-from-profile"><span class="material-symbols-rounded">arrow_back</span></button><h3>Profile</h3><button class="icon-btn" id="edit-profile-btn"><span class="material-symbols-rounded">edit</span></button></div>
+                <div class="profile-content"><div class="profile-avatar-large" id="profile-avatar"></div><div style="text-align:center;font-size:22px;font-weight:700;margin-bottom:8px" id="profile-name"></div><div style="color:var(--gray);font-size:14px;text-align:center;margin-bottom:20px" id="profile-substatus"></div><div class="tg-action-row" id="tg-action-row"><button class="tg-action-btn" id="tg-act-message"><span class="material-symbols-rounded">chat_bubble</span> Chat</button><button class="tg-action-btn" id="tg-act-mute"><span class="material-symbols-rounded">notifications</span> Sound</button><button class="tg-action-btn" id="tg-act-more"><span class="material-symbols-rounded">more_horiz</span> More</button></div><div class="tg-info-list" id="tg-info-list"></div><button class="profile-action-btn danger" id="delete-account-btn"><span class="material-symbols-rounded" style="font-size:18px;vertical-align:middle;margin-right:8px">delete_forever</span> Delete Account</button></div>
             </div>
 
             <div id="settings-screen" class="settings-screen hidden">
                 <div class="settings-header"><button class="icon-btn" id="back-from-settings"><span class="material-symbols-rounded">arrow_back</span></button><h3>Settings</h3></div>
                 <div class="settings-content">
-                    <div class="settings-item" id="settings-edit-profile"><div class="settings-item-left"><span class="material-symbols-rounded">edit</span><div><div class="settings-item-title">Edit Profile</div><div class="settings-item-desc" style="font-size:12px;color:var(--gray)">Name, username, bio</div></div></div><span class="material-symbols-rounded">chevron_right</span></div>
-                    <div class="settings-item" id="settings-privacy"><div class="settings-item-left"><span class="material-symbols-rounded">lock</span><div><div class="settings-item-title">Privacy Settings</div><div class="settings-item-desc" style="font-size:12px;color:var(--gray)">Who can invite/find you</div></div></div><span class="material-symbols-rounded">chevron_right</span></div>
-                    <div class="settings-item" id="settings-create-channel"><div class="settings-item-left"><span class="material-symbols-rounded">campaign</span><div><div class="settings-item-title">Create Channel</div><div class="settings-item-desc" style="font-size:12px;color:var(--gray)">Public or private</div></div></div><span class="material-symbols-rounded">chevron_right</span></div>
-                    <div class="settings-item" id="settings-create-group"><div class="settings-item-left"><span class="material-symbols-rounded">groups</span><div><div class="settings-item-title">Create Group</div><div class="settings-item-desc" style="font-size:12px;color:var(--gray)">Public or private</div></div></div><span class="material-symbols-rounded">chevron_right</span></div>
-                    <div class="settings-item" id="settings-desktop"><div class="settings-item-left"><span class="material-symbols-rounded">desktop_windows</span><div><div class="settings-item-title">Login to PC Client</div><div class="settings-item-desc" style="font-size:12px;color:var(--gray)">Open desktop application</div></div></div><span class="material-symbols-rounded">chevron_right</span></div>
-                    <div class="settings-item" id="settings-announcements"><div class="settings-item-left"><span class="material-symbols-rounded">campaign</span><div><div class="settings-item-title">Announcements</div><div class="settings-item-desc" style="font-size:12px;color:var(--gray)">Manage global announcements</div></div></div><span class="material-symbols-rounded">chevron_right</span></div>
-                    <div class="settings-item" id="settings-support"><div class="settings-item-left"><span class="material-symbols-rounded">support_agent</span><div><div class="settings-item-title">Support</div><div class="settings-item-desc" style="font-size:12px;color:var(--gray)">Contact support</div></div></div><span class="material-symbols-rounded">chevron_right</span></div>
-                    <div class="settings-item" id="settings-delete" style="border-left:3px solid var(--red)"><div class="settings-item-left"><span class="material-symbols-rounded" style="color:var(--red)">warning</span><div><div class="settings-item-title" style="color:var(--red)">Delete Account</div><div class="settings-item-desc" style="font-size:12px;color:var(--gray)">Cannot be undone!</div></div></div><span class="material-symbols-rounded">chevron_right</span></div>
+                    <div class="settings-item" id="settings-edit-profile"><div class="settings-item-left"><span class="material-symbols-rounded">edit</span><div><div class="settings-item-title">Edit Profile</div></div></div><span class="material-symbols-rounded">chevron_right</span></div>
+                    <div class="settings-item" id="settings-privacy"><div class="settings-item-left"><span class="material-symbols-rounded">lock</span><div><div class="settings-item-title">Privacy Settings</div></div></div><span class="material-symbols-rounded">chevron_right</span></div>
+                    <div class="settings-item" id="settings-create-channel"><div class="settings-item-left"><span class="material-symbols-rounded">campaign</span><div><div class="settings-item-title">Create Channel</div></div></div><span class="material-symbols-rounded">chevron_right</span></div>
+                    <div class="settings-item" id="settings-create-group"><div class="settings-item-left"><span class="material-symbols-rounded">groups</span><div><div class="settings-item-title">Create Group</div></div></div><span class="material-symbols-rounded">chevron_right</span></div>
+                    <div class="settings-item" id="settings-desktop"><div class="settings-item-left"><span class="material-symbols-rounded">desktop_windows</span><div><div class="settings-item-title">Login to PC Client</div></div></div><span class="material-symbols-rounded">chevron_right</span></div>
+                    <div class="settings-item" id="settings-announcements"><div class="settings-item-left"><span class="material-symbols-rounded">campaign</span><div><div class="settings-item-title">Announcements</div></div></div><span class="material-symbols-rounded">chevron_right</span></div>
+                    <div class="settings-item" id="settings-support"><div class="settings-item-left"><span class="material-symbols-rounded">support_agent</span><div><div class="settings-item-title">Support</div></div></div><span class="material-symbols-rounded">chevron_right</span></div>
+                    <div class="settings-item" id="settings-delete" style="border-left:3px solid var(--red)"><div class="settings-item-left"><span class="material-symbols-rounded" style="color:var(--red)">warning</span><div><div class="settings-item-title" style="color:var(--red)">Delete Account</div></div></div><span class="material-symbols-rounded">chevron_right</span></div>
                 </div>
             </div>
         </div>
     </div>
+
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
-
     <script>
-        // ===== FIREBASE INIT =====
-        const firebaseConfig={apiKey:"AIzaSyDdey6ZroD4KsiPiD2dnVfQe3I3OW3MPV8",authDomain:"max-chat-f9319.firebaseapp.com",databaseURL:"https://max-chat-f9319-default-rtdb.europe-west1.firebasedatabase.app",projectId:"max-chat-f9319",storageBucket:"max-chat-f9319.firebasestorage.app",messagingSenderId:"1013158224179",appId:"1:1013158224179:web:c4a052ca2e86034de59e46"};
-        const app=firebase.initializeApp(firebaseConfig);
-        const database=firebase.database();
-        const auth=firebase.auth();
-        const googleProvider=new firebase.auth.GoogleAuthProvider();
-        
-        const CLOUD_NAME='qik0zmv8',UPLOAD_PRESET='collaps_chat',DEFAULT_AVATAR='https://ui-avatars.com/api/?name=User&background=2b5278&color=fff&size=256';
-        
-        let currentUser=null,currentUserId=null,currentChat=null,currentChatId=null;
-        let allUsers={},allChats={},allStories={},allAnnouncements={};
-        let activeTab='chats',unreadCounts={},notificationsEnabled=true;
-        let messagesUnsub=null,chatsUnsub=null,storiesUnsub=null,announcementsUnsub=null;
-        let viewedProfileUserId=null;
+        const fc={apiKey:"AIzaSyDdey6ZroD4KsiPiD2dnVfQe3I3OW3MPV8",authDomain:"max-chat-f9319.firebaseapp.com",databaseURL:"https://max-chat-f9319-default-rtdb.europe-west1.firebasedatabase.app",projectId:"max-chat-f9319",storageBucket:"max-chat-f9319.firebasestorage.app",messagingSenderId:"1013158224179",appId:"1:1013158224179:web:c4a052ca2e86034de59e46"};
+        firebase.initializeApp(fc);const db=firebase.database(),auth=firebase.auth(),gp=new firebase.auth.GoogleAuthProvider();
+        const CL='qik0zmv8',UP='collaps_chat',DA='https://ui-avatars.com/api/?name=User&background=2b5278&color=fff&size=256';
+        let cu=null,ci=null,cc=null,cci=null,au={},ac={},ast={},aan={},at='chats',uc={},ne=true,mu=null,chu=null,su=null,anu=null,vu=null;
+        const ref=(d,p)=>d.ref(p),set=(r,v)=>r.set(v),push=(r,v)=>v===undefined?r.push():r.push(v),upd=(r,v)=>r.update(v),rem=r=>r.remove(),get=r=>r.get(),onV=(r,cb)=>{r.on('value',cb);return()=>r.off('value',cb)},onCA=(r,cb)=>{r.on('child_added',cb);return()=>r.off('child_added',cb)},qy=(r,...cs)=>{let q=r;cs.forEach(c=>q=c(q));return q},obc=k=>q=>q.orderByChild(k),eq=v=>q=>q.equalTo(v);
 
-        // Firebase helpers
-        const ref=(db,path)=>db.ref(path);
-        const set=(r,v)=>r.set(v);
-        const push=(r,v)=>v===undefined?r.push():r.push(v);
-        const update=(r,v)=>r.update(v);
-        const remove=r=>r.remove();
-        const get=r=>r.get();
-        const onValue=(r,cb)=>{r.on('value',cb);return()=>r.off('value',cb)};
-        const onChildAdded=(r,cb)=>{r.on('child_added',cb);return()=>r.off('child_added',cb)};
-        const query=(r,...cs)=>{let q=r;cs.forEach(c=>q=c(q));return q};
-        const orderByChild=k=>q=>q.orderByChild(k);
-        const equalTo=v=>q=>q.equalTo(v);
+        function nt(tl,tx='',tp='info'){const c=document.getElementById('notification-container'),n=document.createElement('div');n.className=`notification ${tp}`;const i=tp==='error'?'error':tp==='success'?'check_circle':'info';n.innerHTML=`<span class="material-symbols-rounded">${i}</span><div><div style="font-weight:600;font-size:14px">${tl}</div>${tx?`<div style="font-size:12px;color:var(--gray)">${tx}</div>`:''}</div>`;c.appendChild(n);setTimeout(()=>n.classList.add('show'),10);setTimeout(()=>{n.classList.remove('show');setTimeout(()=>n.remove(),300)},4000)}
+        function sm({title,content,confirmText='OK',cancelText='Cancel',onConfirm,onCancel,customHtml}){document.getElementById('modal-content').innerHTML=`<div class="modal-header"><h3>${title}</h3><button class="modal-close" id="mc"><span class="material-symbols-rounded">close</span></button></div><div class="modal-body">${customHtml||`<div style="color:var(--gray);font-size:15px">${content}</div>`}</div><div class="modal-footer"><button class="modal-btn cancel" id="mcc">${cancelText}</button><button class="modal-btn confirm" id="mok">${confirmText}</button></div>`;document.getElementById('modal-overlay').classList.remove('hidden');const close=()=>{document.getElementById('modal-overlay').classList.add('hidden');if(onCancel)onCancel()};document.getElementById('mc').onclick=close;document.getElementById('mcc').onclick=close;document.getElementById('mok').onclick=()=>{document.getElementById('modal-overlay').classList.add('hidden');if(onConfirm)onConfirm()}}
+        function ft(ts){if(!ts)return'';const d=new Date(ts),n=new Date();return d.toDateString()===n.toDateString()?d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}):d.toLocaleDateString([],{day:'2-digit',month:'2-digit'})}
+        function eh(s){return s?String(s).replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]||m):''}
+        function gb(u){if(!u)return'';let b='';if(u.isBot)b+='<span class="badge-bot-label">BOT</span>';if(u.grant)b+='<span class="badge badge-verified"></span>';if(u.checkReal)b+='<span class="badge badge-checkreal"></span>';if(u.special)b+='<span class="badge badge-special"></span>';if(u.ban)b+='<span class="badge badge-banned"></span>';return b}
+        function gci(){const s=new Set();Object.values(ac).forEach(c=>{if(c.type==='private'&&c.participants&&c.participants[ci]){Object.keys(c.participants).forEach(id=>{if(id!==ci)s.add(id)})}});return s}
 
-        // ===== УВЕДОМЛЕНИЯ =====
-        function notify(title,text='',type='info'){
-            const c=document.getElementById('notification-container');
-            const n=document.createElement('div');
-            n.className=`notification ${type}`;
-            const i=type==='error'?'error':type==='success'?'check_circle':'info';
-            n.innerHTML=`<span class="material-symbols-rounded">${i}</span><div><div style="font-weight:600;font-size:14px">${title}</div>${text?`<div style="font-size:12px;color:var(--gray)">${text}</div>`:''}</div>`;
-            c.appendChild(n);
-            setTimeout(()=>n.classList.add('show'),10);
-            setTimeout(()=>{n.classList.remove('show');setTimeout(()=>n.remove(),300)},4000);
-        }
+        async function ucf(file){const fd=new FormData();fd.append('file',file);fd.append('upload_preset',UP);const r=await fetch(`https://api.cloudinary.com/v1_1/${CL}/auto/upload`,{method:'POST',body:fd});if(!r.ok){const e=await r.json();throw new Error(e.error?.message||'Upload failed')}return await r.json()}
+        async function usf(file){if(!cci){nt('Select chat','','error');return}if(cc?.chatType==='channel'&&!ica()){nt('Cannot post','','error');return}try{nt('Uploading...','','info');const r=await ucf(file);const m={type:r.resource_type==='video'?'video':'image',url:r.secure_url,publicId:r.public_id,senderId:ci,senderName:cu?.username||'User',timestamp:Date.now()};await push(ref(db,`chats/${cci}/messages`),m);await upd(ref(db,`chats/${cci}`),{lastMessage:r.resource_type==='video'?'Video':'Photo',lastMessageTime:Date.now()});nt('Sent!','','success')}catch(e){nt('Error',e.message,'error')}}
 
-        // ===== МОДАЛКИ =====
-        function showModal({title,content,confirmText='OK',cancelText='Cancel',onConfirm,onCancel,customHtml}){
-            document.getElementById('modal-content').innerHTML=`
-                <div class="modal-header"><h3>${title}</h3><button class="modal-close" id="mc"><span class="material-symbols-rounded">close</span></button></div>
-                <div class="modal-body">${customHtml||`<div style="color:var(--gray);font-size:15px">${content}</div>`}</div>
-                <div class="modal-footer"><button class="modal-btn cancel" id="mcc">${cancelText}</button><button class="modal-btn confirm" id="mok">${confirmText}</button></div>`;
-            document.getElementById('modal-overlay').classList.remove('hidden');
-            const close=()=>{document.getElementById('modal-overlay').classList.add('hidden');if(onCancel)onCancel()};
-            document.getElementById('mc').onclick=close;
-            document.getElementById('mcc').onclick=close;
-            document.getElementById('mok').onclick=()=>{document.getElementById('modal-overlay').classList.add('hidden');if(onConfirm)onConfirm()};
-        }
+        function ica(){if(!cc||!ci)return false;if(cc.chatType==='channel'||cc.chatType==='group'){const adm=cc.admins;if(adm&&adm[ci])return true;return cc.createdBy===ci}return true}
 
-        function formatTime(ts){
-            if(!ts)return'';
-            const d=new Date(ts),n=new Date();
-            return d.toDateString()===n.toDateString()?d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}):d.toLocaleDateString([],{day:'2-digit',month:'2-digit'});
-        }
-        function escapeHtml(s){return s?String(s).replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]||m):''}
-        function getUserBadgesHtml(user){
-            if(!user)return'';
-            let b='';
-            if(user.isBot)b+='<span class="badge-bot-label">BOT</span>';
-            if(user.grant)b+='<span class="badge badge-verified"></span>';
-            if(user.checkReal)b+='<span class="badge badge-checkreal"></span>';
-            if(user.special)b+='<span class="badge badge-special"></span>';
-            if(user.ban)b+='<span class="badge badge-banned"></span>';
-            return b;
-        }
-        function getContactIds(){
-            const contacts=new Set();
-            Object.values(allChats).forEach(c=>{
-                if(c.type==='private'&&c.participants&&c.participants[currentUserId]){
-                    Object.keys(c.participants).forEach(id=>{if(id!==currentUserId)contacts.add(id)});
-                }
-            });
-            return contacts;
-        }
+        function lan(){if(ans)ans();ans=onV(ref(db,'announcements'),snap=>{aan=snap.val()||{};ran()})}
+        function ran(){const c=document.getElementById('announcements-container');if(!c)return;const now=Date.now();const act=Object.values(aan).filter(a=>a.expiresAt>now).sort((a,b)=>(b.priority||0)-(a.priority||0));if(!act.length){c.style.display='none';return}c.style.display='block';c.innerHTML='';act.forEach(a=>{const d=document.createElement('div');d.className='announcement-item';d.style.borderLeftColor=a.color||'var(--accent)';d.innerHTML=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><span>${a.icon||'📢'}</span><span style="font-weight:600;font-size:13px">${eh(a.title||'')}</span></div><div style="font-size:12px;color:var(--gray)">${eh(a.text||'')}</div><div style="font-size:10px;color:var(--gray);margin-top:4px;text-align:right">Until ${new Date(a.expiresAt).toLocaleString()}</div>`;if(a.actionUrl){d.style.cursor='pointer';d.addEventListener('click',()=>window.open(a.actionUrl,'_blank'))}c.appendChild(d)})}
 
-        // ===== CLOUDINARY =====
-        async function uploadToCloudinary(file){
-            const fd=new FormData();fd.append('file',file);fd.append('upload_preset',UPLOAD_PRESET);
-            const r=await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`,{method:'POST',body:fd});
-            if(!r.ok){const e=await r.json();throw new Error(e.error?.message||'Upload failed')}
-            return await r.json();
-        }
-        async function uploadAndSendFile(file){
-            if(!currentChatId){notify('Select chat','','error');return}
-            if(currentChat?.chatType==='channel'&&!isChannelAdmin()){notify('Cannot post','','error');return}
-            try{
-                notify('Uploading...','','info');
-                const r=await uploadToCloudinary(file);
-                const m={type:r.resource_type==='video'?'video':'image',url:r.secure_url,publicId:r.public_id,senderId:currentUserId,senderName:currentUser?.username||'User',timestamp:Date.now()};
-                await push(ref(database,`chats/${currentChatId}/messages`),m);
-                await update(ref(database,`chats/${currentChatId}`),{lastMessage:r.resource_type==='video'?'Video':'Photo',lastMessageTime:Date.now()});
-                notify('Sent!','','success');
-            }catch(e){notify('Error',e.message,'error')}
-        }
+        function ls(){if(su)su();su=onV(ref(db,'stories'),snap=>{ast=snap.val()||{};rs()})}
+        function rs(){const c=document.getElementById('stories-container');if(!c)return;const cont=gci();cont.add(ci);let h=`<div class="story-item" id="my-story-item"><div class="story-avatar my-story" style="background-image:url('${cu?.avatar||DA}')"><div class="story-add-icon"><span class="material-symbols-rounded">add</span></div></div><div class="story-name">My</div></div>`;const bu={};Object.values(ast).forEach(s=>{if(!s.expiresAt||s.expiresAt<Date.now())return;if(!cont.has(s.userId))return;if(!bu[s.userId])bu[s.userId]=[];bu[s.userId].push(s)});Object.entries(bu).forEach(([uid,ss])=>{const u=au[uid];if(!u)return;const un=ss.some(s=>!s.viewers||!s.viewers[ci]);h+=`<div class="story-item" data-user-id="${uid}"><div class="story-avatar ${un?'':'seen'}" style="background-image:url('${u.avatar||DA}')"></div><div class="story-name">${eh(u.username||'')}</div></div>`});c.innerHTML=h||'<div style="color:var(--gray);font-size:13px;padding:8px">No stories</div>';setTimeout(()=>{document.getElementById('my-story-item')?.addEventListener('click',()=>{const inp=document.createElement('input');inp.type='file';inp.accept='image/*,video/*';inp.onchange=async e=>{const f=e.target.files[0];if(!f)return;try{nt('Uploading...','','info');const r=await ucf(f);const s={id:push(ref(db,'stories')).key,userId:ci,username:cu.username,url:r.secure_url,type:r.resource_type,createdAt:Date.now(),expiresAt:Date.now()+86400000,viewers:{}};await set(ref(db,`stories/${s.id}`),s);nt('Published!','24 hours','success')}catch(err){nt('Error',err.message,'error')}};inp.click()});c.querySelectorAll('.story-item[data-user-id]').forEach(item=>{item.addEventListener('click',()=>{const uid=item.dataset.userId;const ss=Object.values(ast).filter(s=>s.userId===uid&&s.expiresAt>Date.now());if(ss.length)vs(uid,ss)})})},100)}
+        function vs(uid,ss){const v=document.getElementById('story-viewer'),u=au[uid];if(!u||!ss.length)return;let idx=0,iv;v.classList.add('active');document.getElementById('story-viewer-avatar').style.backgroundImage=`url('${u.avatar||DA}')`;document.getElementById('story-viewer-name').textContent=u.username;function show(i){if(i>=ss.length){v.classList.remove('active');clearInterval(iv);ss.forEach(s=>{if(!s.viewers)s.viewers={};s.viewers[ci]=true;upd(ref(db,`stories/${s.id}/viewers/${ci}`),true)});return}const s=ss[i];idx=i;document.getElementById('story-viewer-time').textContent=ft(s.createdAt);document.getElementById('story-progress').innerHTML=ss.map((_,j)=>`<div class="story-progress-bar"><div class="story-progress-fill" id="p-${j}" style="width:${j<i?'100%':'0%'}"></div></div>`).join('');const cnt=document.getElementById('story-viewer-content');if(s.type==='video'){cnt.innerHTML=`<video src="${s.url}" class="story-viewer-media" autoplay id="sv"></video>`;document.getElementById('sv').onended=()=>show(i+1)}else{cnt.innerHTML=`<img src="${s.url}" class="story-viewer-media">`;let p=0;clearInterval(iv);iv=setInterval(()=>{p+=2;const bar=document.getElementById(`p-${i}`);if(bar)bar.style.width=p+'%';if(p>=100){clearInterval(iv);show(i+1)}},100)}}show(0);document.getElementById('story-viewer-close').onclick=()=>{v.classList.remove('active');clearInterval(iv);ss.forEach(s=>{if(!s.viewers)s.viewers={};s.viewers[ci]=true;upd(ref(db,`stories/${s.id}/viewers/${ci}`),true)})}}
 
-        function isChannelAdmin(){
-            if(!currentChat||!currentUserId)return false;
-            if(currentChat.chatType==='channel'||currentChat.chatType==='group'){
-                const admins=currentChat.admins;
-                if(admins&&admins[currentUserId])return true;
-                return currentChat.createdBy===currentUserId;
-            }
-            return true;
-        }
+        function lau(){onV(ref(db,'users'),snap=>{au=snap.val()||{};rcl();rs();eb()})}
+        let bc=false;
+        function gbr(b,t){const tx=(t||'').trim(),lo=tx.toLowerCase();if(b.botType==='echo'){if(lo==='/start')return'Hi! Echo Bot\n/help';if(lo==='/help')return'/start\n/help\nAny text - I repeat';return tx?' '+tx:''}if(b.botType==='helper'){if(lo==='/start')return'Hi! Helper\n/help';if(lo==='/help')return'/time\n/date\n/id\n/ping\n/about';if(lo==='/time')return new Date().toLocaleTimeString('en-US');if(lo==='/date')return new Date().toLocaleDateString('en-US');if(lo==='/id')return'Your ID: '+(ci||'');if(lo==='/ping')return'pong';if(lo==='/about')return'Collaps Chat Helper v1.0';return'Unknown /help'}return b.botDefault||'Unknown'}
+        async function brp(cid,chat,ut){if(!chat||chat.type!=='private'||!chat.participants)return;const oid=Object.keys(chat.participants).find(id=>id!==ci);const bot=au[oid];if(!bot||!bot.isBot)return;setTimeout(async()=>{const r=gbr(bot,ut);if(!r)return;await push(ref(db,`chats/${cid}/messages`),{text:r,senderId:oid,senderName:bot.username,timestamp:Date.now()});await upd(ref(db,`chats/${cid}`),{lastMessage:r,lastMessageTime:Date.now()})},500)}
+        async function eb(){if(bc)return;bc=true;const defs=[{su:'echo',un:'Echo Bot',bt:'echo',bio:'I repeat /help'},{su:'helper',un:'Helper',bt:'helper',bio:'Commands /help'}];for(const d of defs){if(Object.values(au).some(u=>u.searchUsername===d.su))continue;const id=push(ref(db,'users')).key;await set(ref(db,`users/${id}`),{id,username:d.un,searchUsername:d.su,isBot:true,botType:d.bt,ownerId:'system',bio:d.bio,avatar:`https://ui-avatars.com/api/?name=${encodeURIComponent(d.un)}&background=8e44ad&color=fff&size=256`,email:'',stars:0,grant:false,special:false,ban:false,createdAt:Date.now(),lastSeen:Date.now(),online:true})}}
 
-        // ===== ANNOUNCEMENTS =====
-        function loadAnnouncements(){
-            if(announcementsUnsub)announcementsUnsub();
-            announcementsUnsub=onValue(ref(database,'announcements'),snap=>{allAnnouncements=snap.val()||{};renderAnnouncements()});
-        }
-        function renderAnnouncements(){
-            const c=document.getElementById('announcements-container');
-            if(!c)return;
-            const now=Date.now();
-            const active=Object.values(allAnnouncements).filter(a=>a.expiresAt>now).sort((a,b)=>(b.priority||0)-(a.priority||0));
-            if(!active.length){c.style.display='none';return}
-            c.style.display='block';
-            c.innerHTML='';
-            active.forEach(a=>{
-                const div=document.createElement('div');
-                div.className='announcement-item';
-                div.style.borderLeftColor=a.color||'var(--accent)';
-                div.innerHTML=`<div class="announcement-header"><span>${a.icon||'📢'}</span><span style="font-weight:600;font-size:13px">${escapeHtml(a.title||'')}</span></div><div class="announcement-text">${escapeHtml(a.text||'')}</div><div class="announcement-time">Until ${new Date(a.expiresAt).toLocaleString()}</div>`;
-                if(a.actionUrl){div.style.cursor='pointer';div.addEventListener('click',()=>window.open(a.actionUrl,'_blank'))}
-                c.appendChild(div);
-            });
-        }
+        function luc(){if(!ci)return;if(chu)chu();chu=onV(ref(db,'chats'),snap=>{const d=snap.val()||{};ac={};Object.entries(d).forEach(([id,chat])=>{if(chat.participants&&chat.participants[ci])ac[id]=chat});rcl()})}
+        function gfc(){const c=Object.values(ac);if(at==='channels')return c.filter(x=>x.chatType==='channel');if(at==='groups')return c.filter(x=>x.chatType==='group');return c.filter(x=>!x.chatType||x.chatType==='private')}
+        function rcl(){const l=document.getElementById('chats-list');if(!l)return;const f=gfc().sort((a,b)=>(b.lastMessageTime||b.createdAt||0)-(a.lastMessageTime||a.createdAt||0));if(!f.length){l.innerHTML='<div style="text-align:center;padding:40px;color:var(--gray)">No chats</div>';return}l.innerHTML='';f.forEach(chat=>{const d=document.createElement('div');d.className='chat-item';let name='Chat',avatar=DA,lastMsg=chat.lastMessage||'',time=(chat.lastMessageTime||chat.createdAt)?ft(chat.lastMessageTime||chat.createdAt):'',online=false,otherUser=null,typeBadge='',unreadHtml='';if(chat.chatType==='channel'){name=chat.name||'Channel';typeBadge='<span class="chat-type-badge chat-type-channel">CH</span>'}else if(chat.chatType==='group'){name=chat.name||'Group';typeBadge='<span class="chat-type-badge chat-type-group">GR</span>'}else if(chat.type==='private'&&chat.participants){const oid=Object.keys(chat.participants).find(id=>id!==ci);otherUser=au[oid];if(otherUser){name=otherUser.username;avatar=otherUser.avatar||DA;online=otherUser.online||false}}const un=uc[chat.id]||0;if(un>0)unreadHtml=`<span style="background:var(--accent);color:#fff;border-radius:12px;padding:2px 8px;font-size:11px;font-weight:700">${un}</span>`;d.innerHTML=`<div style="position:relative;margin-right:12px"><div class="avatar-img" style="background-image:url('${avatar}')"></div>${online?'<div class="online-dot"></div>':''}</div><div style="flex:1"><div style="display:flex;justify-content:space-between"><div style="font-weight:600;font-size:15px;display:flex;align-items:center;gap:4px">${eh(name)} ${typeBadge} ${gb(otherUser)}</div><span style="font-size:12px;color:var(--gray)">${time}</span></div><div style="display:flex;justify-content:space-between;margin-top:4px"><span style="font-size:14px;color:var(--gray)">${eh(lastMsg)}</span>${unreadHtml}</div></div>`;d.addEventListener('click',()=>oc(chat));l.appendChild(d)})}
 
-        // ===== STORIES =====
-        function loadStories(){if(storiesUnsub)storiesUnsub();storiesUnsub=onValue(ref(database,'stories'),snap=>{allStories=snap.val()||{};renderStories()})}
-        function renderStories(){
-            const c=document.getElementById('stories-container');if(!c)return;
-            const contacts=getContactIds();contacts.add(currentUserId);
-            let h=`<div class="story-item" id="my-story-item"><div class="story-avatar my-story" style="background-image:url('${currentUser?.avatar||DEFAULT_AVATAR}')"><div class="story-add-icon"><span class="material-symbols-rounded">add</span></div></div><div class="story-name">My</div></div>`;
-            const byUser={};
-            Object.values(allStories).forEach(s=>{if(!s.expiresAt||s.expiresAt<Date.now())return;if(!contacts.has(s.userId))return;if(!byUser[s.userId])byUser[s.userId]=[];byUser[s.userId].push(s)});
-            Object.entries(byUser).forEach(([uid,stories])=>{
-                const u=allUsers[uid];if(!u)return;
-                const un=stories.some(s=>!s.viewers||!s.viewers[currentUserId]);
-                h+=`<div class="story-item" data-user-id="${uid}"><div class="story-avatar ${un?'':'seen'}" style="background-image:url('${u.avatar||DEFAULT_AVATAR}')"></div><div class="story-name">${escapeHtml(u.username||'')}</div></div>`;
-            });
-            c.innerHTML=h||'<div style="color:var(--gray);font-size:13px;padding:8px">No stories</div>';
-            setTimeout(()=>{
-                document.getElementById('my-story-item')?.addEventListener('click',()=>{
-                    const inp=document.createElement('input');inp.type='file';inp.accept='image/*,video/*';
-                    inp.onchange=async e=>{
-                        const f=e.target.files[0];if(!f)return;
-                        try{
-                            notify('Uploading...','','info');
-                            const r=await uploadToCloudinary(f);
-                            const s={id:push(ref(database,'stories')).key,userId:currentUserId,username:currentUser.username,url:r.secure_url,type:r.resource_type,createdAt:Date.now(),expiresAt:Date.now()+86400000,viewers:{}};
-                            await set(ref(database,`stories/${s.id}`),s);
-                            notify('Published!','24 hours','success');
-                        }catch(err){notify('Error',err.message,'error')}
-                    };
-                    inp.click();
-                });
-                c.querySelectorAll('.story-item[data-user-id]').forEach(item=>{
-                    item.addEventListener('click',()=>{
-                        const uid=item.dataset.userId;
-                        const ss=Object.values(allStories).filter(s=>s.userId===uid&&s.expiresAt>Date.now());
-                        if(ss.length)viewStories(uid,ss);
-                    });
-                });
-            },100);
-        }
-        function viewStories(userId,stories){
-            const v=document.getElementById('story-viewer'),u=allUsers[userId];
-            if(!u||!stories.length)return;
-            let idx=0,interval;
-            v.classList.add('active');
-            document.getElementById('story-viewer-avatar').style.backgroundImage=`url('${u.avatar||DEFAULT_AVATAR}')`;
-            document.getElementById('story-viewer-name').textContent=u.username;
-            function show(i){
-                if(i>=stories.length){v.classList.remove('active');clearInterval(interval);stories.forEach(s=>{if(!s.viewers)s.viewers={};s.viewers[currentUserId]=true;update(ref(database,`stories/${s.id}/viewers/${currentUserId}`),true)});return}
-                const s=stories[i];idx=i;
-                document.getElementById('story-viewer-time').textContent=formatTime(s.createdAt);
-                document.getElementById('story-progress').innerHTML=stories.map((_,j)=>`<div class="story-progress-bar"><div class="story-progress-fill" id="p-${j}" style="width:${j<i?'100%':'0%'}"></div></div>`).join('');
-                const cnt=document.getElementById('story-viewer-content');
-                if(s.type==='video'){cnt.innerHTML=`<video src="${s.url}" class="story-viewer-media" autoplay id="sv"></video>`;document.getElementById('sv').onended=()=>show(i+1)}
-                else{cnt.innerHTML=`<img src="${s.url}" class="story-viewer-media">`;let p=0;clearInterval(interval);interval=setInterval(()=>{p+=2;const bar=document.getElementById(`p-${i}`);if(bar)bar.style.width=p+'%';if(p>=100){clearInterval(interval);show(i+1)}},100)}
-            }
-            show(0);
-            document.getElementById('story-viewer-close').onclick=()=>{v.classList.remove('active');clearInterval(interval);stories.forEach(s=>{if(!s.viewers)s.viewers={};s.viewers[currentUserId]=true;update(ref(database,`stories/${s.id}/viewers/${currentUserId}`),true)})};
-        }
+        function sa(q){if(!q){document.getElementById('search-results-container').classList.remove('active');document.getElementById('chats-list-container').classList.remove('hidden');return}const lq=q.toLowerCase().replace(/^@/,''),res=[];Object.entries(au).forEach(([uid,u])=>{if(!u||uid===ci)return;const priv=u.privacySettings||{};const fm=priv.findMe||'everyone';if(fm==='nobody')return;if(fm==='username'&&!lq.startsWith('@'))return;const nm=(u.username||'').toLowerCase(),un=(u.searchUsername||'').toLowerCase();if(nm.includes(lq)||un.includes(lq))res.push({type:'user',user:u,userId:uid,score:un===lq?0:1})});Object.entries(ac).forEach(([cid,chat])=>{if(!chat.name||chat.chatType==='private')return;if(chat.privacy!=='public')return;if(chat.participants&&chat.participants[ci])return;if(chat.name.toLowerCase().includes(lq)||(chat.username&&chat.username.toLowerCase().includes(lq)))res.push({type:'public_chat',chat,chatId:cid,score:1})});res.sort((a,b)=>a.score-b.score);const rl=document.getElementById('search-results-list');if(!res.length){rl.innerHTML='<div style="text-align:center;padding:20px;color:var(--gray)">Nothing found</div>'}else{rl.innerHTML='';res.forEach(r=>{const d=document.createElement('div');d.className='search-result-item';if(r.type==='user'){const av=r.user.avatar||DA;d.innerHTML=`<div class="avatar-img" style="width:48px;height:48px;background-image:url('${av}');margin-right:12px"></div><div style="flex:1"><div style="font-weight:600;font-size:15px">${eh(r.user.username)} ${gb(r.user)}</div><div style="font-size:12px;color:var(--gray)">@${eh(r.user.searchUsername||'')}</div></div><button style="padding:8px 16px;background:var(--accent);border:none;border-radius:20px;color:#fff;font-size:13px;cursor:pointer">Message</button>`;d.querySelector('button').addEventListener('click',e=>{e.stopPropagation();scwu(r.userId)});d.addEventListener('click',()=>oup(r.userId))}else{const isChannel=r.chat.chatType==='channel';d.innerHTML=`<div class="avatar-img" style="width:48px;height:48px;background-image:url('${r.chat.avatar||DA}');margin-right:12px"></div><div style="flex:1"><div style="font-weight:600;font-size:15px">${eh(r.chat.name)}</div><div style="font-size:12px;color:var(--gray)">${r.chat.username?'@'+eh(r.chat.username):isChannel?'Public Channel':'Public Group'}</div></div><button style="padding:8px 16px;background:var(--green);border:none;border-radius:20px;color:#fff;font-size:13px;cursor:pointer">Join</button>`;d.querySelector('button').addEventListener('click',async e=>{e.stopPropagation();await jpc(r.chatId,r.chat.chatType)});d.addEventListener('click',()=>scp(r.chat))}rl.appendChild(d)})}document.getElementById('search-results-container').classList.add('active');document.getElementById('chats-list-container').classList.add('hidden')}
 
-        // ===== USERS =====
-        function loadAllUsers(){onValue(ref(database,'users'),snap=>{allUsers=snap.val()||{};renderChatsList();renderStories();ensureSupport();ensureBots()})}
-        async function ensureSupport(){if(Object.values(allUsers).some(u=>u.searchUsername==='support'))return;const id=push(ref(database,'users')).key;await set(ref(database,`users/${id}`),{id,username:'Support',searchUsername:'support',email:'support@collapschat.dpdns.org',stars:0,grant:true,checkReal:false,special:false,ban:false,bio:'Official Support',avatar:'https://ui-avatars.com/api/?name=Support&background=2b5278&color=fff&size=256',createdAt:Date.now(),lastSeen:Date.now(),online:false})}
-        let botsChecked=false;
-        function getBotReply(bot,text){const t=(text||'').trim(),lo=t.toLowerCase();if(bot.botType==='echo'){if(lo==='/start')return'Hi! Echo Bot\n/help';if(lo==='/help')return'/start\n/help\nAny text - I repeat';return t?' '+t:''}if(bot.botType==='helper'){if(lo==='/start')return'Hi! Helper\n/help';if(lo==='/help')return'/time\n/date\n/id\n/ping\n/about';if(lo==='/time')return new Date().toLocaleTimeString('en-US');if(lo==='/date')return new Date().toLocaleDateString('en-US');if(lo==='/id')return'Your ID: '+(currentUserId||'');if(lo==='/ping')return'pong';if(lo==='/about')return'Collaps Chat Helper v1.0';return'Unknown /help'}return bot.botDefault||'Unknown'}
-        async function botRespond(chatId,chat,userText){if(!chat||chat.type!=='private'||!chat.participants)return;const oid=Object.keys(chat.participants).find(id=>id!==currentUserId);const bot=allUsers[oid];if(!bot||!bot.isBot)return;setTimeout(async()=>{const r=getBotReply(bot,userText);if(!r)return;await push(ref(database,`chats/${chatId}/messages`),{text:r,senderId:oid,senderName:bot.username,timestamp:Date.now()});await update(ref(database,`chats/${chatId}`),{lastMessage:r,lastMessageTime:Date.now()})},500)}
-        async function ensureBots(){if(botsChecked)return;botsChecked=true;const defs=[{searchUsername:'echo',username:'Echo Bot',botType:'echo',bio:'I repeat /help'},{searchUsername:'helper',username:'Helper',botType:'helper',bio:'Commands /help'}];for(const d of defs){if(Object.values(allUsers).some(u=>u.searchUsername===d.searchUsername))continue;const id=push(ref(database,'users')).key;await set(ref(database,`users/${id}`),{id,username:d.username,searchUsername:d.searchUsername,isBot:true,botType:d.botType,ownerId:'system',bio:d.bio,avatar:`https://ui-avatars.com/api/?name=${encodeURIComponent(d.username)}&background=8e44ad&color=fff&size=256`,email:'',stars:0,grant:false,special:false,ban:false,createdAt:Date.now(),lastSeen:Date.now(),online:true})}}
+        async function jpc(cid,ct){if(!ci)return;try{await upd(ref(db,`chats/${cid}/participants/${ci}`),true);if(ct==='channel'){const count=(await get(ref(db,`chats/${cid}/subscriberCount`))).val()||0;await upd(ref(db,`chats/${cid}`),{subscriberCount:count+1})}nt('Joined!','','success');document.getElementById('search-input').value='';document.getElementById('search-results-container').classList.remove('active');document.getElementById('chats-list-container').classList.remove('hidden')}catch(e){nt('Error','','error')}}
+        function scp(chat){const ic=chat.chatType==='channel';sm({title:eh(chat.name||'Chat'),content:`Type: ${ic?'Channel':'Group'}\n${chat.username?'@'+eh(chat.username)+'\n':''}Privacy: ${chat.privacy||'public'}\nSubscribers: ${chat.subscriberCount||0}\n\n${chat.description||''}`,confirmText:'Join',onConfirm:()=>jpc(chat.id,chat.chatType)})}
 
-        // ===== CHATS =====
-        function loadUserChats(){if(!currentUserId)return;if(chatsUnsub)chatsUnsub();chatsUnsub=onValue(ref(database,'chats'),snap=>{const d=snap.val()||{};allChats={};Object.entries(d).forEach(([id,chat])=>{if(chat.participants&&chat.participants[currentUserId])allChats[id]=chat});renderChatsList()})}
-        function getFilteredChats(){const c=Object.values(allChats);if(activeTab==='channels')return c.filter(x=>x.chatType==='channel');if(activeTab==='groups')return c.filter(x=>x.chatType==='group');return c.filter(x=>!x.chatType||x.chatType==='private')}
-        function renderChatsList(){
-            const l=document.getElementById('chats-list');if(!l)return;
-            const f=getFilteredChats().sort((a,b)=>(b.lastMessageTime||b.createdAt||0)-(a.lastMessageTime||a.createdAt||0));
-            if(!f.length){l.innerHTML='<div style="text-align:center;padding:40px;color:var(--gray)">No chats</div>';return}
-            l.innerHTML='';
-            f.forEach(chat=>{
-                const d=document.createElement('div');d.className='chat-item';
-                let name='Chat',avatar=DEFAULT_AVATAR,lastMsg=chat.lastMessage||'',time=(chat.lastMessageTime||chat.createdAt)?formatTime(chat.lastMessageTime||chat.createdAt):'',online=false,otherUser=null,typeBadge='',unreadHtml='';
-                if(chat.chatType==='channel'){name=chat.name||'Channel';typeBadge='<span class="chat-type-badge chat-type-channel">CH</span>'}
-                else if(chat.chatType==='group'){name=chat.name||'Group';typeBadge='<span class="chat-type-badge chat-type-group">GR</span>'}
-                else if(chat.type==='private'&&chat.participants){const oid=Object.keys(chat.participants).find(id=>id!==currentUserId);otherUser=allUsers[oid];if(otherUser){name=otherUser.username;avatar=otherUser.avatar||DEFAULT_AVATAR;online=otherUser.online||false}}
-                const un=unreadCounts[chat.id]||0;if(un>0)unreadHtml=`<span style="background:var(--accent);color:#fff;border-radius:12px;padding:2px 8px;font-size:11px;font-weight:700">${un}</span>`;
-                d.innerHTML=`<div style="position:relative;margin-right:12px"><div class="avatar-img" style="background-image:url('${avatar}')"></div>${online?'<div class="online-dot"></div>':''}</div><div style="flex:1"><div style="display:flex;justify-content:space-between"><div class="chat-item-name">${escapeHtml(name)} ${typeBadge} ${getUserBadgesHtml(otherUser)}</div><span style="font-size:12px;color:var(--gray)">${time}</span></div><div style="display:flex;justify-content:space-between;margin-top:4px"><span style="font-size:14px;color:var(--gray)">${escapeHtml(lastMsg)}</span>${unreadHtml}</div></div>`;
-                d.addEventListener('click',()=>openChat(chat));l.appendChild(d);
-            });
-        }
+        async function ccog(type){sm({title:`Create ${type}`,customHtml:`<label style="color:var(--gray);font-size:12px;display:block;margin-bottom:4px">Name</label><input class="modal-input" id="cr-name"><label style="color:var(--gray);font-size:12px;display:block;margin-bottom:4px">Username (letters, numbers, _)</label><input class="modal-input" id="cr-username" placeholder="@username"><label style="color:var(--gray);font-size:12px;display:block;margin-bottom:4px">Description</label><input class="modal-input" id="cr-desc"><label style="color:var(--gray);font-size:12px;display:block;margin-bottom:4px">Privacy</label><select class="modal-input" id="cr-privacy"><option value="public">Public</option><option value="private">Private</option></select><label style="color:var(--gray);font-size:12px;display:block;margin-bottom:4px;margin-top:10px">Who can add members?</label><select class="modal-input" id="cr-invite"><option value="everyone">All members</option><option value="admins">Only admins</option></select>`,confirmText:'Create',onConfirm:async()=>{const n=document.getElementById('cr-name')?.value?.trim();const uname=(document.getElementById('cr-username')?.value?.trim()||'').replace(/^@/,'').toLowerCase();if(!n){nt('Enter name','','error');return}if(uname){if(!/^[a-zA-Z0-9_]+$/.test(uname)){nt('Username: letters, numbers, _','','error');return}const exists=Object.values(ac).some(c=>c.username===uname);if(exists){nt('@'+uname+' taken','','error');return}}const cid=push(ref(db,'chats')).key;const cd={id:cid,chatType:type,type:'group',name:n,username:uname||null,description:document.getElementById('cr-desc')?.value?.trim()||'',privacy:document.getElementById('cr-privacy')?.value||'public',invitePolicy:document.getElementById('cr-invite')?.value||'everyone',avatar:DA,createdAt:Date.now(),lastMessage:`${type} created`,lastMessageTime:Date.now(),createdBy:ci,participants:{[ci]:true},admins:{[ci]:true},subscriberCount:1};await set(ref(db,`chats/${cid}`),cd);nt('Created!',n,'success');setTimeout(()=>{const c=ac[cid];if(c)oc(c)},500)}})}
+        async function scwu(uid){if(!uid)return;document.getElementById('profile-screen').classList.add('hidden');const cid=await gocpc(uid);document.getElementById('search-input').value='';document.getElementById('search-results-container').classList.remove('active');document.getElementById('chats-list-container').classList.remove('hidden');let att=0;const f=async()=>{let c=ac[cid];if(!c){const s=await get(ref(db,`chats/${cid}`));if(s.exists())c=s.val()}if(c)oc(c);else if(att++<20)setTimeout(f,150)};f()}
+        async function gocpc(uid){for(const[id,chat]of Object.entries(ac)){if(chat.type==='private'&&chat.participants?.[uid]&&chat.participants?.[ci])return id}const nid='private_'+Date.now()+'_'+Math.random().toString(36).substr(2,8),o=au[uid];const cd={id:nid,type:'private',createdAt:Date.now(),participants:{[ci]:true,[uid]:true},lastMessage:'Chat created',lastMessageTime:Date.now(),name:o?.username||'User',avatar:o?.avatar||DA};await set(ref(db,`chats/${nid}`),cd);return nid}
 
-        function searchAll(q){
-            if(!q){document.getElementById('search-results-container').classList.remove('active');document.getElementById('chats-list-container').classList.remove('hidden');return}
-            const lq=q.toLowerCase().replace(/^@/,''),res=[];
-            Object.entries(allUsers).forEach(([uid,u])=>{if(!u||uid===currentUserId)return;const priv=u.privacySettings||{};const findMe=priv.findMe||'everyone';if(findMe==='nobody')return;if(findMe==='username'&&!lq.startsWith('@'))return;const nm=(u.username||'').toLowerCase(),un=(u.searchUsername||'').toLowerCase();if(nm.includes(lq)||un.includes(lq))res.push({type:'user',user:u,userId:uid,score:un===lq?0:1})});
-            Object.entries(allChats).forEach(([cid,chat])=>{if(!chat.name||chat.chatType==='private')return;if(chat.privacy!=='public')return;if(chat.participants&&chat.participants[currentUserId])return;if(chat.name.toLowerCase().includes(lq)||(chat.username&&chat.username.toLowerCase().includes(lq)))res.push({type:'public_chat',chat,chatId:cid,score:1})});
-            res.sort((a,b)=>a.score-b.score);
-            const rl=document.getElementById('search-results-list');
-            if(!res.length){rl.innerHTML='<div style="text-align:center;padding:20px;color:var(--gray)">Nothing found</div>'}
-            else{rl.innerHTML='';res.forEach(r=>{const d=document.createElement('div');d.className='search-result-item';if(r.type==='user'){const av=r.user.avatar||DEFAULT_AVATAR;d.innerHTML=`<div class="avatar-img" style="width:48px;height:48px;background-image:url('${av}');margin-right:12px"></div><div style="flex:1"><div class="chat-item-name">${escapeHtml(r.user.username)} ${getUserBadgesHtml(r.user)}</div><div style="font-size:12px;color:var(--gray)">@${escapeHtml(r.user.searchUsername||'')}</div></div><button style="padding:8px 16px;background:var(--accent);border:none;border-radius:20px;color:#fff;font-size:13px;cursor:pointer">Message</button>`;d.querySelector('button').addEventListener('click',e=>{e.stopPropagation();startChatWithUser(r.userId)});d.addEventListener('click',()=>openUserProfile(r.userId))}else{const isChannel=r.chat.chatType==='channel';d.innerHTML=`<div class="avatar-img" style="width:48px;height:48px;background-image:url('${r.chat.avatar||DEFAULT_AVATAR}');margin-right:12px"></div><div style="flex:1"><div class="chat-item-name">${escapeHtml(r.chat.name)}</div><div style="font-size:12px;color:var(--gray)">${r.chat.username?'@'+escapeHtml(r.chat.username):isChannel?'Public Channel':'Public Group'}</div></div><button style="padding:8px 16px;background:var(--green);border:none;border-radius:20px;color:#fff;font-size:13px;cursor:pointer">Join</button>`;d.querySelector('button').addEventListener('click',async e=>{e.stopPropagation();await joinPublicChat(r.chatId,r.chat.chatType)});d.addEventListener('click',()=>showChatPreview(r.chat))}rl.appendChild(d)})}
-            document.getElementById('search-results-container').classList.add('active');document.getElementById('chats-list-container').classList.add('hidden');
-        }
+        function oc(chat){if(!chat?.id)return;if(mu)mu();cc=chat;cci=chat.id;uc[chat.id]=0;if(chat.chatType==='channel'){document.getElementById('chat-title').textContent=chat.name||'Channel';document.getElementById('chat-subtitle').textContent=`${chat.subscriberCount||0} subscribers`;document.getElementById('chat-avatar').style.backgroundImage=`url('${chat.avatar||DA}')`;document.getElementById('chat-avatar').innerHTML='';const ia=ica();document.getElementById('message-input-area').style.display=ia?'flex':'none';document.getElementById('channel-locked').style.display=ia?'none':'flex'}else if(chat.chatType==='group'){document.getElementById('chat-title').textContent=chat.name||'Group';document.getElementById('chat-subtitle').textContent=`${Object.keys(chat.participants||{}).length} members`;document.getElementById('chat-avatar').style.backgroundImage=`url('${chat.avatar||DA}')`;document.getElementById('chat-avatar').innerHTML='';document.getElementById('message-input-area').style.display='flex';document.getElementById('channel-locked').style.display='none'}else if(chat.type==='private'&&chat.participants){const oid=Object.keys(chat.participants).find(id=>id!==ci);const other=au[oid];if(other){document.getElementById('chat-title').innerHTML=eh(other.username)+' '+gb(other);document.getElementById('chat-avatar').style.backgroundImage=`url('${other.avatar||DA}')`;document.getElementById('chat-avatar').innerHTML='';document.getElementById('chat-subtitle').textContent=other.online?'online':'offline'}document.getElementById('message-input-area').style.display='flex';document.getElementById('channel-locked').style.display='none'}if(window.innerWidth<=768){document.getElementById('chats-sidebar').classList.remove('active');document.getElementById('chat-area').classList.add('active')}else{document.getElementById('chat-area').classList.add('active')}lm(chat.id)}
 
-        async function joinPublicChat(chatId,chatType){if(!currentUserId)return;try{await update(ref(database,`chats/${chatId}/participants/${currentUserId}`),true);if(chatType==='channel'){const count=(await get(ref(database,`chats/${chatId}/subscriberCount`))).val()||0;await update(ref(database,`chats/${chatId}`),{subscriberCount:count+1})}notify('Joined!','','success');document.getElementById('search-input').value='';document.getElementById('search-results-container').classList.remove('active');document.getElementById('chats-list-container').classList.remove('hidden')}catch(e){notify('Error','','error')}}
-        function showChatPreview(chat){const isChannel=chat.chatType==='channel';showModal({title:escapeHtml(chat.name||'Chat'),content:`Type: ${isChannel?'Channel':'Group'}\n${chat.username?'@'+escapeHtml(chat.username)+'\n':''}Privacy: ${chat.privacy||'public'}\nSubscribers: ${chat.subscriberCount||0}\n\n${chat.description||''}`,confirmText:'Join',onConfirm:()=>joinPublicChat(chat.id,chat.chatType)})}
+        function lm(cid){document.getElementById('messages-container').innerHTML='';const mr=ref(db,`chats/${cid}/messages`);mu=onCA(qy(mr,obc('timestamp')),snap=>{const m=snap.val();amc(m);if(m.senderId!==ci&&cci===cid&&ne){const t=cc?.chatType==='channel'?cc.name:cc?.chatType==='group'?m.senderName:null;if(t)nt(t,m.text||'New message','info')}if(m.senderId!==ci){uc[cid]=(uc[cid]||0)+1;rcl()}})}
+        function amc(m){const d=document.createElement('div'),io=m.senderId===ci;d.className=`message ${io?'outgoing':'incoming'}`;const time=ft(m.timestamp);let sender='';if((cc?.chatType==='group'||cc?.chatType==='channel')&&!io){sender=`<div class="message-sender">${eh(m.senderName||'Anonymous')}</div>`}let content='',im=false;if(m.type==='image'){im=true;const opt=m.url.replace('/upload/','/upload/w_400,c_limit,q_auto,f_auto/');content=`<a href="${m.url}" target="_blank"><img src="${opt}" class="message-image" loading="lazy" alt="Photo"></a>`}else if(m.type==='video'){im=true;const p=m.url.replace('/upload/','/upload/w_400,c_limit,q_auto,f_auto/');content=`<video controls preload="metadata" class="message-video" poster="${p}"><source src="${m.url}" type="video/mp4"></video>`}else{content=`<div class="message-text">${sender}${eh(m.text||'')}</div>`}d.innerHTML=`<div class="message-bubble ${im?'media-message-bubble':''}">${content}<div class="message-meta">${time}</div></div>`;document.getElementById('messages-container').appendChild(d);document.getElementById('messages-container').scrollTop=document.getElementById('messages-container').scrollHeight}
 
-        async function createChannelOrGroup(type){
-            showModal({title:`Create ${type}`,customHtml:`<label style="color:var(--gray);font-size:12px;display:block;margin-bottom:4px">Name</label><input class="modal-input" id="cr-name"><label style="color:var(--gray);font-size:12px;display:block;margin-bottom:4px">Username (letters, numbers, _)</label><input class="modal-input" id="cr-username" placeholder="@username"><label style="color:var(--gray);font-size:12px;display:block;margin-bottom:4px">Description</label><input class="modal-input" id="cr-desc"><label style="color:var(--gray);font-size:12px;display:block;margin-bottom:4px">Privacy</label><select class="modal-input" id="cr-privacy"><option value="public">Public</option><option value="private">Private</option></select><label style="color:var(--gray);font-size:12px;display:block;margin-bottom:4px;margin-top:10px">Who can add members?</label><select class="modal-input" id="cr-invite"><option value="everyone">All members</option><option value="admins">Only admins</option></select>`,confirmText:'Create',onConfirm:async()=>{
-                const n=document.getElementById('cr-name')?.value?.trim();const uname=(document.getElementById('cr-username')?.value?.trim()||'').replace(/^@/,'').toLowerCase();
-                if(!n){notify('Enter name','','error');return}
-                if(uname){if(!/^[a-zA-Z0-9_]+$/.test(uname)){notify('Username: letters, numbers, _','','error');return}const exists=Object.values(allChats).some(c=>c.username===uname);if(exists){notify('@'+uname+' taken','','error');return}}
-                const cid=push(ref(database,'chats')).key;
-                const cd={id:cid,chatType:type,type:'group',name:n,username:uname||null,description:document.getElementById('cr-desc')?.value?.trim()||'',privacy:document.getElementById('cr-privacy')?.value||'public',invitePolicy:document.getElementById('cr-invite')?.value||'everyone',avatar:DEFAULT_AVATAR,createdAt:Date.now(),lastMessage:`${type} created`,lastMessageTime:Date.now(),createdBy:currentUserId,participants:{[currentUserId]:true},admins:{[currentUserId]:true},subscriberCount:1};
-                await set(ref(database,`chats/${cid}`),cd);notify('Created!',n,'success');
-                setTimeout(()=>{const c=allChats[cid];if(c)openChat(c)},500);
-            }});
-        }
-        async function startChatWithUser(uid){if(!uid)return;document.getElementById('profile-screen').classList.add('hidden');const cid=await getOrCreatePrivateChat(uid);document.getElementById('search-input').value='';document.getElementById('search-results-container').classList.remove('active');document.getElementById('chats-list-container').classList.remove('hidden');let att=0;const f=async()=>{let c=allChats[cid];if(!c){const s=await get(ref(database,`chats/${cid}`));if(s.exists())c=s.val()}if(c)openChat(c);else if(att++<20)setTimeout(f,150)};f()}
-        async function getOrCreatePrivateChat(uid){for(const[id,chat]of Object.entries(allChats)){if(chat.type==='private'&&chat.participants?.[uid]&&chat.participants?.[currentUserId])return id}const nid='private_'+Date.now()+'_'+Math.random().toString(36).substr(2,8),o=allUsers[uid];const cd={id:nid,type:'private',createdAt:Date.now(),participants:{[currentUserId]:true,[uid]:true},lastMessage:'Chat created',lastMessageTime:Date.now(),name:o?.username||'User',avatar:o?.avatar||DEFAULT_AVATAR};await set(ref(database,`chats/${nid}`),cd);return nid}
-                function openChat(chat){
-            if(!chat?.id)return;if(messagesUnsub)messagesUnsub();
-            currentChat=chat;currentChatId=chat.id;unreadCounts[chat.id]=0;
-            if(chat.chatType==='channel'){
-                document.getElementById('chat-title').textContent=chat.name||'Channel';
-                document.getElementById('chat-subtitle').textContent=`${chat.subscriberCount||0} subscribers`;
-                document.getElementById('chat-avatar').style.backgroundImage=`url('${chat.avatar||DEFAULT_AVATAR}')`;
-                document.getElementById('chat-avatar').innerHTML='';
-                const isAdmin=isChannelAdmin();
-                document.getElementById('message-input-area').style.display=isAdmin?'flex':'none';
-                document.getElementById('channel-locked').style.display=isAdmin?'none':'flex';
-            }else if(chat.chatType==='group'){
-                document.getElementById('chat-title').textContent=chat.name||'Group';
-                document.getElementById('chat-subtitle').textContent=`${Object.keys(chat.participants||{}).length} members`;
-                document.getElementById('chat-avatar').style.backgroundImage=`url('${chat.avatar||DEFAULT_AVATAR}')`;
-                document.getElementById('chat-avatar').innerHTML='';
-                document.getElementById('message-input-area').style.display='flex';
-                document.getElementById('channel-locked').style.display='none';
-            }else if(chat.type==='private'&&chat.participants){
-                const oid=Object.keys(chat.participants).find(id=>id!==currentUserId);
-                const other=allUsers[oid];
-                if(other){
-                    document.getElementById('chat-title').innerHTML=escapeHtml(other.username)+' '+getUserBadgesHtml(other);
-                    document.getElementById('chat-avatar').style.backgroundImage=`url('${other.avatar||DEFAULT_AVATAR}')`;
-                    document.getElementById('chat-avatar').innerHTML='';
-                    document.getElementById('chat-subtitle').textContent=other.online?'online':'offline';
-                }
-                document.getElementById('message-input-area').style.display='flex';
-                document.getElementById('channel-locked').style.display='none';
-            }
-            if(window.innerWidth<=768){document.getElementById('chats-sidebar').classList.remove('active');document.getElementById('chat-area').classList.add('active')}
-            else{document.getElementById('chat-area').classList.add('active')}
-            loadMessages(chat.id);
-        }
+        async function smt(text){text=(text||'').trim();if(!text||!cci||!ci)return;if(cc?.chatType==='channel'&&!ica()){nt('Only admins can post','','error');return}const m={text,senderId:ci,senderName:cu?.username||'User',timestamp:Date.now()};await push(ref(db,`chats/${cci}/messages`),m);await upd(ref(db,`chats/${cci}`),{lastMessage:text,lastMessageTime:Date.now()});document.getElementById('message-input').value='';brp(cci,cc,text)}
 
-        function loadMessages(chatId){
-            document.getElementById('messages-container').innerHTML='';
-            const mr=ref(database,`chats/${chatId}/messages`);
-            messagesUnsub=onChildAdded(query(mr,orderByChild('timestamp')),snap=>{
-                const m=snap.val();
-                addMessageToChat(m);
-                if(m.senderId!==currentUserId&&currentChatId===chatId&&notificationsEnabled){
-                    const t=currentChat?.chatType==='channel'?currentChat.name:currentChat?.chatType==='group'?m.senderName:null;
-                    if(t)notify(t,m.text||'New message','info');
-                }
-                if(m.senderId!==currentUserId){unreadCounts[chatId]=(unreadCounts[chatId]||0)+1;renderChatsList()}
-            });
-        }
+        function sci(){if(!cc)return;const ic=cc.chatType==='channel',ig=cc.chatType==='group';if(!ic&&!ig){if(cc.type==='private'&&cc.participants){const oid=Object.keys(cc.participants).find(id=>id!==ci);if(oid)oup(oid)}return}const ia=ica();const ci2=cc.invitePolicy==='everyone'||ia;let ah='';if(ia){ah=`<button class="modal-btn confirm" id="chat-edit-name" style="margin-bottom:8px">Rename</button><button class="modal-btn confirm" id="chat-add-admin" style="margin-bottom:8px;background:var(--group)">Add Admin</button>`}if(ci2){ah+=`<button class="modal-btn confirm" id="chat-add-member" style="margin-bottom:8px;background:var(--green)">Add Member</button>`}ah+=`<button class="modal-btn cancel" id="chat-view-members" style="margin-bottom:8px">View Members</button>`;sm({title:'Chat Info',customHtml:`<div style="color:var(--gray);font-size:15px;margin-bottom:16px">Type: ${ic?'Channel':'Group'}<br>Name: ${eh(cc.name||'')}<br>${cc.username?'@'+eh(cc.username)+'\n':''}Privacy: ${cc.privacy||'public'}<br>Members: ${Object.keys(cc.participants||{}).length}<br>Created: ${new Date(cc.createdAt).toLocaleDateString()}</div>${ah}`,confirmText:'Close',onConfirm:()=>{}});setTimeout(()=>{document.getElementById('chat-edit-name')?.addEventListener('click',()=>{document.getElementById('modal-overlay').classList.add('hidden');sm({title:'Rename',customHtml:'<input class="modal-input" id="rename-input" value="'+eh(cc.name||'')+'">',confirmText:'Save',onConfirm:async()=>{const v=document.getElementById('rename-input')?.value?.trim();if(v){await upd(ref(db,`chats/${cci}/name`),v);cc.name=v;oc(cc);nt('Renamed!','','success')}}})});document.getElementById('chat-add-admin')?.addEventListener('click',()=>{document.getElementById('modal-overlay').classList.add('hidden');sm({title:'Add Admin',customHtml:'<input class="modal-input" id="admin-input" placeholder="User ID or @username">',confirmText:'Add',onConfirm:async()=>{const v=document.getElementById('admin-input')?.value?.trim();if(!v)return;let uid=v.replace('@','');const u=Object.values(au).find(x=>x.searchUsername===uid||x.id===uid);if(!u){nt('User not found','','error');return}uid=u.id;await upd(ref(db,`chats/${cci}/admins/${uid}`),true);if(!cc.participants||!cc.participants[uid]){await upd(ref(db,`chats/${cci}/participants/${uid}`),true)}nt('Admin added!','','success')}})});document.getElementById('chat-add-member')?.addEventListener('click',()=>{document.getElementById('modal-overlay').classList.add('hidden');sm({title:'Add Member',customHtml:'<input class="modal-input" id="member-input" placeholder="User ID or @username">',confirmText:'Add',onConfirm:async()=>{const v=document.getElementById('member-input')?.value?.trim();if(!v)return;let uid=v.replace('@','');const u=Object.values(au).find(x=>x.searchUsername===uid||x.id===uid);if(!u){nt('User not found','','error');return}uid=u.id;const priv=u.privacySettings||{};if((priv.inviteMe||'everyone')==='nobody'&&!ia){nt('User does not allow invites','','error');return}await upd(ref(db,`chats/${cci}/participants/${uid}`),true);if(cc.chatType==='channel'){const cnt=(await get(ref(db,`chats/${cci}/subscriberCount`))).val()||0;await upd(ref(db,`chats/${cci}`),{subscriberCount:cnt+1})}nt('Member added!','','success')}})});document.getElementById('chat-view-members')?.addEventListener('click',()=>{document.getElementById('modal-overlay').classList.add('hidden');const members=cc.participants||{};const list=Object.keys(members).map(id=>{const u=au[id];const ia2=cc.admins&&cc.admins[id];return`${u?.username||id} ${ia2?'(Admin)':''}`}).join('\n');sm({title:'Members',content:list||'No members',confirmText:'Close'})})},100)}
 
-        function addMessageToChat(m){
-            const d=document.createElement('div'),isOut=m.senderId===currentUserId;
-            d.className=`message ${isOut?'outgoing':'incoming'}`;
-            const time=formatTime(m.timestamp);
-            let sender='';
-            if((currentChat?.chatType==='group'||currentChat?.chatType==='channel')&&!isOut){
-                sender=`<div class="message-sender">${escapeHtml(m.senderName||'Anonymous')}</div>`;
-            }
-            let content='',isMedia=false;
-            if(m.type==='image'){
-                isMedia=true;
-                const opt=m.url.replace('/upload/','/upload/w_400,c_limit,q_auto,f_auto/');
-                content=`<a href="${m.url}" target="_blank"><img src="${opt}" class="message-image" loading="lazy" alt="Photo"></a>`;
-            }else if(m.type==='video'){
-                isMedia=true;
-                const p=m.url.replace('/upload/','/upload/w_400,c_limit,q_auto,f_auto/');
-                content=`<video controls preload="metadata" class="message-video" poster="${p}"><source src="${m.url}" type="video/mp4"></video>`;
-            }else{
-                content=`<div class="message-text">${sender}${escapeHtml(m.text||'')}</div>`;
-            }
-            d.innerHTML=`<div class="message-bubble ${isMedia?'media-message-bubble':''}">${content}<div class="message-meta">${time}</div></div>`;
-            document.getElementById('messages-container').appendChild(d);
-            document.getElementById('messages-container').scrollTop=document.getElementById('messages-container').scrollHeight;
-        }
+        function oup(uid){const isSelf=uid===ci,u=isSelf?cu:au[uid];if(!u){nt('User not found','','error');return}vu=uid;const av=u.avatar||DA;document.getElementById('profile-avatar').style.backgroundImage=`url('${av}')`;document.getElementById('profile-name').innerHTML=eh(u.username||'')+' '+gb(u);document.getElementById('profile-substatus').textContent=isSelf?'this is you':(u.isBot?'bot':(u.online?'online':'offline'));const rows=[];if(u.bio)rows.push({label:'Bio',value:eh(u.bio)});if(u.searchUsername)rows.push({label:'Username',value:'@'+eh(u.searchUsername)});rows.push({label:'ID',value:String(u.id||uid)});if(u.createdAt)rows.push({label:'Joined',value:new Date(u.createdAt).toLocaleDateString('en-US')});if(isSelf&&u.email)rows.push({label:'Email',value:eh(u.email)});const priv=u.privacySettings||{};if(isSelf){rows.push({label:'Invite me',value:priv.inviteMe||'everyone'});rows.push({label:'Find me',value:priv.findMe||'everyone'})}document.getElementById('tg-info-list').innerHTML=rows.map(r=>`<div class="tg-info-row"><div class="tg-info-label">${r.label}</div><div class="tg-info-value">${r.value}</div></div>`).join('');document.getElementById('tg-action-row').style.display=isSelf?'none':'flex';document.getElementById('edit-profile-btn').style.display=isSelf?'flex':'none';document.getElementById('delete-account-btn').style.display=isSelf?'block':'none';document.getElementById('chats-sidebar').classList.remove('active');document.getElementById('profile-screen').classList.remove('hidden')}
+        function uui(){if(!cu)return;document.getElementById('user-avatar').style.backgroundImage=`url('${cu.avatar||DA}')`;document.getElementById('current-username').innerHTML=eh(cu.username)+' '+gb(cu);document.getElementById('user-stars').textContent=(cu.stars||0)+' stars'}
 
-        async function sendMessageText(text){
-            text=(text||'').trim();
-            if(!text||!currentChatId||!currentUserId)return;
-            if(currentChat?.chatType==='channel'&&!isChannelAdmin()){notify('Only admins can post','','error');return}
-            const m={text,senderId:currentUserId,senderName:currentUser?.username||'User',timestamp:Date.now()};
-            await push(ref(database,`chats/${currentChatId}/messages`),m);
-            await update(ref(database,`chats/${currentChatId}`),{lastMessage:text,lastMessageTime:Date.now()});
-            document.getElementById('message-input').value='';
-            botRespond(currentChatId,currentChat,text);
-        }
-
-        function showChatInfo(){
-            if(!currentChat)return;
-            const isChannel=currentChat.chatType==='channel',isGroup=currentChat.chatType==='group';
-            if(!isChannel&&!isGroup){
-                if(currentChat.type==='private'&&currentChat.participants){
-                    const oid=Object.keys(currentChat.participants).find(id=>id!==currentUserId);
-                    if(oid)openUserProfile(oid);
-                }
-                return;
-            }
-            const isAdmin=isChannelAdmin();
-            const canInvite=currentChat.invitePolicy==='everyone'||isAdmin;
-            let adminHtml='';
-            if(isAdmin){adminHtml=`<button class="modal-btn confirm" id="chat-edit-name" style="margin-bottom:8px">Rename</button><button class="modal-btn confirm" id="chat-add-admin" style="margin-bottom:8px;background:var(--group)">Add Admin</button>`}
-            if(canInvite){adminHtml+=`<button class="modal-btn confirm" id="chat-add-member" style="margin-bottom:8px;background:var(--green)">Add Member</button>`}
-            adminHtml+=`<button class="modal-btn cancel" id="chat-view-members" style="margin-bottom:8px">View Members</button>`;
-            showModal({title:'Chat Info',customHtml:`<div style="color:var(--gray);font-size:15px;margin-bottom:16px">Type: ${isChannel?'Channel':'Group'}<br>Name: ${escapeHtml(currentChat.name||'')}<br>${currentChat.username?'@'+escapeHtml(currentChat.username)+'\n':''}Privacy: ${currentChat.privacy||'public'}<br>Members: ${Object.keys(currentChat.participants||{}).length}<br>Created: ${new Date(currentChat.createdAt).toLocaleDateString()}</div>${adminHtml}`,confirmText:'Close',onConfirm:()=>{}});
-            setTimeout(()=>{
-                document.getElementById('chat-edit-name')?.addEventListener('click',()=>{document.getElementById('modal-overlay').classList.add('hidden');showModal({title:'Rename',customHtml:'<input class="modal-input" id="rename-input" value="'+escapeHtml(currentChat.name||'')+'">',confirmText:'Save',onConfirm:async()=>{const v=document.getElementById('rename-input')?.value?.trim();if(v){await update(ref(database,`chats/${currentChatId}/name`),v);currentChat.name=v;openChat(currentChat);notify('Renamed!','','success')}}})});
-                document.getElementById('chat-add-admin')?.addEventListener('click',()=>{document.getElementById('modal-overlay').classList.add('hidden');showModal({title:'Add Admin',customHtml:'<input class="modal-input" id="admin-input" placeholder="User ID or @username">',confirmText:'Add',onConfirm:async()=>{const v=document.getElementById('admin-input')?.value?.trim();if(!v)return;let uid=v.replace('@','');const u=Object.values(allUsers).find(x=>x.searchUsername===uid||x.id===uid);if(!u){notify('User not found','','error');return}uid=u.id;await update(ref(database,`chats/${currentChatId}/admins/${uid}`),true);if(!currentChat.participants||!currentChat.participants[uid]){await update(ref(database,`chats/${currentChatId}/participants/${uid}`),true)}notify('Admin added!','','success')}})});
-                document.getElementById('chat-add-member')?.addEventListener('click',()=>{document.getElementById('modal-overlay').classList.add('hidden');showModal({title:'Add Member',customHtml:'<input class="modal-input" id="member-input" placeholder="User ID or @username">',confirmText:'Add',onConfirm:async()=>{const v=document.getElementById('member-input')?.value?.trim();if(!v)return;let uid=v.replace('@','');const u=Object.values(allUsers).find(x=>x.searchUsername===uid||x.id===uid);if(!u){notify('User not found','','error');return}uid=u.id;const priv=u.privacySettings||{};if((priv.inviteMe||'everyone')==='nobody'&&!isAdmin){notify('User does not allow invites','','error');return}await update(ref(database,`chats/${currentChatId}/participants/${uid}`),true);if(currentChat.chatType==='channel'){const cnt=(await get(ref(database,`chats/${currentChatId}/subscriberCount`))).val()||0;await update(ref(database,`chats/${currentChatId}`),{subscriberCount:cnt+1})}notify('Member added!','','success')}})});
-                document.getElementById('chat-view-members')?.addEventListener('click',()=>{document.getElementById('modal-overlay').classList.add('hidden');const members=currentChat.participants||{};const list=Object.keys(members).map(id=>{const u=allUsers[id];const isAdm=currentChat.admins&&currentChat.admins[id];return`${u?.username||id} ${isAdm?'(Admin)':''}`}).join('\n');showModal({title:'Members',content:list||'No members',confirmText:'Close'})});
-            },100);
-        }
-
-        function openUserProfile(uid){
-            const isSelf=uid===currentUserId,u=isSelf?currentUser:allUsers[uid];
-            if(!u){notify('User not found','','error');return}
-            viewedProfileUserId=uid;
-            const av=u.avatar||DEFAULT_AVATAR;
-            document.getElementById('profile-avatar').style.backgroundImage=`url('${av}')`;
-            document.getElementById('profile-name').innerHTML=escapeHtml(u.username||'')+' '+getUserBadgesHtml(u);
-            document.getElementById('profile-substatus').textContent=isSelf?'this is you':(u.isBot?'bot':(u.online?'online':'offline'));
-            const rows=[];
-            if(u.bio)rows.push({label:'Bio',value:escapeHtml(u.bio)});
-            if(u.searchUsername)rows.push({label:'Username',value:'@'+escapeHtml(u.searchUsername)});
-            rows.push({label:'ID',value:String(u.id||uid)});
-            if(u.createdAt)rows.push({label:'Joined',value:new Date(u.createdAt).toLocaleDateString('en-US')});
-            if(isSelf&&u.email)rows.push({label:'Email',value:escapeHtml(u.email)});
-            const priv=u.privacySettings||{};
-            if(isSelf){rows.push({label:'Invite me',value:priv.inviteMe||'everyone'});rows.push({label:'Find me',value:priv.findMe||'everyone'})}
-            document.getElementById('tg-info-list').innerHTML=rows.map(r=>`<div class="tg-info-row"><div class="tg-info-label">${r.label}</div><div class="tg-info-value">${r.value}</div></div>`).join('');
-            document.getElementById('tg-action-row').style.display=isSelf?'none':'flex';
-            document.getElementById('edit-profile-btn').style.display=isSelf?'flex':'none';
-            document.getElementById('delete-account-btn').style.display=isSelf?'block':'none';
-            document.getElementById('chats-sidebar').classList.remove('active');
-            document.getElementById('profile-screen').classList.remove('hidden');
-        }
-
-        function updateUserInfo(){
-            if(!currentUser)return;
-            document.getElementById('user-avatar').style.backgroundImage=`url('${currentUser.avatar||DEFAULT_AVATAR}')`;
-            document.getElementById('current-username').innerHTML=escapeHtml(currentUser.username)+' '+getUserBadgesHtml(currentUser);
-            document.getElementById('user-stars').textContent=(currentUser.stars||0)+' stars';
-        }
-
-        function showProfileSettings(){
-            if(!currentUser)return;
-            showModal({title:'Edit Profile',customHtml:`<label style="color:var(--gray);font-size:12px;display:block;margin-bottom:4px">Name</label><input class="modal-input" id="set-name" value="${escapeHtml(currentUser.username||'')}"><label style="color:var(--gray);font-size:12px;display:block;margin-bottom:4px">Username</label><input class="modal-input" id="set-username" value="${escapeHtml(currentUser.searchUsername||'')}"><label style="color:var(--gray);font-size:12px;display:block;margin-bottom:4px">Bio</label><input class="modal-input" id="set-bio" value="${escapeHtml(currentUser.bio||'')}">`,confirmText:'Save',onConfirm:async()=>{
-                const name=document.getElementById('set-name')?.value?.trim();const uname=document.getElementById('set-username')?.value?.trim().toLowerCase();const bio=document.getElementById('set-bio')?.value?.trim();
-                if(!name){notify('Name required','','error');return}
-                if(uname&&uname!==currentUser.searchUsername){if(!/^[a-zA-Z0-9_]+$/.test(uname)){notify('Username: letters, numbers, _','','error');return}const exists=Object.values(allUsers).some(u=>u.searchUsername===uname&&u.id!==currentUserId);if(exists){notify('Username taken','','error');return}}
-                const updates={};if(name!==currentUser.username)updates.username=name;if(uname!==currentUser.searchUsername)updates.searchUsername=uname;if(bio!==(currentUser.bio||''))updates.bio=bio;
-                if(Object.keys(updates).length>0){await update(ref(database,`users/${currentUserId}`),updates);Object.assign(currentUser,updates);updateUserInfo();notify('Profile updated!','','success')}
-            }});
-        }
-
-        function showPrivacySettings(){
-            if(!currentUser)return;
-            const priv=currentUser.privacySettings||{};
-            showModal({title:'Privacy Settings',customHtml:`<label style="color:var(--gray);font-size:12px;display:block;margin-bottom:4px">Who can invite me?</label><select class="modal-input" id="priv-invite"><option value="everyone" ${(priv.inviteMe||'everyone')==='everyone'?'selected':''}>Everyone</option><option value="nobody" ${priv.inviteMe==='nobody'?'selected':''}>Nobody</option></select><label style="color:var(--gray);font-size:12px;display:block;margin-bottom:4px;margin-top:10px">Who can find me?</label><select class="modal-input" id="priv-find"><option value="everyone" ${(priv.findMe||'everyone')==='everyone'?'selected':''}>Everyone</option><option value="username" ${priv.findMe==='username'?'selected':''}>Only by username</option><option value="nobody" ${priv.findMe==='nobody'?'selected':''}>Nobody</option></select>`,confirmText:'Save',onConfirm:async()=>{
-                const inviteMe=document.getElementById('priv-invite')?.value||'everyone';const findMe=document.getElementById('priv-find')?.value||'everyone';
-                await update(ref(database,`users/${currentUserId}/privacySettings`),{inviteMe,findMe});
-                currentUser.privacySettings={inviteMe,findMe};notify('Privacy saved!','','success');
-            }});
-        }
+        function sps(){if(!cu)return;sm({title:'Edit Profile',customHtml:`<label style="color:var(--gray);font-size:12px;display:block;margin-bottom:4px">Name</label><input class="modal-input" id="set-name" value="${eh(cu.username||'')}"><label style="color:var(--gray);font-size:12px;display:block;margin-bottom:4px">Username</label><input class="modal-input" id="set-username" value="${eh(cu.searchUsername||'')}"><label style="color:var(--gray);font-size:12px;display:block;margin-bottom:4px">Bio</label><input class="modal-input" id="set-bio" value="${eh(cu.bio||'')}">`,confirmText:'Save',onConfirm:async()=>{const name=document.getElementById('set-name')?.value?.trim();const uname=document.getElementById('set-username')?.value?.trim().toLowerCase();const bio=document.getElementById('set-bio')?.value?.trim();if(!name){nt('Name required','','error');return}if(uname&&uname!==cu.searchUsername){if(!/^[a-zA-Z0-9_]+$/.test(uname)){nt('Username: letters, numbers, _','','error');return}const exists=Object.values(au).some(u=>u.searchUsername===uname&&u.id!==ci);if(exists){nt('Username taken','','error');return}}const updates={};if(name!==cu.username)updates.username=name;if(uname!==cu.searchUsername)updates.searchUsername=uname;if(bio!==(cu.bio||''))updates.bio=bio;if(Object.keys(updates).length>0){await upd(ref(db,`users/${ci}`),updates);Object.assign(cu,updates);uui();nt('Profile updated!','','success')}}})}
+        function sprs(){if(!cu)return;const priv=cu.privacySettings||{};sm({title:'Privacy Settings',customHtml:`<label style="color:var(--gray);font-size:12px;display:block;margin-bottom:4px">Who can invite me?</label><select class="modal-input" id="priv-invite"><option value="everyone" ${(priv.inviteMe||'everyone')==='everyone'?'selected':''}>Everyone</option><option value="nobody" ${priv.inviteMe==='nobody'?'selected':''}>Nobody</option></select><label style="color:var(--gray);font-size:12px;display:block;margin-bottom:4px;margin-top:10px">Who can find me?</label><select class="modal-input" id="priv-find"><option value="everyone" ${(priv.findMe||'everyone')==='everyone'?'selected':''}>Everyone</option><option value="username" ${priv.findMe==='username'?'selected':''}>Only by username</option><option value="nobody" ${priv.findMe==='nobody'?'selected':''}>Nobody</option></select>`,confirmText:'Save',onConfirm:async()=>{const inviteMe=document.getElementById('priv-invite')?.value||'everyone';const findMe=document.getElementById('priv-find')?.value||'everyone';await upd(ref(db,`users/${ci}/privacySettings`),{inviteMe,findMe});cu.privacySettings={inviteMe,findMe};nt('Privacy saved!','','success')}})}
 
         // ===== AUTH =====
-        auth.onAuthStateChanged(async(user)=>{
-            if(user){
-                currentUserId=user.uid;
-                const snap=await get(ref(database,`users/${user.uid}`));
-                if(snap.exists()){
-                    currentUser=snap.val();
-                    if(currentUser.ban){await auth.signOut();notify('Account banned','','error');return}
-                }else{
-                    const uname=user.email?user.email.split('@')[0].replace(/[^a-zA-Z0-9_]/g,'')+'_'+Math.floor(Math.random()*1000):'user_'+Math.random().toString(36).substr(2,8);
-                    currentUser={id:user.uid,username:user.displayName||user.email?.split('@')[0]||'User',searchUsername:uname,email:user.email||'',stars:0,grant:false,checkReal:false,special:false,ban:false,bio:'Hello!',avatar:user.photoURL||DEFAULT_AVATAR,privacySettings:{inviteMe:'everyone',findMe:'everyone'},createdAt:Date.now(),lastSeen:Date.now(),online:true};
-                    await set(ref(database,`users/${user.uid}`),currentUser);
-                }
-                await update(ref(database,`users/${currentUserId}`),{online:true,lastSeen:Date.now()});
-                document.getElementById('auth-screen').style.display='none';
-                document.getElementById('main-screen').classList.add('active');
-                updateUserInfo();loadAllUsers();loadUserChats();loadStories();loadAnnouncements();
-            }else{
-                document.getElementById('main-screen').classList.remove('active');
-                document.getElementById('auth-screen').style.display='flex';
-            }
-        });
+        auth.onAuthStateChanged(async(user)=>{if(user){ci=user.uid;const snap=await get(ref(db,`users/${user.uid}`));if(snap.exists()){cu=snap.val();if(cu.ban){await auth.signOut();nt('Account banned','','error');return}}else{const uname=user.email?user.email.split('@')[0].replace(/[^a-zA-Z0-9_]/g,'')+'_'+Math.floor(Math.random()*1000):'user_'+Math.random().toString(36).substr(2,8);cu={id:user.uid,username:user.displayName||user.email?.split('@')[0]||'User',searchUsername:uname,email:user.email||'',stars:0,grant:false,checkReal:false,special:false,ban:false,bio:'Hello!',avatar:user.photoURL||DA,privacySettings:{inviteMe:'everyone',findMe:'everyone'},createdAt:Date.now(),lastSeen:Date.now(),online:true};await set(ref(db,`users/${user.uid}`),cu)}await upd(ref(db,`users/${ci}`),{online:true,lastSeen:Date.now()});document.getElementById('auth-screen').style.display='none';document.getElementById('main-screen').classList.add('active');uui();lau();luc();ls();lan()}else{document.getElementById('main-screen').classList.remove('active');document.getElementById('auth-screen').style.display='flex'}});
 
-        document.getElementById('login-btn').addEventListener('click',async()=>{
-            const email=document.getElementById('login-username').value.trim();
-            const password=document.getElementById('login-password').value.trim();
-            if(!email||!password){notify('Fill fields','','error');return}
-            try{await auth.signInWithEmailAndPassword(email,password)}
-            catch(e){notify(e.code==='auth/invalid-credential'?'Invalid credentials':e.message,'','error')}
-        });
-
-        document.getElementById('google-login-btn').addEventListener('click',async()=>{
-            try{await auth.signInWithPopup(googleProvider)}catch(e){notify('Error',e.message,'error')}
-        });
-
-        document.getElementById('register-btn').addEventListener('click',async()=>{
-            const username=document.getElementById('register-username').value.trim();
-            const email=document.getElementById('register-email').value.trim();
-            const password=document.getElementById('register-password').value.trim();
-            if(!username||!email||!password){notify('Fill fields','','error');return}
-            if(password.length<6){notify('Password min 6','','error');return}
-            try{
-                const result=await auth.createUserWithEmailAndPassword(email,password);
-                const uid=result.user.uid;
-                const uname=email.split('@')[0].replace(/[^a-zA-Z0-9_]/g,'')+'_'+Math.floor(Math.random()*1000);
-                await set(ref(database,`users/${uid}`),{id:uid,username,searchUsername:uname,email,stars:0,grant:false,checkReal:false,special:false,ban:false,bio:'Hello!',avatar:`https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=2b5278&color=fff&size=256`,privacySettings:{inviteMe:'everyone',findMe:'everyone'},createdAt:Date.now(),lastSeen:Date.now(),online:true});
-                await result.user.updateProfile({displayName:username});
-            }catch(e){notify(e.code==='auth/email-already-in-use'?'Email taken':e.message,'','error')}
-        });
-
-        document.getElementById('logout-btn').addEventListener('click',async()=>{
-            if(currentUserId)await update(ref(database,`users/${currentUserId}`),{online:false,lastSeen:Date.now()});
-            if(messagesUnsub)messagesUnsub();if(chatsUnsub)chatsUnsub();if(storiesUnsub)storiesUnsub();if(announcementsUnsub)announcementsUnsub();
-            currentUser=null;currentUserId=null;
-            await auth.signOut();
-        });
-
+        document.getElementById('login-btn').addEventListener('click',async()=>{const e=document.getElementById('login-username').value.trim(),p=document.getElementById('login-password').value.trim();if(!e||!p){nt('Fill fields','','error');return}try{await auth.signInWithEmailAndPassword(e,p)}catch(err){nt(err.code==='auth/invalid-credential'?'Invalid credentials':err.message,'','error')}});
+        document.getElementById('google-login-btn').addEventListener('click',async()=>{try{await auth.signInWithPopup(gp)}catch(e){nt('Error',e.message,'error')}});
+        document.getElementById('register-btn').addEventListener('click',async()=>{const un=document.getElementById('register-username').value.trim(),em=document.getElementById('register-email').value.trim(),pw=document.getElementById('register-password').value.trim();if(!un||!em||!pw){nt('Fill fields','','error');return}if(pw.length<6){nt('Password min 6','','error');return}try{const r=await auth.createUserWithEmailAndPassword(em,pw);const uid=r.user.uid;const sun=em.split('@')[0].replace(/[^a-zA-Z0-9_]/g,'')+'_'+Math.floor(Math.random()*1000);await set(ref(db,`users/${uid}`),{id:uid,username:un,searchUsername:sun,email:em,stars:0,grant:false,checkReal:false,special:false,ban:false,bio:'Hello!',avatar:`https://ui-avatars.com/api/?name=${encodeURIComponent(un)}&background=2b5278&color=fff&size=256`,privacySettings:{inviteMe:'everyone',findMe:'everyone'},createdAt:Date.now(),lastSeen:Date.now(),online:true});await r.user.updateProfile({displayName:un})}catch(e){nt(e.code==='auth/email-already-in-use'?'Email taken':e.message,'','error')}});
+        document.getElementById('logout-btn').addEventListener('click',async()=>{if(ci)await upd(ref(db,`users/${ci}`),{online:false,lastSeen:Date.now()});if(mu)mu();if(chu)chu();if(su)su();if(ans)ans();cu=null;ci=null;await auth.signOut()});
         document.getElementById('privacy-checkbox').addEventListener('change',function(){document.getElementById('register-btn').disabled=!this.checked});
         document.getElementById('show-register').addEventListener('click',e=>{e.preventDefault();document.getElementById('login-form').style.display='none';document.getElementById('register-form').style.display='block'});
         document.getElementById('show-login').addEventListener('click',e=>{e.preventDefault();document.getElementById('register-form').style.display='none';document.getElementById('login-form').style.display='block'});
 
-        // ===== EVENT LISTENERS =====
-        document.getElementById('send-btn').addEventListener('click',()=>sendMessageText(document.getElementById('message-input').value));
-        document.getElementById('message-input').addEventListener('keypress',e=>{if(e.key==='Enter')sendMessageText(document.getElementById('message-input').value)});
+        document.getElementById('send-btn').addEventListener('click',()=>smt(document.getElementById('message-input').value));
+        document.getElementById('message-input').addEventListener('keypress',e=>{if(e.key==='Enter')smt(document.getElementById('message-input').value)});
         document.getElementById('back-to-chats').addEventListener('click',()=>{document.getElementById('chat-area').classList.remove('active');document.getElementById('chats-sidebar').classList.add('active')});
         document.getElementById('back-from-profile').addEventListener('click',()=>{document.getElementById('profile-screen').classList.add('hidden');document.getElementById('chats-sidebar').classList.add('active')});
         document.getElementById('back-from-settings').addEventListener('click',()=>{document.getElementById('settings-screen').classList.add('hidden');document.getElementById('chats-sidebar').classList.add('active')});
-        document.getElementById('user-info').addEventListener('click',()=>openUserProfile(currentUserId));
+        document.getElementById('user-info').addEventListener('click',()=>oup(ci));
         document.getElementById('search-btn').addEventListener('click',()=>document.getElementById('search-input').focus());
         document.getElementById('settings-menu-btn').addEventListener('click',()=>{document.getElementById('settings-screen').classList.remove('hidden');document.getElementById('chats-sidebar').classList.remove('active')});
-        document.getElementById('search-input').addEventListener('input',e=>searchAll(e.target.value));
-        
-        document.querySelectorAll('.tab-btn').forEach(b=>{b.addEventListener('click',()=>{document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');activeTab=b.dataset.tab;document.getElementById('search-results-container').classList.remove('active');document.getElementById('chats-list-container').classList.remove('hidden');document.getElementById('search-input').value='';renderChatsList()})});
-        
-        document.getElementById('create-chat-btn').addEventListener('click',()=>{showModal({title:'Create',customHtml:'<button class="modal-btn confirm" id="cr-chan" style="background:var(--channel);margin-bottom:8px">Channel</button><button class="modal-btn confirm" id="cr-grp" style="background:var(--group)">Group</button>',confirmText:'Close',cancelText:'',onConfirm:()=>{}});setTimeout(()=>{document.getElementById('cr-chan')?.addEventListener('click',()=>{document.getElementById('modal-overlay').classList.add('hidden');createChannelOrGroup('channel')});document.getElementById('cr-grp')?.addEventListener('click',()=>{document.getElementById('modal-overlay').classList.add('hidden');createChannelOrGroup('group')})},100)});
-        
-        document.getElementById('settings-edit-profile').addEventListener('click',()=>{document.getElementById('settings-screen').classList.add('hidden');showProfileSettings()});
-        document.getElementById('settings-privacy').addEventListener('click',()=>{document.getElementById('settings-screen').classList.add('hidden');showPrivacySettings()});
-        document.getElementById('settings-create-channel').addEventListener('click',()=>{document.getElementById('settings-screen').classList.add('hidden');createChannelOrGroup('channel')});
-        document.getElementById('settings-create-group').addEventListener('click',()=>{document.getElementById('settings-screen').classList.add('hidden');createChannelOrGroup('group')});
-        document.getElementById('settings-desktop').addEventListener('click',()=>{if(!currentUser||!currentUserId){notify('Login first','','error');return}const p=new URLSearchParams({token:currentUserId,email:currentUser.email||'',name:currentUser.username||'',photo:currentUser.avatar||''});window.location.href='collapschat://auth?'+p.toString();setTimeout(()=>{notify('Desktop app not found','Install Collaps Chat Desktop','error')},2000)});
+        document.getElementById('search-input').addEventListener('input',e=>sa(e.target.value));
+        document.querySelectorAll('.tab-btn').forEach(b=>{b.addEventListener('click',()=>{document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');at=b.dataset.tab;document.getElementById('search-results-container').classList.remove('active');document.getElementById('chats-list-container').classList.remove('hidden');document.getElementById('search-input').value='';rcl()})});
+        document.getElementById('create-chat-btn').addEventListener('click',()=>{sm({title:'Create',customHtml:'<button class="modal-btn confirm" id="cr-chan" style="background:var(--channel);margin-bottom:8px">Channel</button><button class="modal-btn confirm" id="cr-grp" style="background:var(--group)">Group</button>',confirmText:'Close',cancelText:'',onConfirm:()=>{}});setTimeout(()=>{document.getElementById('cr-chan')?.addEventListener('click',()=>{document.getElementById('modal-overlay').classList.add('hidden');ccog('channel')});document.getElementById('cr-grp')?.addEventListener('click',()=>{document.getElementById('modal-overlay').classList.add('hidden');ccog('group')})},100)});
+        document.getElementById('settings-edit-profile').addEventListener('click',()=>{document.getElementById('settings-screen').classList.add('hidden');sps()});
+        document.getElementById('settings-privacy').addEventListener('click',()=>{document.getElementById('settings-screen').classList.add('hidden');sprs()});
+        document.getElementById('settings-create-channel').addEventListener('click',()=>{document.getElementById('settings-screen').classList.add('hidden');ccog('channel')});
+        document.getElementById('settings-create-group').addEventListener('click',()=>{document.getElementById('settings-screen').classList.add('hidden');ccog('group')});
+        document.getElementById('settings-desktop').addEventListener('click',()=>{if(!cu||!ci){nt('Login first','','error');return}const p=new URLSearchParams({token:ci,email:cu.email||'',name:cu.username||'',photo:cu.avatar||''});window.location.href='collapschat://auth?'+p.toString();setTimeout(()=>{nt('Desktop app not found','Install Collaps Chat Desktop','error')},2000)});
         document.getElementById('settings-announcements').addEventListener('click',()=>window.open('announcements.html','_blank'));
-        document.getElementById('settings-support').addEventListener('click',async()=>{const su=Object.values(allUsers).find(u=>u.searchUsername==='support');if(su){const cid=await getOrCreatePrivateChat(su.id);setTimeout(()=>{const c=allChats[cid];if(c)openChat(c)},300);document.getElementById('settings-screen').classList.add('hidden')}});
-        document.getElementById('settings-delete').addEventListener('click',()=>{showModal({title:'Delete Account',content:'Cannot be undone!',confirmText:'Delete',onConfirm:async()=>{await remove(ref(database,`users/${currentUserId}`));await auth.currentUser?.delete();await auth.signOut()}})});
-        
-        document.getElementById('edit-profile-btn').addEventListener('click',()=>{showModal({title:'Edit Bio',customHtml:'<input class="modal-input" id="ed-bio" value="'+(currentUser?.bio||'')+'">',confirmText:'Save',onConfirm:async()=>{const bio=document.getElementById('ed-bio')?.value?.trim();if(bio!==undefined&&currentUserId){await update(ref(database,`users/${currentUserId}`),{bio});currentUser.bio=bio;openUserProfile(currentUserId)}}})});
-        document.getElementById('delete-account-btn').addEventListener('click',()=>{showModal({title:'Delete Account',content:'Cannot be undone!',confirmText:'Delete',onConfirm:async()=>{await remove(ref(database,`users/${currentUserId}`));await auth.currentUser?.delete();await auth.signOut()}})});
-        document.getElementById('tg-act-message')?.addEventListener('click',()=>{if(viewedProfileUserId&&viewedProfileUserId!==currentUserId)startChatWithUser(viewedProfileUserId)});
-        document.getElementById('tg-act-mute')?.addEventListener('click',()=>{notificationsEnabled=!notificationsEnabled;notify(notificationsEnabled?'Notifications ON':'Notifications OFF','',notificationsEnabled?'success':'warning')});
-        document.getElementById('tg-act-more')?.addEventListener('click',()=>{const u=viewedProfileUserId===currentUserId?currentUser:allUsers[viewedProfileUserId];if(!u)return;showModal({title:escapeHtml(u.username||'Profile'),content:`@${escapeHtml(u.searchUsername||'')}\nID: ${u.id||viewedProfileUserId}\n${u.bio||''}`,confirmText:'Close'})});
-        document.getElementById('chat-header-info').addEventListener('click',()=>{if(currentChat?.type==='private'&&currentChat.participants){const oid=Object.keys(currentChat.participants).find(id=>id!==currentUserId);if(oid)openUserProfile(oid)}});
-        document.getElementById('chat-info-btn').addEventListener('click',showChatInfo);
-        
-        document.getElementById('file-upload').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;if(f.size>100*1024*1024){notify('Too large','Max 100 MB','error');return}if(!f.type.startsWith('image/')&&!f.type.startsWith('video/')){notify('Images/videos only','','error');return}uploadAndSendFile(f);e.target.value=''});
-        
-        const mc=document.getElementById('messages-container');
-        mc.addEventListener('dragover',e=>e.preventDefault());
-        mc.addEventListener('drop',e=>{e.preventDefault();const f=e.dataTransfer.files[0];if(f&&(f.type.startsWith('image/')||f.type.startsWith('video/'))){document.getElementById('file-upload').files=e.dataTransfer.files;document.getElementById('file-upload').dispatchEvent(new Event('change'))}});
-        
+        document.getElementById('settings-support').addEventListener('click',async()=>{const su=Object.values(au).find(u=>u.searchUsername==='support');if(su){const cid=await gocpc(su.id);setTimeout(()=>{const c=ac[cid];if(c)oc(c)},300);document.getElementById('settings-screen').classList.add('hidden')}else{sm({title:'Support',content:'Email: collapschat.legal@bk.ru',confirmText:'OK'})}});
+        document.getElementById('settings-delete').addEventListener('click',()=>{sm({title:'Delete Account',content:'Cannot be undone!',confirmText:'Delete',onConfirm:async()=>{await rem(ref(db,`users/${ci}`));await auth.currentUser?.delete();await auth.signOut()}})});
+        document.getElementById('edit-profile-btn').addEventListener('click',()=>{sm({title:'Edit Bio',customHtml:'<input class="modal-input" id="ed-bio" value="'+(cu?.bio||'')+'">',confirmText:'Save',onConfirm:async()=>{const bio=document.getElementById('ed-bio')?.value?.trim();if(bio!==undefined&&ci){await upd(ref(db,`users/${ci}`),{bio});cu.bio=bio;oup(ci)}}})});
+        document.getElementById('delete-account-btn').addEventListener('click',()=>{sm({title:'Delete Account',content:'Cannot be undone!',confirmText:'Delete',onConfirm:async()=>{await rem(ref(db,`users/${ci}`));await auth.currentUser?.delete();await auth.signOut()}})});
+        document.getElementById('tg-act-message')?.addEventListener('click',()=>{if(vu&&vu!==ci)scwu(vu)});
+        document.getElementById('tg-act-mute')?.addEventListener('click',()=>{ne=!ne;nt(ne?'Notifications ON':'Notifications OFF','',ne?'success':'warning')});
+        document.getElementById('tg-act-more')?.addEventListener('click',()=>{const u=vu===ci?cu:au[vu];if(!u)return;sm({title:eh(u.username||'Profile'),content:`@${eh(u.searchUsername||'')}\nID: ${u.id||vu}\n${u.bio||''}`,confirmText:'Close'})});
+        document.getElementById('chat-header-info').addEventListener('click',()=>{if(cc?.type==='private'&&cc.participants){const oid=Object.keys(cc.participants).find(id=>id!==ci);if(oid)oup(oid)}});
+        document.getElementById('chat-info-btn').addEventListener('click',sci);
+        document.getElementById('file-upload').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;if(f.size>100*1024*1024){nt('Too large','Max 100 MB','error');return}if(!f.type.startsWith('image/')&&!f.type.startsWith('video/')){nt('Images/videos only','','error');return}usf(f);e.target.value=''});
+        const mc2=document.getElementById('messages-container');mc2.addEventListener('dragover',e=>e.preventDefault());mc2.addEventListener('drop',e=>{e.preventDefault();const f=e.dataTransfer.files[0];if(f&&(f.type.startsWith('image/')||f.type.startsWith('video/'))){document.getElementById('file-upload').files=e.dataTransfer.files;document.getElementById('file-upload').dispatchEvent(new Event('change'))}});
         if(window.innerWidth<=768){document.getElementById('chat-area').classList.remove('active');document.getElementById('chats-sidebar').classList.add('active')}
-        
-        setInterval(async()=>{if(currentUserId){const s=await get(ref(database,`users/${currentUserId}/ban`));if(s.val()===true){notify('Account banned','','error');await auth.signOut()}}},10000);
-        
-        console.log('✅ Collaps Chat ready');
+        setInterval(async()=>{if(ci){const s=await get(ref(db,`users/${ci}/ban`));if(s.val()===true){nt('Account banned','','error');await auth.signOut()}}},10000);
+        console.log('Collaps Chat ready');
     </script>
 </body>
 </html>
