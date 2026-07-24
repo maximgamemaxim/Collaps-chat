@@ -291,7 +291,37 @@
         document.getElementById('settings-create-group').addEventListener('click',()=>{document.getElementById('settings-screen').classList.add('hidden');ccog('group')});
         document.getElementById('settings-desktop').addEventListener('click',()=>{if(!cu||!ci){nt('Login first','','error');return}const p=new URLSearchParams({token:ci,email:cu.email||'',name:cu.username||'',photo:cu.avatar||''});window.location.href='collapschat://auth?'+p.toString();setTimeout(()=>{nt('Desktop app not found','Install Collaps Chat Desktop','error')},2000)});
         document.getElementById('settings-announcements').addEventListener('click',()=>window.open('announcements.html','_blank'));
-        document.getElementById('settings-support').addEventListener('click',async()=>{const su=Object.values(au).find(u=>u.searchUsername==='support');if(su){const cid=await gocpc(su.id);setTimeout(()=>{const c=ac[cid];if(c)oc(c)},300);document.getElementById('settings-screen').classList.add('hidden')}else{sm({title:'Support',content:'Email: collapschat.legal@bk.ru',confirmText:'OK'})}});
+       document.getElementById('settings-support').addEventListener('click', async () => {
+    // Ищем поддержку в пользователях
+    const supportUser = Object.values(au).find(u => u.searchUsername === 'support');
+    
+    if (supportUser) {
+        // Создаём/получаем чат с поддержкой
+        const chatId = await gocpc(supportUser.id);
+        
+        // Ждём пока чат появится в allChats
+        let attempts = 0;
+        const tryOpen = async () => {
+            let chat = ac[chatId];
+            if (!chat) {
+                const snap = await get(ref(db, `chats/${chatId}`));
+                if (snap.exists()) chat = snap.val();
+            }
+            if (chat) {
+                oc(chat); // Открываем чат
+                document.getElementById('settings-screen').classList.add('hidden');
+            } else if (attempts++ < 20) {
+                setTimeout(tryOpen, 150);
+            } else {
+                sm({ title: 'Support', content: 'Cannot open support chat. Email: collapschat@bk.ru', confirmText: 'OK' });
+            }
+        };
+        tryOpen();
+    } else {
+        // Если поддержки нет в базе - создаём чат напрямую
+        sm({ title: 'Support', content: 'Support account not found. Email: collapschat@bk.ru', confirmText: 'OK' });
+    }
+});
         document.getElementById('settings-delete').addEventListener('click',()=>{sm({title:'Delete Account',content:'Cannot be undone!',confirmText:'Delete',onConfirm:async()=>{await rem(ref(db,`users/${ci}`));await auth.currentUser?.delete();await auth.signOut()}})});
         document.getElementById('edit-profile-btn').addEventListener('click',()=>{sm({title:'Edit Bio',customHtml:'<input class="modal-input" id="ed-bio" value="'+(cu?.bio||'')+'">',confirmText:'Save',onConfirm:async()=>{const bio=document.getElementById('ed-bio')?.value?.trim();if(bio!==undefined&&ci){await upd(ref(db,`users/${ci}`),{bio});cu.bio=bio;oup(ci)}}})});
         document.getElementById('delete-account-btn').addEventListener('click',()=>{sm({title:'Delete Account',content:'Cannot be undone!',confirmText:'Delete',onConfirm:async()=>{await rem(ref(db,`users/${ci}`));await auth.currentUser?.delete();await auth.signOut()}})});
