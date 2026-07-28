@@ -4,127 +4,131 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Политика конфиденциальности - Collaps Chat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #17212b;
-            color: #ffffff;
-            padding: 20px;
-            line-height: 1.6;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: #1e2b37;
-            border-radius: 20px;
-            padding: 40px;
-        }
-        h1 {
-            color: #2b5278;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        h2 {
-            margin: 25px 0 15px;
-            font-size: 22px;
-        }
-        p, li {
-            color: #8e9cae;
-            margin-bottom: 12px;
-        }
-        ul {
-            padding-left: 25px;
-            margin-bottom: 20px;
-        }
-        .badge-example {
-            display: inline-block;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            margin: 0 3px;
-            vertical-align: middle;
-        }
-        .badge-blue { background: #4caf50; }
-        .badge-green { background: #2ecc71; }
-        .badge-pink { background: #ff69b4; }
-        .badge-red { background: #e74c3c; }
-        .last-updated {
-            text-align: center;
-            color: #6b7a8d;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid #0f1b26;
-        }
-        .back-btn {
-            display: inline-block;
-            background: #2b5278;
-            color: white;
-            padding: 10px 25px;
-            border-radius: 30px;
-            text-decoration: none;
-            margin-top: 20px;
-        }
-        @media (max-width: 768px) {
-            .container { padding: 20px; }
-        }
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#17212b;color:#fff;padding:20px;line-height:1.6}
+        .container{max-width:800px;margin:0 auto;background:#1e2b37;border-radius:20px;padding:40px}
+        h1{color:#fff;margin-bottom:8px;text-align:center;font-size:28px;font-weight:700}
+        .subtitle{text-align:center;color:#8e9cae;margin-bottom:30px;font-size:14px}
+        h2{color:#fff;margin:30px 0 15px;font-size:20px;font-weight:600;border-left:4px solid #2b5278;padding-left:12px}
+        p,li{color:#8e9cae;margin-bottom:12px;font-size:15px}
+        ul{padding-left:25px;margin-bottom:20px}
+        li{margin-bottom:8px}
+        .badge-row{display:flex;align-items:center;gap:10px;margin:8px 0;flex-wrap:wrap}
+        .badge-example{display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:9px;letter-spacing:.3px;flex-shrink:0}
+        .badge-round{width:20px;height:20px;border-radius:50%}
+        .badge-grant{background:#2ecc71}.badge-grant::after{content:'✓';color:#fff}
+        .badge-isreal{background:#3498db}.badge-isreal::after{content:'✓';color:#fff}
+        .badge-rect{padding:3px 8px;border-radius:6px}
+        .badge-zoro{background:#ffd700;color:#000}.badge-zoro::after{content:'ZORO'}
+        .badge-rustore{background:#6c5ce7;color:#fff}.badge-rustore::after{content:'RUSTORE'}
+        .badge-banned{background:#e74c3c;color:#fff}.badge-banned::after{content:'BANNED'}
+        .badge-bot{background:#8e44ad;color:#fff}.badge-bot::after{content:'BOT'}
+        .highlight{color:#fff;font-weight:500}
+        .last-updated{text-align:center;color:#6b7a8d;margin-top:40px;padding-top:20px;border-top:1px solid #0f1b26;font-size:13px}
+        .back-btn{display:inline-block;background:#2b5278;color:#fff;padding:12px 28px;border-radius:30px;text-decoration:none;margin-top:20px;font-weight:600;font-size:15px;transition:background .2s}
+        .back-btn:hover{background:#3a6d99}
+        .section-box{background:#242f3d;border-radius:12px;padding:16px;margin:12px 0}
+        .section-box p{margin-bottom:6px}
+        @media(max-width:768px){.container{padding:20px}h1{font-size:22px}h2{font-size:18px}}
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Политика конфиденциальности Collaps Chat</h1>
-        <p><strong>Последнее обновление:</strong> 20 марта 2026 г.</p>
+        <h1>Политика конфиденциальности</h1>
+        <p class="subtitle">Collaps Chat — безопасный мессенджер</p>
+        <p style="text-align:center;color:#8e9cae;margin-bottom:30px"><strong>Последнее обновление:</strong> 28 июля 2026 г.</p>
 
         <h2>1. Какие данные мы собираем</h2>
-        <ul>
-            <li><strong>Имя пользователя (никнейм)</strong> — для отображения в чате</li>
-            <li><strong>Юзернейм для поиска</strong> — для поиска вас другими пользователями</li>
-            <li><strong>Email</strong> — для входа в аккаунт и восстановления пароля</li>
-            <li><strong>Пароль</strong> — хранится в зашифрованном виде</li>
-            <li><strong>Сообщения</strong> — которые вы отправляете в чатах</li>
-            <li><strong>Данные аккаунта Google</strong> (имя, email) — если вы входите через Google</li>
-        </ul>
+        <div class="section-box">
+            <p><span class="highlight">Имя пользователя (никнейм)</span> — для отображения в чате и поиске</p>
+            <p><span class="highlight">Юзернейм (@username)</span> — уникальный идентификатор для поиска</p>
+            <p><span class="highlight">Email</span> — для входа в аккаунт и восстановления доступа</p>
+            <p><span class="highlight">Аватар</span> — изображение профиля (загружается через Cloudinary)</p>
+            <p><span class="highlight">Сообщения</span> — текст, фото и видео, которые вы отправляете</p>
+            <p><span class="highlight">Истории</span> — временные публикации (хранятся 24 часа)</p>
+            <p><span class="highlight">Данные Google</span> (имя, email, фото) — только при входе через Google</p>
+        </div>
 
-        <h2>2. Статусы аккаунтов</h2>
-        <ul>
-            <li><span class="badge-example badge-blue"></span> <strong>Синяя галочка (grant)</strong> — официальный аккаунт (администрация)</li>
-            <li><span class="badge-example badge-green"></span> <strong>Зелёная галочка (checkReal)</strong> — подтверждённый реальный пользователь</li>
-            <li><span class="badge-example badge-pink"></span> <strong>Розовая галочка (special)</strong> — особый статус (за вклад в проект)</li>
-            <li><span class="badge-example badge-red"></span> <strong>Красный значок (ban)</strong> — аккаунт заблокирован за нарушения</li>
-        </ul>
+        <h2>2. Статусы и галочки аккаунтов</h2>
+        <div class="section-box">
+            <div class="badge-row"><span class="badge-example badge-round badge-grant"></span> <span class="highlight">GRANT</span> — официальный аккаунт (администрация, поддержка)</div>
+            <div class="badge-row"><span class="badge-example badge-round badge-isreal"></span> <span class="highlight">ISREAL</span> — подтверждённый реальный пользователь</div>
+            <div class="badge-row"><span class="badge-example badge-rect badge-zoro"></span> <span class="highlight">ZORO</span> — особый статус (за вклад в развитие проекта)</div>
+            <div class="badge-row"><span class="badge-example badge-rect badge-rustore"></span> <span class="highlight">RUSTORE</span> — верификация через RuStore</div>
+            <div class="badge-row"><span class="badge-example badge-rect badge-bot"></span> <span class="highlight">BOT</span> — автоматический бот-аккаунт</div>
+            <div class="badge-row"><span class="badge-example badge-rect badge-banned"></span> <span class="highlight">BANNED</span> — заблокированный аккаунт</div>
+        </div>
 
-        <h2>3. Блокировка аккаунтов</h2>
-        <p>Мы блокируем аккаунты за:</p>
-        <ul>
-            <li>Использование запрещённых слов и оскорблений</li>
-            <li>Спам и рекламу</li>
-            <li>Попытки взлома</li>
-        </ul>
+        <h2>3. Как мы используем данные</h2>
+        <div class="section-box">
+            <p>• Отображение вашего профиля другим пользователям</p>
+            <p>• Поиск пользователей по имени и @юзернейму</p>
+            <p>• Отправка и получение сообщений в чатах, каналах и группах</p>
+            <p>• Публикация историй (видны только вашим контактам)</p>
+            <p>• Отображение объявлений от администрации</p>
+        </div>
 
-        <h2>4. Где хранятся данные</h2>
-        <p>Все данные хранятся в <strong>Firebase (Google Cloud)</strong>, серверы находятся в Европе.</p>
+        <h2>4. Приватность и настройки</h2>
+        <div class="section-box">
+            <p>Вы можете настроить в <span class="highlight">Settings → Privacy Settings</span>:</p>
+            <p>• <strong>Кто может приглашать вас</strong> в группы и каналы (Все / Никто)</p>
+            <p>• <strong>Кто может найти вас</strong> в поиске (Все / По юзернейму / Никто)</p>
+        </div>
 
-        <h2>5. Ваши права</h2>
-        <ul>
-            <li>Запросить копию данных: <strong>collapschat.legal@bk.ru</strong></li>
-            <li>Исправить данные (в настройках)</li>
-            <li>Удалить аккаунт (в настройках)</li>
-        </ul>
+        <h2>5. Где хранятся данные</h2>
+        <div class="section-box">
+            <p>Все данные хранятся в <span class="highlight">Firebase (Google Cloud)</span>, серверы в Европе.</p>
+            <p>Медиафайлы (фото, видео) загружаются через <span class="highlight">Cloudinary</span>.</p>
+            <p>Пароли хранятся в зашифрованном виде в <span class="highlight">Firebase Authentication</span>.</p>
+        </div>
 
-        <h2>6. Контакты</h2>
-        <ul>
-            <li>Email: <strong>collapschat.legal@bk.ru</strong></li>
-        </ul>
+        <h2>6. Модерация и блокировка</h2>
+        <div class="section-box">
+            <p>Администрация оставляет за собой право:</p>
+            <p>• Выдавать предупреждения за нарушения</p>
+            <p>• Блокировать аккаунты за спам, оскорбления, попытки взлома</p>
+            <p>• Удалять сообщения и контент, нарушающий правила</p>
+        </div>
 
-        <div style="text-align: center;">
+        <h2>7. Удаление аккаунта</h2>
+        <div class="section-box">
+            <p>Вы можете удалить аккаунт в любой момент:</p>
+            <p>• <strong>Settings → Delete Account</strong> в приложении</p>
+            <p>• Или отправить запрос на <span class="highlight">collapschat@bk.ru</span></p>
+            <p>При удалении все ваши сообщения и данные будут безвозвратно удалены.</p>
+        </div>
+
+        <h2>8. Ваши права</h2>
+        <div class="section-box">
+            <p>• <strong>Право на доступ</strong> — запросить копию ваших данных</p>
+            <p>• <strong>Право на исправление</strong> — изменить данные в настройках профиля</p>
+            <p>• <strong>Право на удаление</strong> — удалить аккаунт и все данные</p>
+            <p>• <strong>Право на ограничение</strong> — настроить приватность</p>
+            <p>Для запросов: <span class="highlight">collapschat@bk.ru</span></p>
+        </div>
+
+        <h2>9. Файлы Cookie</h2>
+        <div class="section-box">
+            <p>Мы используем только необходимые cookie для:</p>
+            <p>• Сохранения сессии входа (localStorage)</p>
+            <p>• Firebase Authentication (токены безопасности)</p>
+            <p>Мы <strong>не используем</strong> трекинговые или рекламные cookie.</p>
+        </div>
+
+        <h2>10. Контакты</h2>
+        <div class="section-box">
+            <p>• <strong>Email поддержки:</strong> collapschat@bk.ru</p>
+            <p>• <strong>Чат поддержки:</strong> напишите @support в поиске мессенджера</p>
+            <p>• <strong>Веб-сайт:</strong> collapschat.dpdns.org</p>
+        </div>
+
+        <div style="text-align:center;">
             <a href="index.html" class="back-btn">← Вернуться в чат</a>
         </div>
         <div class="last-updated">
-            © 2026 Collaps Chat
+            © 2026 Collaps Chat. Все права защищены.
         </div>
     </div>
 </body>
