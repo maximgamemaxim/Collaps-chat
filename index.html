@@ -212,7 +212,7 @@
         const fc={apiKey:"AIzaSyDdey6ZroD4KsiPiD2dnVfQe3I3OW3MPV8",authDomain:"max-chat-f9319.firebaseapp.com",databaseURL:"https://max-chat-f9319-default-rtdb.europe-west1.firebasedatabase.app",projectId:"max-chat-f9319",storageBucket:"max-chat-f9319.firebasestorage.app",messagingSenderId:"1013158224179",appId:"1:1013158224179:web:c4a052ca2e86034de59e46"};
         firebase.initializeApp(fc);const db=firebase.database(),auth=firebase.auth(),gp=new firebase.auth.GoogleAuthProvider();
         const CL='qik0zmv8',UP='collaps_chat',DA='https://ui-avatars.com/api/?name=User&background=2b5278&color=fff&size=256';
-        let cu=null,ci=null,cc=null,cci=null,au={},ac={},ast={},aan={},at='chats',uc={},ne=true,mu=null,chu=null,su=null,anu=null,vu=null;
+        let cu=null,ci=null,cc=null,cci=null,au={},ac={},ast={},aan={},at='chats',uc={},ne=true,mu=null,chu=null,su=null,ans=null,vu=null;
         const ref=(d,p)=>d.ref(p),set=(r,v)=>r.set(v),push=(r,v)=>v===undefined?r.push():r.push(v),upd=(r,v)=>r.update(v),rem=r=>r.remove(),get=r=>r.get(),onV=(r,cb)=>{r.on('value',cb);return()=>r.off('value',cb)},onCA=(r,cb)=>{r.on('child_added',cb);return()=>r.off('child_added',cb)},qy=(r,...cs)=>{let q=r;cs.forEach(c=>q=c(q));return q},obc=k=>q=>q.orderByChild(k),eq=v=>q=>q.equalTo(v);
 
         function nt(tl,tx='',tp='info'){const c=document.getElementById('notification-container'),n=document.createElement('div');n.className=`notification ${tp}`;const i=tp==='error'?'error':tp==='success'?'check_circle':'info';n.innerHTML=`<span class="material-symbols-rounded">${i}</span><div><div style="font-weight:600;font-size:14px">${tl}</div>${tx?`<div style="font-size:12px;color:var(--gray)">${tx}</div>`:''}</div>`;c.appendChild(n);setTimeout(()=>n.classList.add('show'),10);setTimeout(()=>{n.classList.remove('show');setTimeout(()=>n.remove(),300)},4000)}
@@ -296,9 +296,19 @@
 
         document.getElementById('send-btn').addEventListener('click',()=>smt(document.getElementById('message-input').value));
         document.getElementById('message-input').addEventListener('keypress',e=>{if(e.key==='Enter')smt(document.getElementById('message-input').value)});
-        document.getElementById('back-to-chats').addEventListener('click',()=>{document.getElementById('chat-area').classList.remove('active');if(window.innerWidth<=768){document.getElementById('chats-sidebar').classList.add('active')}});
-        document.getElementById('back-from-profile').addEventListener('click',()=>{document.getElementById('profile-screen').classList.add('hidden');if(window.innerWidth<=768){document.getElementById('chats-sidebar').classList.add('active');document.getElementById('chat-area').classList.remove('active')}else{document.getElementById('chats-sidebar').classList.add('active')}});
-        document.getElementById('back-from-settings').addEventListener('click',()=>{document.getElementById('settings-screen').classList.add('hidden');if(window.innerWidth<=768){document.getElementById('chats-sidebar').classList.add('active');document.getElementById('chat-area').classList.remove('active')}else{document.getElementById('chats-sidebar').classList.add('active')}});
+        
+        // Мобильная навигация - всегда показываем chats-sidebar при возврате
+        function showSidebar(){
+            document.getElementById('chat-area').classList.remove('active');
+            document.getElementById('profile-screen').classList.add('hidden');
+            document.getElementById('settings-screen').classList.add('hidden');
+            document.getElementById('chats-sidebar').classList.add('active');
+        }
+        
+        document.getElementById('back-to-chats').addEventListener('click',showSidebar);
+        document.getElementById('back-from-profile').addEventListener('click',showSidebar);
+        document.getElementById('back-from-settings').addEventListener('click',showSidebar);
+        
         document.getElementById('profile-click-area').addEventListener('click',()=>oup(ci));
         document.getElementById('user-avatar').addEventListener('click',()=>oup(ci));
         document.getElementById('search-btn').addEventListener('click',()=>document.getElementById('search-input').focus());
