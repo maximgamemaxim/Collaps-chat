@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Rounded" rel="stylesheet">
     <style>
         *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif}
-        :root{--bg:#17212b;--bg2:#1e2b37;--bg3:#242f3d;--hover:#2b3b4a;--text:#fff;--gray:#8e9cae;--accent:#2b5278;--accentH:#3a6d99;--border:#0f1b26;--msgIn:#182533;--msgOut:#2b5278;--red:#e74c3c;--green:#2ecc71;--online:#2ecc71;--story:#2ecc71;--storySeen:#8e9cae;--channel:#e74c3c;--group:#3498db;--verified:#2ecc71;--checkreal:#2ecc71;--special:#ff69b4;--banned:#e74c3c}
+        :root{--bg:#17212b;--bg2:#1e2b37;--bg3:#242f3d;--hover:#2b3b4a;--text:#fff;--gray:#8e9cae;--accent:#2b5278;--accentH:#3a6d99;--border:#0f1b26;--msgIn:#182533;--msgOut:#2b5278;--red:#e74c3c;--green:#2ecc71;--online:#2ecc71;--story:#2ecc71;--storySeen:#8e9cae;--channel:#e74c3c;--group:#3498db;--zoro:#ffd700;--rustore:#6c5ce7}
         .material-symbols-rounded{font-variation-settings:'FILL'0,'wght'400,'GRAD'0,'opsz'24;user-select:none}
         html,body{height:100%;overflow:hidden}body{background:var(--bg);color:var(--text)}
         #app{height:100vh;display:flex;flex-direction:column}
@@ -29,14 +29,18 @@
         .chats-title{font-size:20px;font-weight:700}.header-buttons{display:flex;gap:4px}
         .icon-btn{background:transparent;border:none;color:var(--gray);cursor:pointer;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all .2s}
         .icon-btn:hover{background:var(--hover);color:var(--text)}.icon-btn .material-symbols-rounded{font-size:22px}
-        .profile-bar{padding:12px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);cursor:pointer;flex-shrink:0}
-        .profile-bar:hover{background:var(--hover)}.profile-avatar{width:48px;height:48px;border-radius:50%;background-size:cover;background-position:center;background-color:var(--accent);flex-shrink:0}
+        .profile-bar{padding:12px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);flex-shrink:0}
+        .profile-bar:hover{background:var(--hover)}.profile-avatar{width:48px;height:48px;border-radius:50%;background-size:cover;background-position:center;background-color:var(--accent);flex-shrink:0;cursor:pointer}
         .profile-name{font-weight:600;font-size:15px;display:flex;align-items:center;gap:6px}
-        .badge{display:inline-block;width:18px;height:18px;border-radius:50%;position:relative;flex-shrink:0}
-        .badge-verified{background:var(--verified)}.badge-checkreal{background:var(--checkreal)}.badge-special{background:var(--special)}.badge-banned{background:var(--banned)}
-        .badge::after{content:'✓';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;font-size:11px;font-weight:700}
-        .badge-special::after{content:'★';font-size:10px}.badge-banned::after{content:'⛔';font-size:9px}
-        .badge-bot-label{display:inline-block;background:#8e44ad;color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:6px;margin-left:4px}
+        .badge-round{display:inline-block;width:18px;height:18px;border-radius:50%;position:relative;flex-shrink:0;margin-left:3px;vertical-align:middle}
+        .badge-round::after{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;font-size:10px;font-weight:700}
+        .badge-grant{background:var(--green)}.badge-grant::after{content:'✓'}
+        .badge-isreal{background:#3498db}.badge-isreal::after{content:'✓'}
+        .badge{display:inline-block;padding:2px 7px;border-radius:6px;flex-shrink:0;font-size:9px;font-weight:700;letter-spacing:.3px;vertical-align:middle;margin-left:3px;color:#fff}
+        .badge-zoro{background:var(--zoro);color:#000}.badge-zoro::after{content:'ZORO'}
+        .badge-rustore{background:var(--rustore)}.badge-rustore::after{content:'RUSTORE'}
+        .badge-banned{background:var(--red)}.badge-banned::after{content:'BANNED'}
+        .badge-bot-label{background:#8e44ad;padding:2px 7px;border-radius:6px;font-size:9px;font-weight:700;letter-spacing:.3px}.badge-bot-label::after{content:'BOT'}
         .announcements-container{padding:0 16px 8px;border-bottom:1px solid var(--border);flex-shrink:0;max-height:200px;overflow-y:auto}
         .announcement-item{background:var(--bg3);border-radius:12px;padding:12px;margin-top:8px;border-left:4px solid var(--accent);cursor:pointer}
         .stories-container{padding:12px 16px;border-bottom:1px solid var(--border);overflow-x:auto;display:flex;gap:14px;flex-shrink:0}
@@ -156,7 +160,11 @@
         <div id="main-screen" class="main-screen">
             <div id="chats-sidebar" class="chats-sidebar active">
                 <div class="chats-header"><div class="chats-title">Collaps Chat</div><div class="header-buttons"><button class="icon-btn" id="create-chat-btn"><span class="material-symbols-rounded">add_circle</span></button><button class="icon-btn" id="search-btn"><span class="material-symbols-rounded">search</span></button><button class="icon-btn" id="settings-menu-btn"><span class="material-symbols-rounded">settings</span></button></div></div>
-                <div class="profile-bar" id="user-info"><div class="profile-avatar" id="user-avatar"></div><div style="flex:1"><span class="profile-name" id="current-username">Loading...</span><br><span style="font-size:12px;color:var(--gray)" id="user-stars">0 stars</span></div><button class="icon-btn" id="logout-btn"><span class="material-symbols-rounded">logout</span></button></div>
+                <div class="profile-bar">
+                    <div class="profile-avatar" id="user-avatar"></div>
+                    <div style="flex:1;cursor:pointer" id="profile-click-area"><span class="profile-name" id="current-username">Loading...</span><br><span style="font-size:12px;color:var(--gray)" id="user-stars">0 stars</span></div>
+                    <button class="icon-btn" id="logout-btn"><span class="material-symbols-rounded">logout</span></button>
+                </div>
                 <div class="announcements-container" id="announcements-container" style="display:none"></div>
                 <div class="stories-container" id="stories-container"></div>
                 <div class="search-container"><input type="text" id="search-input" placeholder="Search..." class="search-input"></div>
@@ -211,7 +219,7 @@
         function sm({title,content,confirmText='OK',cancelText='Cancel',onConfirm,onCancel,customHtml}){document.getElementById('modal-content').innerHTML=`<div class="modal-header"><h3>${title}</h3><button class="modal-close" id="mc"><span class="material-symbols-rounded">close</span></button></div><div class="modal-body">${customHtml||`<div style="color:var(--gray);font-size:15px">${content}</div>`}</div><div class="modal-footer"><button class="modal-btn cancel" id="mcc">${cancelText}</button><button class="modal-btn confirm" id="mok">${confirmText}</button></div>`;document.getElementById('modal-overlay').classList.remove('hidden');const close=()=>{document.getElementById('modal-overlay').classList.add('hidden');if(onCancel)onCancel()};document.getElementById('mc').onclick=close;document.getElementById('mcc').onclick=close;document.getElementById('mok').onclick=()=>{document.getElementById('modal-overlay').classList.add('hidden');if(onConfirm)onConfirm()}}
         function ft(ts){if(!ts)return'';const d=new Date(ts),n=new Date();return d.toDateString()===n.toDateString()?d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}):d.toLocaleDateString([],{day:'2-digit',month:'2-digit'})}
         function eh(s){return s?String(s).replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]||m):''}
-        function gb(u){if(!u)return'';let b='';if(u.isBot)b+='<span class="badge-bot-label">BOT</span>';if(u.grant)b+='<span class="badge badge-verified"></span>';if(u.checkReal)b+='<span class="badge badge-checkreal"></span>';if(u.special)b+='<span class="badge badge-special"></span>';if(u.ban)b+='<span class="badge badge-banned"></span>';return b}
+        function gb(u){if(!u)return'';let b='';if(u.isBot)b+='<span class="badge badge-bot-label"></span>';if(u.grant)b+='<span class="badge-round badge-grant"></span>';if(u.checkReal)b+='<span class="badge-round badge-isreal"></span>';if(u.special)b+='<span class="badge badge-zoro"></span>';if(u.rustore)b+='<span class="badge badge-rustore"></span>';if(u.ban)b+='<span class="badge badge-banned"></span>';return b}
         function gci(){const s=new Set();Object.values(ac).forEach(c=>{if(c.type==='private'&&c.participants&&c.participants[ci]){Object.keys(c.participants).forEach(id=>{if(id!==ci)s.add(id)})}});return s}
 
         async function ucf(file){const fd=new FormData();fd.append('file',file);fd.append('upload_preset',UP);const r=await fetch(`https://api.cloudinary.com/v1_1/${CL}/auto/upload`,{method:'POST',body:fd});if(!r.ok){const e=await r.json();throw new Error(e.error?.message||'Upload failed')}return await r.json()}
@@ -236,7 +244,21 @@
         function gfc(){const c=Object.values(ac);if(at==='channels')return c.filter(x=>x.chatType==='channel');if(at==='groups')return c.filter(x=>x.chatType==='group');return c.filter(x=>!x.chatType||x.chatType==='private')}
         function rcl(){const l=document.getElementById('chats-list');if(!l)return;const f=gfc().sort((a,b)=>(b.lastMessageTime||b.createdAt||0)-(a.lastMessageTime||a.createdAt||0));if(!f.length){l.innerHTML='<div style="text-align:center;padding:40px;color:var(--gray)">No chats</div>';return}l.innerHTML='';f.forEach(chat=>{const d=document.createElement('div');d.className='chat-item';let name='Chat',avatar=DA,lastMsg=chat.lastMessage||'',time=(chat.lastMessageTime||chat.createdAt)?ft(chat.lastMessageTime||chat.createdAt):'',online=false,otherUser=null,typeBadge='',unreadHtml='';if(chat.chatType==='channel'){name=chat.name||'Channel';typeBadge='<span class="chat-type-badge chat-type-channel">CH</span>'}else if(chat.chatType==='group'){name=chat.name||'Group';typeBadge='<span class="chat-type-badge chat-type-group">GR</span>'}else if(chat.type==='private'&&chat.participants){const oid=Object.keys(chat.participants).find(id=>id!==ci);otherUser=au[oid];if(otherUser){name=otherUser.username;avatar=otherUser.avatar||DA;online=otherUser.online||false}}const un=uc[chat.id]||0;if(un>0)unreadHtml=`<span style="background:var(--accent);color:#fff;border-radius:12px;padding:2px 8px;font-size:11px;font-weight:700">${un}</span>`;d.innerHTML=`<div style="position:relative;margin-right:12px"><div class="avatar-img" style="background-image:url('${avatar}')"></div>${online?'<div class="online-dot"></div>':''}</div><div style="flex:1"><div style="display:flex;justify-content:space-between"><div style="font-weight:600;font-size:15px;display:flex;align-items:center;gap:4px">${eh(name)} ${typeBadge} ${gb(otherUser)}</div><span style="font-size:12px;color:var(--gray)">${time}</span></div><div style="display:flex;justify-content:space-between;margin-top:4px"><span style="font-size:14px;color:var(--gray)">${eh(lastMsg)}</span>${unreadHtml}</div></div>`;d.addEventListener('click',()=>oc(chat));l.appendChild(d)})}
 
-        function sa(q){if(!q){document.getElementById('search-results-container').classList.remove('active');document.getElementById('chats-list-container').classList.remove('hidden');return}const lq=q.toLowerCase().replace(/^@/,''),res=[];Object.entries(au).forEach(([uid,u])=>{if(!u||uid===ci)return;const priv=u.privacySettings||{};const fm=priv.findMe||'everyone';if(fm==='nobody')return;if(fm==='username'&&!lq.startsWith('@'))return;const nm=(u.username||'').toLowerCase(),un=(u.searchUsername||'').toLowerCase();if(nm.includes(lq)||un.includes(lq))res.push({type:'user',user:u,userId:uid,score:un===lq?0:1})});Object.entries(ac).forEach(([cid,chat])=>{if(!chat.name||chat.chatType==='private')return;if(chat.privacy!=='public')return;if(chat.participants&&chat.participants[ci])return;if(chat.name.toLowerCase().includes(lq)||(chat.username&&chat.username.toLowerCase().includes(lq)))res.push({type:'public_chat',chat,chatId:cid,score:1})});res.sort((a,b)=>a.score-b.score);const rl=document.getElementById('search-results-list');if(!res.length){rl.innerHTML='<div style="text-align:center;padding:20px;color:var(--gray)">Nothing found</div>'}else{rl.innerHTML='';res.forEach(r=>{const d=document.createElement('div');d.className='search-result-item';if(r.type==='user'){const av=r.user.avatar||DA;d.innerHTML=`<div class="avatar-img" style="width:48px;height:48px;background-image:url('${av}');margin-right:12px"></div><div style="flex:1"><div style="font-weight:600;font-size:15px">${eh(r.user.username)} ${gb(r.user)}</div><div style="font-size:12px;color:var(--gray)">@${eh(r.user.searchUsername||'')}</div></div><button style="padding:8px 16px;background:var(--accent);border:none;border-radius:20px;color:#fff;font-size:13px;cursor:pointer">Message</button>`;d.querySelector('button').addEventListener('click',e=>{e.stopPropagation();scwu(r.userId)});d.addEventListener('click',()=>oup(r.userId))}else{const isChannel=r.chat.chatType==='channel';d.innerHTML=`<div class="avatar-img" style="width:48px;height:48px;background-image:url('${r.chat.avatar||DA}');margin-right:12px"></div><div style="flex:1"><div style="font-weight:600;font-size:15px">${eh(r.chat.name)}</div><div style="font-size:12px;color:var(--gray)">${r.chat.username?'@'+eh(r.chat.username):isChannel?'Public Channel':'Public Group'}</div></div><button style="padding:8px 16px;background:var(--green);border:none;border-radius:20px;color:#fff;font-size:13px;cursor:pointer">Join</button>`;d.querySelector('button').addEventListener('click',async e=>{e.stopPropagation();await jpc(r.chatId,r.chat.chatType)});d.addEventListener('click',()=>scp(r.chat))}rl.appendChild(d)})}document.getElementById('search-results-container').classList.add('active');document.getElementById('chats-list-container').classList.add('hidden')}
+        function sa(q){
+            if(!q){document.getElementById('search-results-container').classList.remove('active');document.getElementById('chats-list-container').classList.remove('hidden');return}
+            const lq=q.toLowerCase().replace(/^@/,''),res=[];
+            Object.entries(au).forEach(([uid,u])=>{if(!u||uid===ci)return;const priv=u.privacySettings||{};const fm=priv.findMe||'everyone';if(fm==='nobody')return;if(fm==='username'&&!lq.startsWith('@'))return;const nm=(u.username||'').toLowerCase(),un=(u.searchUsername||'').toLowerCase();if(nm.includes(lq)||un.includes(lq))res.push({type:'user',user:u,userId:uid,score:un===lq?0:1})});
+            fetch('https://max-chat-f9319-default-rtdb.europe-west1.firebasedatabase.app/chats.json').then(r=>r.json()).then(allChats=>{if(!allChats)return;Object.entries(allChats).forEach(([cid,chat])=>{if(!chat.name||chat.type==='private')return;if(chat.participants&&chat.participants[ci])return;if(chat.privacy&&chat.privacy!=='public')return;const chatName=(chat.name||'').toLowerCase(),chatUsername=(chat.username||'').toLowerCase();if(chatName.includes(lq)||chatUsername.includes(lq))res.push({type:'public_chat',chat:chat,chatId:cid,score:chatUsername===lq?0:1})});
+                res.sort((a,b)=>a.score-b.score);const rl=document.getElementById('search-results-list');
+                if(!res.length){rl.innerHTML='<div style="text-align:center;padding:20px;color:var(--gray)">Nothing found</div>'}
+                else{rl.innerHTML='';res.forEach(r=>{const d=document.createElement('div');d.className='search-result-item';
+                    if(r.type==='user'){const av=r.user.avatar||DA;d.innerHTML=`<div class="avatar-img" style="width:48px;height:48px;background-image:url('${av}');margin-right:12px"></div><div style="flex:1"><div style="font-weight:600;font-size:15px">${eh(r.user.username)} ${gb(r.user)}</div><div style="font-size:12px;color:var(--gray)">@${eh(r.user.searchUsername||'')}</div></div><button style="padding:8px 16px;background:var(--accent);border:none;border-radius:20px;color:#fff;font-size:13px;cursor:pointer">Message</button>`;d.querySelector('button').addEventListener('click',e=>{e.stopPropagation();scwu(r.userId)});d.addEventListener('click',()=>oup(r.userId))}
+                    else{const isChannel=r.chat.chatType==='channel';const avatarUrl=r.chat.avatar||DA;d.innerHTML=`<div class="avatar-img" style="width:48px;height:48px;background-image:url('${avatarUrl}');margin-right:12px"></div><div style="flex:1"><div style="font-weight:600;font-size:15px">${eh(r.chat.name)}</div><div style="font-size:12px;color:var(--gray)">${r.chat.username?'@'+eh(r.chat.username):isChannel?'Public Channel':'Public Group'}</div></div><button style="padding:8px 16px;background:var(--green);border:none;border-radius:20px;color:#fff;font-size:13px;cursor:pointer">Join</button>`;d.querySelector('button').addEventListener('click',async e=>{e.stopPropagation();await jpc(r.chatId,r.chat.chatType)});d.addEventListener('click',()=>scp(r.chat))}
+                    rl.appendChild(d)})
+                }
+                document.getElementById('search-results-container').classList.add('active');document.getElementById('chats-list-container').classList.add('hidden');
+            });
+        }
 
         async function jpc(cid,ct){if(!ci)return;try{await upd(ref(db,`chats/${cid}/participants/${ci}`),true);if(ct==='channel'){const count=(await get(ref(db,`chats/${cid}/subscriberCount`))).val()||0;await upd(ref(db,`chats/${cid}`),{subscriberCount:count+1})}nt('Joined!','','success');document.getElementById('search-input').value='';document.getElementById('search-results-container').classList.remove('active');document.getElementById('chats-list-container').classList.remove('hidden')}catch(e){nt('Error','','error')}}
         function scp(chat){const ic=chat.chatType==='channel';sm({title:eh(chat.name||'Chat'),content:`Type: ${ic?'Channel':'Group'}\n${chat.username?'@'+eh(chat.username)+'\n':''}Privacy: ${chat.privacy||'public'}\nSubscribers: ${chat.subscriberCount||0}\n\n${chat.description||''}`,confirmText:'Join',onConfirm:()=>jpc(chat.id,chat.chatType)})}
@@ -257,34 +279,11 @@
         function oup(uid){const isSelf=uid===ci,u=isSelf?cu:au[uid];if(!u){nt('User not found','','error');return}vu=uid;const av=u.avatar||DA;document.getElementById('profile-avatar').style.backgroundImage=`url('${av}')`;document.getElementById('profile-name').innerHTML=eh(u.username||'')+' '+gb(u);document.getElementById('profile-substatus').textContent=isSelf?'this is you':(u.isBot?'bot':(u.online?'online':'offline'));const rows=[];if(u.bio)rows.push({label:'Bio',value:eh(u.bio)});if(u.searchUsername)rows.push({label:'Username',value:'@'+eh(u.searchUsername)});rows.push({label:'ID',value:String(u.id||uid)});if(u.createdAt)rows.push({label:'Joined',value:new Date(u.createdAt).toLocaleDateString('en-US')});if(isSelf&&u.email)rows.push({label:'Email',value:eh(u.email)});const priv=u.privacySettings||{};if(isSelf){rows.push({label:'Invite me',value:priv.inviteMe||'everyone'});rows.push({label:'Find me',value:priv.findMe||'everyone'})}document.getElementById('tg-info-list').innerHTML=rows.map(r=>`<div class="tg-info-row"><div class="tg-info-label">${r.label}</div><div class="tg-info-value">${r.value}</div></div>`).join('');document.getElementById('tg-action-row').style.display=isSelf?'none':'flex';document.getElementById('edit-profile-btn').style.display=isSelf?'flex':'none';document.getElementById('delete-account-btn').style.display=isSelf?'block':'none';document.getElementById('chats-sidebar').classList.remove('active');document.getElementById('profile-screen').classList.remove('hidden')}
         function uui(){if(!cu)return;document.getElementById('user-avatar').style.backgroundImage=`url('${cu.avatar||DA}')`;document.getElementById('current-username').innerHTML=eh(cu.username)+' '+gb(cu);document.getElementById('user-stars').textContent=(cu.stars||0)+' stars'}
 
-        // ===== СМЕНА АВАТАРА ПРИ КЛИКЕ =====
-        document.getElementById('profile-avatar').addEventListener('click', async () => {
-            if (!cu || !ci) return;
-            const inp = document.createElement('input');
-            inp.type = 'file';
-            inp.accept = 'image/*';
-            inp.onchange = async (e) => {
-                const f = e.target.files[0];
-                if (!f) return;
-                try {
-                    nt('Uploading avatar...', '', 'info');
-                    const r = await ucf(f);
-                    await upd(ref(db, `users/${ci}`), { avatar: r.secure_url });
-                    cu.avatar = r.secure_url;
-                    uui();
-                    document.getElementById('profile-avatar').style.backgroundImage = `url('${r.secure_url}')`;
-                    nt('Avatar updated!', '', 'success');
-                } catch (err) {
-                    nt('Error', err.message, 'error');
-                }
-            };
-            inp.click();
-        });
+        document.getElementById('profile-avatar').addEventListener('click',async()=>{if(!cu||!ci)return;const inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.onchange=async(e)=>{const f=e.target.files[0];if(!f)return;try{nt('Uploading avatar...','','info');const r=await ucf(f);await upd(ref(db,`users/${ci}`),{avatar:r.secure_url});cu.avatar=r.secure_url;uui();document.getElementById('profile-avatar').style.backgroundImage=`url('${r.secure_url}')`;nt('Avatar updated!','','success')}catch(err){nt('Error',err.message,'error')}};inp.click()});
 
         function sps(){if(!cu)return;sm({title:'Edit Profile',customHtml:`<label style="color:var(--gray);font-size:12px;display:block;margin-bottom:4px">Name</label><input class="modal-input" id="set-name" value="${eh(cu.username||'')}"><label style="color:var(--gray);font-size:12px;display:block;margin-bottom:4px">Username</label><input class="modal-input" id="set-username" value="${eh(cu.searchUsername||'')}"><label style="color:var(--gray);font-size:12px;display:block;margin-bottom:4px">Bio</label><input class="modal-input" id="set-bio" value="${eh(cu.bio||'')}">`,confirmText:'Save',onConfirm:async()=>{const name=document.getElementById('set-name')?.value?.trim();const uname=document.getElementById('set-username')?.value?.trim().toLowerCase();const bio=document.getElementById('set-bio')?.value?.trim();if(!name){nt('Name required','','error');return}if(uname&&uname!==cu.searchUsername){if(!/^[a-zA-Z0-9_]+$/.test(uname)){nt('Username: letters, numbers, _','','error');return}const exists=Object.values(au).some(u=>u.searchUsername===uname&&u.id!==ci);if(exists){nt('Username taken','','error');return}}const updates={};if(name!==cu.username)updates.username=name;if(uname!==cu.searchUsername)updates.searchUsername=uname;if(bio!==(cu.bio||''))updates.bio=bio;if(Object.keys(updates).length>0){await upd(ref(db,`users/${ci}`),updates);Object.assign(cu,updates);uui();nt('Profile updated!','','success')}}})}
         function sprs(){if(!cu)return;const priv=cu.privacySettings||{};sm({title:'Privacy Settings',customHtml:`<label style="color:var(--gray);font-size:12px;display:block;margin-bottom:4px">Who can invite me?</label><select class="modal-input" id="priv-invite"><option value="everyone" ${(priv.inviteMe||'everyone')==='everyone'?'selected':''}>Everyone</option><option value="nobody" ${priv.inviteMe==='nobody'?'selected':''}>Nobody</option></select><label style="color:var(--gray);font-size:12px;display:block;margin-bottom:4px;margin-top:10px">Who can find me?</label><select class="modal-input" id="priv-find"><option value="everyone" ${(priv.findMe||'everyone')==='everyone'?'selected':''}>Everyone</option><option value="username" ${priv.findMe==='username'?'selected':''}>Only by username</option><option value="nobody" ${priv.findMe==='nobody'?'selected':''}>Nobody</option></select>`,confirmText:'Save',onConfirm:async()=>{const inviteMe=document.getElementById('priv-invite')?.value||'everyone';const findMe=document.getElementById('priv-find')?.value||'everyone';await upd(ref(db,`users/${ci}/privacySettings`),{inviteMe,findMe});cu.privacySettings={inviteMe,findMe};nt('Privacy saved!','','success')}})}
 
-        // ===== AUTH =====
         auth.onAuthStateChanged(async(user)=>{if(user){ci=user.uid;const snap=await get(ref(db,`users/${user.uid}`));if(snap.exists()){cu=snap.val();if(cu.ban){await auth.signOut();nt('Account banned','','error');return}}else{const uname=user.email?user.email.split('@')[0].replace(/[^a-zA-Z0-9_]/g,'')+'_'+Math.floor(Math.random()*1000):'user_'+Math.random().toString(36).substr(2,8);cu={id:user.uid,username:user.displayName||user.email?.split('@')[0]||'User',searchUsername:uname,email:user.email||'',stars:0,grant:false,checkReal:false,special:false,ban:false,bio:'Hello!',avatar:user.photoURL||DA,privacySettings:{inviteMe:'everyone',findMe:'everyone'},createdAt:Date.now(),lastSeen:Date.now(),online:true};await set(ref(db,`users/${user.uid}`),cu)}await upd(ref(db,`users/${ci}`),{online:true,lastSeen:Date.now()});document.getElementById('auth-screen').style.display='none';document.getElementById('main-screen').classList.add('active');uui();lau();luc();ls();lan()}else{document.getElementById('main-screen').classList.remove('active');document.getElementById('auth-screen').style.display='flex'}});
 
         document.getElementById('login-btn').addEventListener('click',async()=>{const e=document.getElementById('login-username').value.trim(),p=document.getElementById('login-password').value.trim();if(!e||!p){nt('Fill fields','','error');return}try{await auth.signInWithEmailAndPassword(e,p)}catch(err){nt(err.code==='auth/invalid-credential'?'Invalid credentials':err.message,'','error')}});
@@ -297,10 +296,11 @@
 
         document.getElementById('send-btn').addEventListener('click',()=>smt(document.getElementById('message-input').value));
         document.getElementById('message-input').addEventListener('keypress',e=>{if(e.key==='Enter')smt(document.getElementById('message-input').value)});
-        document.getElementById('back-to-chats').addEventListener('click',()=>{document.getElementById('chat-area').classList.remove('active');document.getElementById('chats-sidebar').classList.add('active')});
-        document.getElementById('back-from-profile').addEventListener('click',()=>{document.getElementById('profile-screen').classList.add('hidden');document.getElementById('chats-sidebar').classList.add('active')});
-        document.getElementById('back-from-settings').addEventListener('click',()=>{document.getElementById('settings-screen').classList.add('hidden');document.getElementById('chats-sidebar').classList.add('active')});
-        document.getElementById('user-info').addEventListener('click',()=>oup(ci));
+        document.getElementById('back-to-chats').addEventListener('click',()=>{document.getElementById('chat-area').classList.remove('active');if(window.innerWidth<=768){document.getElementById('chats-sidebar').classList.add('active')}});
+        document.getElementById('back-from-profile').addEventListener('click',()=>{document.getElementById('profile-screen').classList.add('hidden');if(window.innerWidth<=768){document.getElementById('chats-sidebar').classList.add('active');document.getElementById('chat-area').classList.remove('active')}else{document.getElementById('chats-sidebar').classList.add('active')}});
+        document.getElementById('back-from-settings').addEventListener('click',()=>{document.getElementById('settings-screen').classList.add('hidden');if(window.innerWidth<=768){document.getElementById('chats-sidebar').classList.add('active');document.getElementById('chat-area').classList.remove('active')}else{document.getElementById('chats-sidebar').classList.add('active')}});
+        document.getElementById('profile-click-area').addEventListener('click',()=>oup(ci));
+        document.getElementById('user-avatar').addEventListener('click',()=>oup(ci));
         document.getElementById('search-btn').addEventListener('click',()=>document.getElementById('search-input').focus());
         document.getElementById('settings-menu-btn').addEventListener('click',()=>{document.getElementById('settings-screen').classList.remove('hidden');document.getElementById('chats-sidebar').classList.remove('active')});
         document.getElementById('search-input').addEventListener('input',e=>sa(e.target.value));
@@ -312,31 +312,7 @@
         document.getElementById('settings-create-group').addEventListener('click',()=>{document.getElementById('settings-screen').classList.add('hidden');ccog('group')});
         document.getElementById('settings-desktop').addEventListener('click',()=>{if(!cu||!ci){nt('Login first','','error');return}const p=new URLSearchParams({token:ci,email:cu.email||'',name:cu.username||'',photo:cu.avatar||''});window.location.href='collapschat://auth?'+p.toString();setTimeout(()=>{nt('Desktop app not found','Install Collaps Chat Desktop','error')},2000)});
         document.getElementById('settings-announcements').addEventListener('click',()=>window.open('announcements.html','_blank'));
-       document.getElementById('settings-support').addEventListener('click', async () => {
-    const supportUser = Object.values(au).find(u => u.searchUsername === 'support');
-    if (supportUser) {
-        const chatId = await gocpc(supportUser.id);
-        let attempts = 0;
-        const tryOpen = async () => {
-            let chat = ac[chatId];
-            if (!chat) {
-                const snap = await get(ref(db, `chats/${chatId}`));
-                if (snap.exists()) chat = snap.val();
-            }
-            if (chat) {
-                oc(chat);
-                document.getElementById('settings-screen').classList.add('hidden');
-            } else if (attempts++ < 20) {
-                setTimeout(tryOpen, 150);
-            } else {
-                sm({ title: 'Support', content: 'Cannot open support chat. Email: collapschat@bk.ru', confirmText: 'OK' });
-            }
-        };
-        tryOpen();
-    } else {
-        sm({ title: 'Support', content: 'Support account not found. Email: collapschat@bk.ru', confirmText: 'OK' });
-    }
-});
+        document.getElementById('settings-support').addEventListener('click',async()=>{const supportUser=Object.values(au).find(u=>u.searchUsername==='support');if(supportUser){const chatId=await gocpc(supportUser.id);let attempts=0;const tryOpen=async()=>{let chat=ac[chatId];if(!chat){const snap=await get(ref(db,`chats/${chatId}`));if(snap.exists())chat=snap.val()}if(chat){oc(chat);document.getElementById('settings-screen').classList.add('hidden')}else if(attempts++<20){setTimeout(tryOpen,150)}else{sm({title:'Support',content:'Cannot open support chat. Email: collapschat@bk.ru',confirmText:'OK'})}};tryOpen()}else{sm({title:'Support',content:'Support account not found. Email: collapschat@bk.ru',confirmText:'OK'})}});
         document.getElementById('settings-delete').addEventListener('click',()=>{sm({title:'Delete Account',content:'Cannot be undone!',confirmText:'Delete',onConfirm:async()=>{await rem(ref(db,`users/${ci}`));await auth.currentUser?.delete();await auth.signOut()}})});
         document.getElementById('edit-profile-btn').addEventListener('click',()=>{sm({title:'Edit Bio',customHtml:'<input class="modal-input" id="ed-bio" value="'+(cu?.bio||'')+'">',confirmText:'Save',onConfirm:async()=>{const bio=document.getElementById('ed-bio')?.value?.trim();if(bio!==undefined&&ci){await upd(ref(db,`users/${ci}`),{bio});cu.bio=bio;oup(ci)}}})});
         document.getElementById('delete-account-btn').addEventListener('click',()=>{sm({title:'Delete Account',content:'Cannot be undone!',confirmText:'Delete',onConfirm:async()=>{await rem(ref(db,`users/${ci}`));await auth.currentUser?.delete();await auth.signOut()}})});
