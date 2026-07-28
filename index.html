@@ -73,7 +73,7 @@
         .chat-type-badge{font-size:10px;padding:2px 6px;border-radius:8px;font-weight:600}
         .chat-type-channel{background:var(--channel);color:#fff}.chat-type-group{background:var(--group);color:#fff}
         .chat-area{flex:1;display:none;flex-direction:column;background:var(--bg)}.chat-area.active{display:flex}
-        .chat-header{height:60px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:12px;flex-shrink:0}
+        .chat-header{height:60px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:8px;flex-shrink:0}
         .chat-header-info{flex:1;display:flex;align-items:center;gap:12px;cursor:pointer;min-width:0}
         .chat-avatar{width:40px;height:40px;border-radius:50%;background-size:cover;background-position:center;background-color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0}
         .chat-avatar .material-symbols-rounded{font-size:22px;color:#fff}
@@ -97,7 +97,7 @@
         .profile-screen.hidden,.settings-screen.hidden{display:none}
         .profile-header,.settings-header{height:60px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:12px;flex-shrink:0}
         .profile-content,.settings-content{padding:24px;flex:1}
-        .profile-avatar-large{width:120px;height:120px;border-radius:50%;background-size:cover;background-position:center;background-color:var(--accent);margin:0 auto 24px}
+        .profile-avatar-large{width:120px;height:120px;border-radius:50%;background-size:cover;background-position:center;background-color:var(--accent);margin:0 auto 24px;cursor:pointer}
         .tg-action-row{display:flex;gap:8px;margin-bottom:20px}
         .tg-action-btn{flex:1;background:var(--bg2);border:none;border-radius:12px;padding:14px 8px;color:var(--accentH);display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;font-size:12px}
         .tg-info-list{background:var(--bg2);border-radius:12px;overflow:hidden;margin-bottom:16px}
@@ -117,7 +117,7 @@
         .modal-footer{padding:16px 20px;border-top:1px solid var(--border);display:flex;gap:10px}
         .modal-btn{flex:1;padding:12px;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer}.modal-btn.confirm{background:var(--accent);color:#fff}
         .hidden{display:none!important}@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-        @media(max-width:768px){.chats-sidebar{width:100%;position:absolute;z-index:10;display:none}.chats-sidebar.active{display:flex}.chat-area{width:100%;display:none}.chat-area.active{display:flex}}
+        @media(max-width:768px){.chats-sidebar{width:100%;position:absolute;z-index:10;display:none}.chats-sidebar.active{display:flex}.chat-area{width:100%;display:none}.chat-area.active{display:flex}#back-to-chats{display:flex!important}}
     </style>
 </head>
 <body>
@@ -167,11 +167,8 @@
 
             <div id="chat-area" class="chat-area">
                 <div class="chat-header">
-                    <button class="icon-btn" id="back-to-chats" style="display:none"><span class="material-symbols-rounded">arrow_back</span></button>
-                    <div class="chat-header-info" id="chat-header-info">
-                        <div class="chat-avatar" id="chat-avatar"><span class="material-symbols-rounded">person</span></div>
-                        <div style="min-width:0;flex:1"><div class="chat-title" id="chat-title">Select chat</div><div class="chat-subtitle" id="chat-subtitle"></div></div>
-                    </div>
+                    <button class="icon-btn" id="back-to-chats"><span class="material-symbols-rounded">arrow_back</span></button>
+                    <div class="chat-header-info" id="chat-header-info"><div class="chat-avatar" id="chat-avatar"><span class="material-symbols-rounded">person</span></div><div style="min-width:0;flex:1"><div class="chat-title" id="chat-title">Select chat</div><div class="chat-subtitle" id="chat-subtitle"></div></div></div>
                     <button class="icon-btn" id="chat-info-btn"><span class="material-symbols-rounded">info</span></button>
                 </div>
                 <div class="messages-container" id="messages-container"></div>
@@ -226,7 +223,7 @@
         function ran(){const c=document.getElementById('announcements-container');if(!c)return;const now=Date.now();const act=Object.values(aan).filter(a=>a.expiresAt>now).sort((a,b)=>(b.priority||0)-(a.priority||0));if(!act.length){c.style.display='none';return}c.style.display='block';c.innerHTML='';act.forEach(a=>{const d=document.createElement('div');d.className='announcement-item';d.style.borderLeftColor=a.color||'var(--accent)';d.innerHTML=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><span>${a.icon||'📢'}</span><span style="font-weight:600;font-size:13px">${eh(a.title||'')}</span></div><div style="font-size:12px;color:var(--gray)">${eh(a.text||'')}</div><div style="font-size:10px;color:var(--gray);margin-top:4px;text-align:right">Until ${new Date(a.expiresAt).toLocaleString()}</div>`;if(a.actionUrl){d.style.cursor='pointer';d.addEventListener('click',()=>window.open(a.actionUrl,'_blank'))}c.appendChild(d)})}
 
         function ls(){if(su)su();su=onV(ref(db,'stories'),snap=>{ast=snap.val()||{};rs()})}
-        function rs(){const c=document.getElementById('stories-container');if(!c)return;const cont=gci();cont.add(ci);let h=`<div class="story-item" id="my-story-item"><div class="story-avatar my-story" style="background-image:url('${cu?.avatar||DA}')"><div class="story-add-icon"><span class="material-symbols-rounded">add</span></div></div><div class="story-name">My</div></div>`;const bu={};Object.values(ast).forEach(s=>{if(!s.expiresAt||s.expiresAt<Date.now())return;if(!cont.has(s.userId))return;if(!bu[s.userId])bu[s.userId]=[];bu[s.userId].push(s)});Object.entries(bu).forEach(([uid,ss])=>{const u=au[uid];if(!u)return;const un=ss.some(s=>!s.viewers||!s.viewers[ci]);h+=`<div class="story-item" data-user-id="${uid}"><div class="story-avatar ${un?'':'seen'}" style="background-image:url('${u.avatar||DA}')"></div><div class="story-name">${eh(u.username||'')}</div></div>`});c.innerHTML=h||'<div style="color:var(--gray);font-size:13px;padding:8px">No stories</div>';setTimeout(()=>{document.getElementById('my-story-item')?.addEventListener('click',()=>{const inp=document.createElement('input');inp.type='file';inp.accept='image/*,video/*';inp.onchange=async e=>{const f=e.target.files[0];if(!f)return;try{nt('Uploading...','','info');const r=await ucf(f);const s={id:push(ref(db,'stories')).key,userId:ci,username:cu.username,url:r.secure_url,type:r.resource_type,createdAt:Date.now(),expiresAt:Date.now()+86400000,viewers:{}};await set(ref(db,`stories/${s.id}`),s);nt('Published!','24 hours','success')}catch(err){nt('Error',err.message,'error')}};inp.click()});c.querySelectorAll('.story-item[data-user-id]').forEach(item=>{item.addEventListener('click',()=>{const uid=item.dataset.userId;const ss=Object.values(ast).filter(s=>s.userId===uid&&s.expiresAt>Date.now());if(ss.length)vs(uid,ss)})})},100)}
+        function rs(){const c=document.getElementById('stories-container');if(!c)return;const cont=gci();cont.add(ci);let h=`<div class="story-item" id="my-story-item"><div class="story-avatar my-story" style="background-image:url('${cu?.avatar||DA}')"><div class="story-add-icon"><span class="material-symbols-rounded">add</span></div></div><div class="story-name">Load history</div></div>`;const bu={};Object.values(ast).forEach(s=>{if(!s.expiresAt||s.expiresAt<Date.now())return;if(!cont.has(s.userId))return;if(!bu[s.userId])bu[s.userId]=[];bu[s.userId].push(s)});Object.entries(bu).forEach(([uid,ss])=>{const u=au[uid];if(!u)return;const un=ss.some(s=>!s.viewers||!s.viewers[ci]);h+=`<div class="story-item" data-user-id="${uid}"><div class="story-avatar ${un?'':'seen'}" style="background-image:url('${u.avatar||DA}')"></div><div class="story-name">${eh(u.username||'')}</div></div>`});c.innerHTML=h||'<div style="color:var(--gray);font-size:13px;padding:8px">No stories</div>';setTimeout(()=>{document.getElementById('my-story-item')?.addEventListener('click',()=>{const inp=document.createElement('input');inp.type='file';inp.accept='image/*,video/*';inp.onchange=async e=>{const f=e.target.files[0];if(!f)return;try{nt('Uploading...','','info');const r=await ucf(f);const s={id:push(ref(db,'stories')).key,userId:ci,username:cu.username,url:r.secure_url,type:r.resource_type,createdAt:Date.now(),expiresAt:Date.now()+86400000,viewers:{}};await set(ref(db,`stories/${s.id}`),s);nt('Published!','24 hours','success')}catch(err){nt('Error',err.message,'error')}};inp.click()});c.querySelectorAll('.story-item[data-user-id]').forEach(item=>{item.addEventListener('click',()=>{const uid=item.dataset.userId;const ss=Object.values(ast).filter(s=>s.userId===uid&&s.expiresAt>Date.now());if(ss.length)vs(uid,ss)})})},100)}
         function vs(uid,ss){const v=document.getElementById('story-viewer'),u=au[uid];if(!u||!ss.length)return;let idx=0,iv;v.classList.add('active');document.getElementById('story-viewer-avatar').style.backgroundImage=`url('${u.avatar||DA}')`;document.getElementById('story-viewer-name').textContent=u.username;function show(i){if(i>=ss.length){v.classList.remove('active');clearInterval(iv);ss.forEach(s=>{if(!s.viewers)s.viewers={};s.viewers[ci]=true;upd(ref(db,`stories/${s.id}/viewers/${ci}`),true)});return}const s=ss[i];idx=i;document.getElementById('story-viewer-time').textContent=ft(s.createdAt);document.getElementById('story-progress').innerHTML=ss.map((_,j)=>`<div class="story-progress-bar"><div class="story-progress-fill" id="p-${j}" style="width:${j<i?'100%':'0%'}"></div></div>`).join('');const cnt=document.getElementById('story-viewer-content');if(s.type==='video'){cnt.innerHTML=`<video src="${s.url}" class="story-viewer-media" autoplay id="sv"></video>`;document.getElementById('sv').onended=()=>show(i+1)}else{cnt.innerHTML=`<img src="${s.url}" class="story-viewer-media">`;let p=0;clearInterval(iv);iv=setInterval(()=>{p+=2;const bar=document.getElementById(`p-${i}`);if(bar)bar.style.width=p+'%';if(p>=100){clearInterval(iv);show(i+1)}},100)}}show(0);document.getElementById('story-viewer-close').onclick=()=>{v.classList.remove('active');clearInterval(iv);ss.forEach(s=>{if(!s.viewers)s.viewers={};s.viewers[ci]=true;upd(ref(db,`stories/${s.id}/viewers/${ci}`),true)})}}
 
         function lau(){onV(ref(db,'users'),snap=>{au=snap.val()||{};rcl();rs();eb()})}
@@ -260,6 +257,30 @@
         function oup(uid){const isSelf=uid===ci,u=isSelf?cu:au[uid];if(!u){nt('User not found','','error');return}vu=uid;const av=u.avatar||DA;document.getElementById('profile-avatar').style.backgroundImage=`url('${av}')`;document.getElementById('profile-name').innerHTML=eh(u.username||'')+' '+gb(u);document.getElementById('profile-substatus').textContent=isSelf?'this is you':(u.isBot?'bot':(u.online?'online':'offline'));const rows=[];if(u.bio)rows.push({label:'Bio',value:eh(u.bio)});if(u.searchUsername)rows.push({label:'Username',value:'@'+eh(u.searchUsername)});rows.push({label:'ID',value:String(u.id||uid)});if(u.createdAt)rows.push({label:'Joined',value:new Date(u.createdAt).toLocaleDateString('en-US')});if(isSelf&&u.email)rows.push({label:'Email',value:eh(u.email)});const priv=u.privacySettings||{};if(isSelf){rows.push({label:'Invite me',value:priv.inviteMe||'everyone'});rows.push({label:'Find me',value:priv.findMe||'everyone'})}document.getElementById('tg-info-list').innerHTML=rows.map(r=>`<div class="tg-info-row"><div class="tg-info-label">${r.label}</div><div class="tg-info-value">${r.value}</div></div>`).join('');document.getElementById('tg-action-row').style.display=isSelf?'none':'flex';document.getElementById('edit-profile-btn').style.display=isSelf?'flex':'none';document.getElementById('delete-account-btn').style.display=isSelf?'block':'none';document.getElementById('chats-sidebar').classList.remove('active');document.getElementById('profile-screen').classList.remove('hidden')}
         function uui(){if(!cu)return;document.getElementById('user-avatar').style.backgroundImage=`url('${cu.avatar||DA}')`;document.getElementById('current-username').innerHTML=eh(cu.username)+' '+gb(cu);document.getElementById('user-stars').textContent=(cu.stars||0)+' stars'}
 
+        // ===== СМЕНА АВАТАРА ПРИ КЛИКЕ =====
+        document.getElementById('profile-avatar').addEventListener('click', async () => {
+            if (!cu || !ci) return;
+            const inp = document.createElement('input');
+            inp.type = 'file';
+            inp.accept = 'image/*';
+            inp.onchange = async (e) => {
+                const f = e.target.files[0];
+                if (!f) return;
+                try {
+                    nt('Uploading avatar...', '', 'info');
+                    const r = await ucf(f);
+                    await upd(ref(db, `users/${ci}`), { avatar: r.secure_url });
+                    cu.avatar = r.secure_url;
+                    uui();
+                    document.getElementById('profile-avatar').style.backgroundImage = `url('${r.secure_url}')`;
+                    nt('Avatar updated!', '', 'success');
+                } catch (err) {
+                    nt('Error', err.message, 'error');
+                }
+            };
+            inp.click();
+        });
+
         function sps(){if(!cu)return;sm({title:'Edit Profile',customHtml:`<label style="color:var(--gray);font-size:12px;display:block;margin-bottom:4px">Name</label><input class="modal-input" id="set-name" value="${eh(cu.username||'')}"><label style="color:var(--gray);font-size:12px;display:block;margin-bottom:4px">Username</label><input class="modal-input" id="set-username" value="${eh(cu.searchUsername||'')}"><label style="color:var(--gray);font-size:12px;display:block;margin-bottom:4px">Bio</label><input class="modal-input" id="set-bio" value="${eh(cu.bio||'')}">`,confirmText:'Save',onConfirm:async()=>{const name=document.getElementById('set-name')?.value?.trim();const uname=document.getElementById('set-username')?.value?.trim().toLowerCase();const bio=document.getElementById('set-bio')?.value?.trim();if(!name){nt('Name required','','error');return}if(uname&&uname!==cu.searchUsername){if(!/^[a-zA-Z0-9_]+$/.test(uname)){nt('Username: letters, numbers, _','','error');return}const exists=Object.values(au).some(u=>u.searchUsername===uname&&u.id!==ci);if(exists){nt('Username taken','','error');return}}const updates={};if(name!==cu.username)updates.username=name;if(uname!==cu.searchUsername)updates.searchUsername=uname;if(bio!==(cu.bio||''))updates.bio=bio;if(Object.keys(updates).length>0){await upd(ref(db,`users/${ci}`),updates);Object.assign(cu,updates);uui();nt('Profile updated!','','success')}}})}
         function sprs(){if(!cu)return;const priv=cu.privacySettings||{};sm({title:'Privacy Settings',customHtml:`<label style="color:var(--gray);font-size:12px;display:block;margin-bottom:4px">Who can invite me?</label><select class="modal-input" id="priv-invite"><option value="everyone" ${(priv.inviteMe||'everyone')==='everyone'?'selected':''}>Everyone</option><option value="nobody" ${priv.inviteMe==='nobody'?'selected':''}>Nobody</option></select><label style="color:var(--gray);font-size:12px;display:block;margin-bottom:4px;margin-top:10px">Who can find me?</label><select class="modal-input" id="priv-find"><option value="everyone" ${(priv.findMe||'everyone')==='everyone'?'selected':''}>Everyone</option><option value="username" ${priv.findMe==='username'?'selected':''}>Only by username</option><option value="nobody" ${priv.findMe==='nobody'?'selected':''}>Nobody</option></select>`,confirmText:'Save',onConfirm:async()=>{const inviteMe=document.getElementById('priv-invite')?.value||'everyone';const findMe=document.getElementById('priv-find')?.value||'everyone';await upd(ref(db,`users/${ci}/privacySettings`),{inviteMe,findMe});cu.privacySettings={inviteMe,findMe};nt('Privacy saved!','','success')}})}
 
@@ -292,14 +313,9 @@
         document.getElementById('settings-desktop').addEventListener('click',()=>{if(!cu||!ci){nt('Login first','','error');return}const p=new URLSearchParams({token:ci,email:cu.email||'',name:cu.username||'',photo:cu.avatar||''});window.location.href='collapschat://auth?'+p.toString();setTimeout(()=>{nt('Desktop app not found','Install Collaps Chat Desktop','error')},2000)});
         document.getElementById('settings-announcements').addEventListener('click',()=>window.open('announcements.html','_blank'));
        document.getElementById('settings-support').addEventListener('click', async () => {
-    // Ищем поддержку в пользователях
     const supportUser = Object.values(au).find(u => u.searchUsername === 'support');
-    
     if (supportUser) {
-        // Создаём/получаем чат с поддержкой
         const chatId = await gocpc(supportUser.id);
-        
-        // Ждём пока чат появится в allChats
         let attempts = 0;
         const tryOpen = async () => {
             let chat = ac[chatId];
@@ -308,7 +324,7 @@
                 if (snap.exists()) chat = snap.val();
             }
             if (chat) {
-                oc(chat); // Открываем чат
+                oc(chat);
                 document.getElementById('settings-screen').classList.add('hidden');
             } else if (attempts++ < 20) {
                 setTimeout(tryOpen, 150);
@@ -318,7 +334,6 @@
         };
         tryOpen();
     } else {
-        // Если поддержки нет в базе - создаём чат напрямую
         sm({ title: 'Support', content: 'Support account not found. Email: collapschat@bk.ru', confirmText: 'OK' });
     }
 });
