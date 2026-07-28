@@ -13,7 +13,7 @@
         .material-symbols-rounded{font-variation-settings:'FILL'0,'wght'400,'GRAD'0,'opsz'24;user-select:none}
         html,body{height:100%;overflow:hidden}body{background:var(--bg);color:var(--text)}
         #app{height:100vh;display:flex;flex-direction:column}
-        .auth-screen{height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg)}
+        .auth-screen{height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);position:relative}
         .auth-container{width:100%;max-width:400px;padding:40px 24px;text-align:center}
         .auth-input{width:100%;padding:16px 20px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;color:var(--text);font-size:16px;margin-bottom:16px}
         .auth-input:focus{outline:none;border-color:var(--accent)}
@@ -23,6 +23,12 @@
         .btn-google{background:#fff;color:#333;border:none;display:flex;align-items:center;justify-content:center;gap:12px;width:100%;padding:14px;border-radius:12px;font-weight:600;font-size:15px;cursor:pointer;margin-bottom:16px}
         .divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--gray);font-size:13px}
         .divider-line{flex:1;height:1px;background:var(--border)}
+        .checkbox-row{display:flex;align-items:center;gap:10px;margin:12px 0;text-align:left}
+        .checkbox-row input[type=checkbox]{width:18px;height:18px;cursor:pointer;accent-color:var(--accent);flex-shrink:0}
+        .checkbox-row label{font-size:13px;color:var(--gray);cursor:pointer}
+        .checkbox-row label a{color:var(--accent);text-decoration:none;font-weight:500}
+        .auth-footer{position:absolute;bottom:0;left:0;right:0;padding:12px 20px;text-align:center;font-size:11px;color:var(--gray);background:var(--bg);z-index:1}
+        .auth-footer a{color:var(--accent);text-decoration:none;font-weight:500}
         .main-screen{height:100vh;display:none;overflow:hidden}.main-screen.active{display:flex}
         .chats-sidebar{width:360px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;height:100%}
         .chats-header{height:60px;padding:0 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);flex-shrink:0}
@@ -121,6 +127,8 @@
         .modal-footer{padding:16px 20px;border-top:1px solid var(--border);display:flex;gap:10px}
         .modal-btn{flex:1;padding:12px;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer}.modal-btn.confirm{background:var(--accent);color:#fff}
         .hidden{display:none!important}@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+        .main-footer{background:var(--bg2);border-top:1px solid var(--border);padding:8px 16px;text-align:center;font-size:11px;color:var(--gray);flex-shrink:0}
+        .main-footer a{color:var(--accent);text-decoration:none;font-weight:500}
         @media(max-width:768px){.chats-sidebar{width:100%;position:absolute;z-index:10;display:none}.chats-sidebar.active{display:flex}.chat-area{width:100%;display:none}.chat-area.active{display:flex}#back-to-chats{display:flex!important}}
     </style>
 </head>
@@ -150,21 +158,19 @@
                     <input type="text" id="register-username" placeholder="Display Name" class="auth-input">
                     <input type="email" id="register-email" placeholder="Email" class="auth-input">
                     <input type="password" id="register-password" placeholder="Password (min 6)" class="auth-input">
-                    <div style="display:flex;align-items:center;gap:10px;margin:16px 0"><input type="checkbox" id="privacy-checkbox" style="width:18px;height:18px;accent-color:var(--accent)"><span style="font-size:13px;color:var(--gray)">I accept <a href="privacy.html" style="color:var(--accent)">Privacy Policy</a></span></div>
+                    <div class="checkbox-row"><input type="checkbox" id="age-checkbox"><label>I confirm that I am <strong>13 years or older</strong></label></div>
+                    <div class="checkbox-row"><input type="checkbox" id="privacy-checkbox"><label>I accept <a href="privacy.html" target="_blank">Privacy Policy</a></label></div>
                     <button id="register-btn" class="auth-btn" disabled>Create Account</button>
                     <div class="auth-links"><a href="#" id="show-login">Sign In</a></div>
                 </div>
             </div>
+            <div class="auth-footer">© 2026 Collaps Chat | <a href="privacy.html" target="_blank">Privacy Policy</a></div>
         </div>
 
         <div id="main-screen" class="main-screen">
             <div id="chats-sidebar" class="chats-sidebar active">
                 <div class="chats-header"><div class="chats-title">Collaps Chat</div><div class="header-buttons"><button class="icon-btn" id="create-chat-btn"><span class="material-symbols-rounded">add_circle</span></button><button class="icon-btn" id="search-btn"><span class="material-symbols-rounded">search</span></button><button class="icon-btn" id="settings-menu-btn"><span class="material-symbols-rounded">settings</span></button></div></div>
-                <div class="profile-bar">
-                    <div class="profile-avatar" id="user-avatar"></div>
-                    <div style="flex:1;cursor:pointer" id="profile-click-area"><span class="profile-name" id="current-username">Loading...</span><br><span style="font-size:12px;color:var(--gray)" id="user-stars">0 stars</span></div>
-                    <button class="icon-btn" id="logout-btn"><span class="material-symbols-rounded">logout</span></button>
-                </div>
+                <div class="profile-bar"><div class="profile-avatar" id="user-avatar"></div><div style="flex:1;cursor:pointer" id="profile-click-area"><span class="profile-name" id="current-username">Loading...</span><br><span style="font-size:12px;color:var(--gray)" id="user-stars">0 stars</span></div><button class="icon-btn" id="logout-btn"><span class="material-symbols-rounded">logout</span></button></div>
                 <div class="announcements-container" id="announcements-container" style="display:none"></div>
                 <div class="stories-container" id="stories-container"></div>
                 <div class="search-container"><input type="text" id="search-input" placeholder="Search..." class="search-input"></div>
@@ -174,11 +180,7 @@
             </div>
 
             <div id="chat-area" class="chat-area">
-                <div class="chat-header">
-                    <button class="icon-btn" id="back-to-chats"><span class="material-symbols-rounded">arrow_back</span></button>
-                    <div class="chat-header-info" id="chat-header-info"><div class="chat-avatar" id="chat-avatar"><span class="material-symbols-rounded">person</span></div><div style="min-width:0;flex:1"><div class="chat-title" id="chat-title">Select chat</div><div class="chat-subtitle" id="chat-subtitle"></div></div></div>
-                    <button class="icon-btn" id="chat-info-btn"><span class="material-symbols-rounded">info</span></button>
-                </div>
+                <div class="chat-header"><button class="icon-btn" id="back-to-chats"><span class="material-symbols-rounded">arrow_back</span></button><div class="chat-header-info" id="chat-header-info"><div class="chat-avatar" id="chat-avatar"><span class="material-symbols-rounded">person</span></div><div style="min-width:0;flex:1"><div class="chat-title" id="chat-title">Select chat</div><div class="chat-subtitle" id="chat-subtitle"></div></div></div><button class="icon-btn" id="chat-info-btn"><span class="material-symbols-rounded">info</span></button></div>
                 <div class="messages-container" id="messages-container"></div>
                 <div class="message-input-area" id="message-input-area" style="display:none"><label for="file-upload" class="icon-btn" style="cursor:pointer"><span class="material-symbols-rounded">attach_file</span></label><input type="file" id="file-upload" accept="image/*,video/*" style="display:none"><div class="input-wrapper"><input type="text" id="message-input" placeholder="Message" autocomplete="off"></div><button class="send-btn" id="send-btn"><span class="material-symbols-rounded">send</span></button></div>
                 <div class="channel-locked" id="channel-locked" style="display:none">Only admins can post in this channel</div>
@@ -202,6 +204,7 @@
                     <div class="settings-item" id="settings-delete" style="border-left:3px solid var(--red)"><div class="settings-item-left"><span class="material-symbols-rounded" style="color:var(--red)">warning</span><div><div class="settings-item-title" style="color:var(--red)">Delete Account</div></div></div><span class="material-symbols-rounded">chevron_right</span></div>
                 </div>
             </div>
+            <div class="main-footer">© 2026 Collaps Chat | <a href="privacy.html" target="_blank">Privacy Policy</a></div>
         </div>
     </div>
 
@@ -244,21 +247,7 @@
         function gfc(){const c=Object.values(ac);if(at==='channels')return c.filter(x=>x.chatType==='channel');if(at==='groups')return c.filter(x=>x.chatType==='group');return c.filter(x=>!x.chatType||x.chatType==='private')}
         function rcl(){const l=document.getElementById('chats-list');if(!l)return;const f=gfc().sort((a,b)=>(b.lastMessageTime||b.createdAt||0)-(a.lastMessageTime||a.createdAt||0));if(!f.length){l.innerHTML='<div style="text-align:center;padding:40px;color:var(--gray)">No chats</div>';return}l.innerHTML='';f.forEach(chat=>{const d=document.createElement('div');d.className='chat-item';let name='Chat',avatar=DA,lastMsg=chat.lastMessage||'',time=(chat.lastMessageTime||chat.createdAt)?ft(chat.lastMessageTime||chat.createdAt):'',online=false,otherUser=null,typeBadge='',unreadHtml='';if(chat.chatType==='channel'){name=chat.name||'Channel';typeBadge='<span class="chat-type-badge chat-type-channel">CH</span>'}else if(chat.chatType==='group'){name=chat.name||'Group';typeBadge='<span class="chat-type-badge chat-type-group">GR</span>'}else if(chat.type==='private'&&chat.participants){const oid=Object.keys(chat.participants).find(id=>id!==ci);otherUser=au[oid];if(otherUser){name=otherUser.username;avatar=otherUser.avatar||DA;online=otherUser.online||false}}const un=uc[chat.id]||0;if(un>0)unreadHtml=`<span style="background:var(--accent);color:#fff;border-radius:12px;padding:2px 8px;font-size:11px;font-weight:700">${un}</span>`;d.innerHTML=`<div style="position:relative;margin-right:12px"><div class="avatar-img" style="background-image:url('${avatar}')"></div>${online?'<div class="online-dot"></div>':''}</div><div style="flex:1"><div style="display:flex;justify-content:space-between"><div style="font-weight:600;font-size:15px;display:flex;align-items:center;gap:4px">${eh(name)} ${typeBadge} ${gb(otherUser)}</div><span style="font-size:12px;color:var(--gray)">${time}</span></div><div style="display:flex;justify-content:space-between;margin-top:4px"><span style="font-size:14px;color:var(--gray)">${eh(lastMsg)}</span>${unreadHtml}</div></div>`;d.addEventListener('click',()=>oc(chat));l.appendChild(d)})}
 
-        function sa(q){
-            if(!q){document.getElementById('search-results-container').classList.remove('active');document.getElementById('chats-list-container').classList.remove('hidden');return}
-            const lq=q.toLowerCase().replace(/^@/,''),res=[];
-            Object.entries(au).forEach(([uid,u])=>{if(!u||uid===ci)return;const priv=u.privacySettings||{};const fm=priv.findMe||'everyone';if(fm==='nobody')return;if(fm==='username'&&!lq.startsWith('@'))return;const nm=(u.username||'').toLowerCase(),un=(u.searchUsername||'').toLowerCase();if(nm.includes(lq)||un.includes(lq))res.push({type:'user',user:u,userId:uid,score:un===lq?0:1})});
-            fetch('https://max-chat-f9319-default-rtdb.europe-west1.firebasedatabase.app/chats.json').then(r=>r.json()).then(allChats=>{if(!allChats)return;Object.entries(allChats).forEach(([cid,chat])=>{if(!chat.name||chat.type==='private')return;if(chat.participants&&chat.participants[ci])return;if(chat.privacy&&chat.privacy!=='public')return;const chatName=(chat.name||'').toLowerCase(),chatUsername=(chat.username||'').toLowerCase();if(chatName.includes(lq)||chatUsername.includes(lq))res.push({type:'public_chat',chat:chat,chatId:cid,score:chatUsername===lq?0:1})});
-                res.sort((a,b)=>a.score-b.score);const rl=document.getElementById('search-results-list');
-                if(!res.length){rl.innerHTML='<div style="text-align:center;padding:20px;color:var(--gray)">Nothing found</div>'}
-                else{rl.innerHTML='';res.forEach(r=>{const d=document.createElement('div');d.className='search-result-item';
-                    if(r.type==='user'){const av=r.user.avatar||DA;d.innerHTML=`<div class="avatar-img" style="width:48px;height:48px;background-image:url('${av}');margin-right:12px"></div><div style="flex:1"><div style="font-weight:600;font-size:15px">${eh(r.user.username)} ${gb(r.user)}</div><div style="font-size:12px;color:var(--gray)">@${eh(r.user.searchUsername||'')}</div></div><button style="padding:8px 16px;background:var(--accent);border:none;border-radius:20px;color:#fff;font-size:13px;cursor:pointer">Message</button>`;d.querySelector('button').addEventListener('click',e=>{e.stopPropagation();scwu(r.userId)});d.addEventListener('click',()=>oup(r.userId))}
-                    else{const isChannel=r.chat.chatType==='channel';const avatarUrl=r.chat.avatar||DA;d.innerHTML=`<div class="avatar-img" style="width:48px;height:48px;background-image:url('${avatarUrl}');margin-right:12px"></div><div style="flex:1"><div style="font-weight:600;font-size:15px">${eh(r.chat.name)}</div><div style="font-size:12px;color:var(--gray)">${r.chat.username?'@'+eh(r.chat.username):isChannel?'Public Channel':'Public Group'}</div></div><button style="padding:8px 16px;background:var(--green);border:none;border-radius:20px;color:#fff;font-size:13px;cursor:pointer">Join</button>`;d.querySelector('button').addEventListener('click',async e=>{e.stopPropagation();await jpc(r.chatId,r.chat.chatType)});d.addEventListener('click',()=>scp(r.chat))}
-                    rl.appendChild(d)})
-                }
-                document.getElementById('search-results-container').classList.add('active');document.getElementById('chats-list-container').classList.add('hidden');
-            });
-        }
+        function sa(q){if(!q){document.getElementById('search-results-container').classList.remove('active');document.getElementById('chats-list-container').classList.remove('hidden');return}const lq=q.toLowerCase().replace(/^@/,''),res=[];Object.entries(au).forEach(([uid,u])=>{if(!u||uid===ci)return;const priv=u.privacySettings||{};const fm=priv.findMe||'everyone';if(fm==='nobody')return;if(fm==='username'&&!lq.startsWith('@'))return;const nm=(u.username||'').toLowerCase(),un=(u.searchUsername||'').toLowerCase();if(nm.includes(lq)||un.includes(lq))res.push({type:'user',user:u,userId:uid,score:un===lq?0:1})});fetch('https://max-chat-f9319-default-rtdb.europe-west1.firebasedatabase.app/chats.json').then(r=>r.json()).then(allChats=>{if(!allChats)return;Object.entries(allChats).forEach(([cid,chat])=>{if(!chat.name||chat.type==='private')return;if(chat.participants&&chat.participants[ci])return;if(chat.privacy&&chat.privacy!=='public')return;const chatName=(chat.name||'').toLowerCase(),chatUsername=(chat.username||'').toLowerCase();if(chatName.includes(lq)||chatUsername.includes(lq))res.push({type:'public_chat',chat:chat,chatId:cid,score:chatUsername===lq?0:1})});res.sort((a,b)=>a.score-b.score);const rl=document.getElementById('search-results-list');if(!res.length){rl.innerHTML='<div style="text-align:center;padding:20px;color:var(--gray)">Nothing found</div>'}else{rl.innerHTML='';res.forEach(r=>{const d=document.createElement('div');d.className='search-result-item';if(r.type==='user'){const av=r.user.avatar||DA;d.innerHTML=`<div class="avatar-img" style="width:48px;height:48px;background-image:url('${av}');margin-right:12px"></div><div style="flex:1"><div style="font-weight:600;font-size:15px">${eh(r.user.username)} ${gb(r.user)}</div><div style="font-size:12px;color:var(--gray)">@${eh(r.user.searchUsername||'')}</div></div><button style="padding:8px 16px;background:var(--accent);border:none;border-radius:20px;color:#fff;font-size:13px;cursor:pointer">Message</button>`;d.querySelector('button').addEventListener('click',e=>{e.stopPropagation();scwu(r.userId)});d.addEventListener('click',()=>oup(r.userId))}else{const isChannel=r.chat.chatType==='channel';const avatarUrl=r.chat.avatar||DA;d.innerHTML=`<div class="avatar-img" style="width:48px;height:48px;background-image:url('${avatarUrl}');margin-right:12px"></div><div style="flex:1"><div style="font-weight:600;font-size:15px">${eh(r.chat.name)}</div><div style="font-size:12px;color:var(--gray)">${r.chat.username?'@'+eh(r.chat.username):isChannel?'Public Channel':'Public Group'}</div></div><button style="padding:8px 16px;background:var(--green);border:none;border-radius:20px;color:#fff;font-size:13px;cursor:pointer">Join</button>`;d.querySelector('button').addEventListener('click',async e=>{e.stopPropagation();await jpc(r.chatId,r.chat.chatType)});d.addEventListener('click',()=>scp(r.chat))}rl.appendChild(d)})}document.getElementById('search-results-container').classList.add('active');document.getElementById('chats-list-container').classList.add('hidden')})}
 
         async function jpc(cid,ct){if(!ci)return;try{await upd(ref(db,`chats/${cid}/participants/${ci}`),true);if(ct==='channel'){const count=(await get(ref(db,`chats/${cid}/subscriberCount`))).val()||0;await upd(ref(db,`chats/${cid}`),{subscriberCount:count+1})}nt('Joined!','','success');document.getElementById('search-input').value='';document.getElementById('search-results-container').classList.remove('active');document.getElementById('chats-list-container').classList.remove('hidden')}catch(e){nt('Error','','error')}}
         function scp(chat){const ic=chat.chatType==='channel';sm({title:eh(chat.name||'Chat'),content:`Type: ${ic?'Channel':'Group'}\n${chat.username?'@'+eh(chat.username)+'\n':''}Privacy: ${chat.privacy||'public'}\nSubscribers: ${chat.subscriberCount||0}\n\n${chat.description||''}`,confirmText:'Join',onConfirm:()=>jpc(chat.id,chat.chatType)})}
@@ -288,27 +277,21 @@
 
         document.getElementById('login-btn').addEventListener('click',async()=>{const e=document.getElementById('login-username').value.trim(),p=document.getElementById('login-password').value.trim();if(!e||!p){nt('Fill fields','','error');return}try{await auth.signInWithEmailAndPassword(e,p)}catch(err){nt(err.code==='auth/invalid-credential'?'Invalid credentials':err.message,'','error')}});
         document.getElementById('google-login-btn').addEventListener('click',async()=>{try{await auth.signInWithPopup(gp)}catch(e){nt('Error',e.message,'error')}});
-        document.getElementById('register-btn').addEventListener('click',async()=>{const un=document.getElementById('register-username').value.trim(),em=document.getElementById('register-email').value.trim(),pw=document.getElementById('register-password').value.trim();if(!un||!em||!pw){nt('Fill fields','','error');return}if(pw.length<6){nt('Password min 6','','error');return}try{const r=await auth.createUserWithEmailAndPassword(em,pw);const uid=r.user.uid;const sun=em.split('@')[0].replace(/[^a-zA-Z0-9_]/g,'')+'_'+Math.floor(Math.random()*1000);await set(ref(db,`users/${uid}`),{id:uid,username:un,searchUsername:sun,email:em,stars:0,grant:false,checkReal:false,special:false,ban:false,bio:'Hello!',avatar:`https://ui-avatars.com/api/?name=${encodeURIComponent(un)}&background=2b5278&color=fff&size=256`,privacySettings:{inviteMe:'everyone',findMe:'everyone'},createdAt:Date.now(),lastSeen:Date.now(),online:true});await r.user.updateProfile({displayName:un})}catch(e){nt(e.code==='auth/email-already-in-use'?'Email taken':e.message,'','error')}});
+        document.getElementById('register-btn').addEventListener('click',async()=>{if(!document.getElementById('age-checkbox').checked){nt('You must be 13+','','error');return}if(!document.getElementById('privacy-checkbox').checked){nt('Accept Privacy Policy','','error');return}const un=document.getElementById('register-username').value.trim(),em=document.getElementById('register-email').value.trim(),pw=document.getElementById('register-password').value.trim();if(!un||!em||!pw){nt('Fill fields','','error');return}if(pw.length<6){nt('Password min 6','','error');return}try{const r=await auth.createUserWithEmailAndPassword(em,pw);const uid=r.user.uid;const sun=em.split('@')[0].replace(/[^a-zA-Z0-9_]/g,'')+'_'+Math.floor(Math.random()*1000);await set(ref(db,`users/${uid}`),{id:uid,username:un,searchUsername:sun,email:em,stars:0,grant:false,checkReal:false,special:false,ban:false,bio:'Hello!',avatar:`https://ui-avatars.com/api/?name=${encodeURIComponent(un)}&background=2b5278&color=fff&size=256`,privacySettings:{inviteMe:'everyone',findMe:'everyone'},createdAt:Date.now(),lastSeen:Date.now(),online:true});await r.user.updateProfile({displayName:un})}catch(e){nt(e.code==='auth/email-already-in-use'?'Email taken':e.message,'','error')}});
         document.getElementById('logout-btn').addEventListener('click',async()=>{if(ci)await upd(ref(db,`users/${ci}`),{online:false,lastSeen:Date.now()});if(mu)mu();if(chu)chu();if(su)su();if(ans)ans();cu=null;ci=null;await auth.signOut()});
-        document.getElementById('privacy-checkbox').addEventListener('change',function(){document.getElementById('register-btn').disabled=!this.checked});
+        
+        function updateRegBtn(){const a=document.getElementById('age-checkbox')?.checked;const p=document.getElementById('privacy-checkbox')?.checked;document.getElementById('register-btn').disabled=!(a&&p)}
+        document.getElementById('age-checkbox').addEventListener('change',updateRegBtn);
+        document.getElementById('privacy-checkbox').addEventListener('change',updateRegBtn);
         document.getElementById('show-register').addEventListener('click',e=>{e.preventDefault();document.getElementById('login-form').style.display='none';document.getElementById('register-form').style.display='block'});
         document.getElementById('show-login').addEventListener('click',e=>{e.preventDefault();document.getElementById('register-form').style.display='none';document.getElementById('login-form').style.display='block'});
 
         document.getElementById('send-btn').addEventListener('click',()=>smt(document.getElementById('message-input').value));
         document.getElementById('message-input').addEventListener('keypress',e=>{if(e.key==='Enter')smt(document.getElementById('message-input').value)});
-        
-        // Мобильная навигация - всегда показываем chats-sidebar при возврате
-        function showSidebar(){
-            document.getElementById('chat-area').classList.remove('active');
-            document.getElementById('profile-screen').classList.add('hidden');
-            document.getElementById('settings-screen').classList.add('hidden');
-            document.getElementById('chats-sidebar').classList.add('active');
-        }
-        
+        function showSidebar(){document.getElementById('chat-area').classList.remove('active');document.getElementById('profile-screen').classList.add('hidden');document.getElementById('settings-screen').classList.add('hidden');document.getElementById('chats-sidebar').classList.add('active')}
         document.getElementById('back-to-chats').addEventListener('click',showSidebar);
         document.getElementById('back-from-profile').addEventListener('click',showSidebar);
         document.getElementById('back-from-settings').addEventListener('click',showSidebar);
-        
         document.getElementById('profile-click-area').addEventListener('click',()=>oup(ci));
         document.getElementById('user-avatar').addEventListener('click',()=>oup(ci));
         document.getElementById('search-btn').addEventListener('click',()=>document.getElementById('search-input').focus());
@@ -316,13 +299,15 @@
         document.getElementById('search-input').addEventListener('input',e=>sa(e.target.value));
         document.querySelectorAll('.tab-btn').forEach(b=>{b.addEventListener('click',()=>{document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');at=b.dataset.tab;document.getElementById('search-results-container').classList.remove('active');document.getElementById('chats-list-container').classList.remove('hidden');document.getElementById('search-input').value='';rcl()})});
         document.getElementById('create-chat-btn').addEventListener('click',()=>{sm({title:'Create',customHtml:'<button class="modal-btn confirm" id="cr-chan" style="background:var(--channel);margin-bottom:8px">Channel</button><button class="modal-btn confirm" id="cr-grp" style="background:var(--group)">Group</button>',confirmText:'Close',cancelText:'',onConfirm:()=>{}});setTimeout(()=>{document.getElementById('cr-chan')?.addEventListener('click',()=>{document.getElementById('modal-overlay').classList.add('hidden');ccog('channel')});document.getElementById('cr-grp')?.addEventListener('click',()=>{document.getElementById('modal-overlay').classList.add('hidden');ccog('group')})},100)});
-        document.getElementById('settings-edit-profile').addEventListener('click',()=>{document.getElementById('settings-screen').classList.add('hidden');sps()});
-        document.getElementById('settings-privacy').addEventListener('click',()=>{document.getElementById('settings-screen').classList.add('hidden');sprs()});
-        document.getElementById('settings-create-channel').addEventListener('click',()=>{document.getElementById('settings-screen').classList.add('hidden');ccog('channel')});
-        document.getElementById('settings-create-group').addEventListener('click',()=>{document.getElementById('settings-screen').classList.add('hidden');ccog('group')});
+        
+        // Настройки НЕ закрываются - модалки открываются поверх
+        document.getElementById('settings-edit-profile').addEventListener('click',()=>{sps()});
+        document.getElementById('settings-privacy').addEventListener('click',()=>{sprs()});
+        document.getElementById('settings-create-channel').addEventListener('click',()=>{ccog('channel')});
+        document.getElementById('settings-create-group').addEventListener('click',()=>{ccog('group')});
         document.getElementById('settings-desktop').addEventListener('click',()=>{if(!cu||!ci){nt('Login first','','error');return}const p=new URLSearchParams({token:ci,email:cu.email||'',name:cu.username||'',photo:cu.avatar||''});window.location.href='collapschat://auth?'+p.toString();setTimeout(()=>{nt('Desktop app not found','Install Collaps Chat Desktop','error')},2000)});
         document.getElementById('settings-announcements').addEventListener('click',()=>window.open('announcements.html','_blank'));
-        document.getElementById('settings-support').addEventListener('click',async()=>{const supportUser=Object.values(au).find(u=>u.searchUsername==='support');if(supportUser){const chatId=await gocpc(supportUser.id);let attempts=0;const tryOpen=async()=>{let chat=ac[chatId];if(!chat){const snap=await get(ref(db,`chats/${chatId}`));if(snap.exists())chat=snap.val()}if(chat){oc(chat);document.getElementById('settings-screen').classList.add('hidden')}else if(attempts++<20){setTimeout(tryOpen,150)}else{sm({title:'Support',content:'Cannot open support chat. Email: collapschat@bk.ru',confirmText:'OK'})}};tryOpen()}else{sm({title:'Support',content:'Support account not found. Email: collapschat@bk.ru',confirmText:'OK'})}});
+        document.getElementById('settings-support').addEventListener('click',()=>{sm({title:'Support',content:'Contact us via email:\n\ncollapschat@bk.ru',confirmText:'OK'})});
         document.getElementById('settings-delete').addEventListener('click',()=>{sm({title:'Delete Account',content:'Cannot be undone!',confirmText:'Delete',onConfirm:async()=>{await rem(ref(db,`users/${ci}`));await auth.currentUser?.delete();await auth.signOut()}})});
         document.getElementById('edit-profile-btn').addEventListener('click',()=>{sm({title:'Edit Bio',customHtml:'<input class="modal-input" id="ed-bio" value="'+(cu?.bio||'')+'">',confirmText:'Save',onConfirm:async()=>{const bio=document.getElementById('ed-bio')?.value?.trim();if(bio!==undefined&&ci){await upd(ref(db,`users/${ci}`),{bio});cu.bio=bio;oup(ci)}}})});
         document.getElementById('delete-account-btn').addEventListener('click',()=>{sm({title:'Delete Account',content:'Cannot be undone!',confirmText:'Delete',onConfirm:async()=>{await rem(ref(db,`users/${ci}`));await auth.currentUser?.delete();await auth.signOut()}})});
