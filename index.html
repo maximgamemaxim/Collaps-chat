@@ -20,7 +20,6 @@
         .auth-btn{width:100%;padding:16px;background:var(--accent);color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:600;cursor:pointer;margin:24px 0 16px;transition:.2s}
         .auth-btn:hover{background:var(--accentH)}.auth-btn:disabled{opacity:.5;cursor:not-allowed}
         .auth-links a{color:var(--accent);text-decoration:none;font-size:14px;cursor:pointer;font-weight:500}
-        .btn-google{background:#fff;color:#333;border:none;display:flex;align-items:center;justify-content:center;gap:12px;width:100%;padding:14px;border-radius:12px;font-weight:600;font-size:15px;cursor:pointer;margin-bottom:16px}
         .divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--gray);font-size:13px}
         .divider-line{flex:1;height:1px;background:var(--border)}
         .checkbox-row{display:flex;align-items:center;gap:10px;margin:12px 0;text-align:left}
@@ -29,7 +28,8 @@
         .checkbox-row label a{color:var(--accent);text-decoration:none;font-weight:500}
         .auth-footer{position:absolute;bottom:0;left:0;right:0;padding:12px 20px;text-align:center;font-size:11px;color:var(--gray);background:var(--bg);z-index:1}
         .auth-footer a{color:var(--accent);text-decoration:none;font-weight:500}
-        .main-screen{height:100vh;display:none;overflow:hidden}.main-screen.active{display:flex}
+        .main-screen{height:100vh;display:none;overflow:hidden;flex-direction:column}.main-screen.active{display:flex}
+        .main-content{display:flex;flex:1;overflow:hidden}
         .chats-sidebar{width:360px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;height:100%}
         .chats-header{height:60px;padding:0 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);flex-shrink:0}
         .chats-title{font-size:20px;font-weight:700}.header-buttons{display:flex;gap:4px}
@@ -147,8 +147,6 @@
                 <h1 style="font-size:32px;font-weight:700;margin-bottom:8px">Collaps Chat</h1>
                 <p style="color:var(--gray);margin-bottom:40px;font-size:14px">Secure messenger</p>
                 <div id="login-form">
-                    <button id="google-login-btn" class="btn-google"><svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>Sign in with Google</button>
-                    <div class="divider"><span class="divider-line"></span><span>or</span><span class="divider-line"></span></div>
                     <input type="text" id="login-username" placeholder="Email" class="auth-input">
                     <input type="password" id="login-password" placeholder="Password" class="auth-input">
                     <button id="login-btn" class="auth-btn">Sign In</button>
@@ -168,43 +166,45 @@
         </div>
 
         <div id="main-screen" class="main-screen">
-            <div id="chats-sidebar" class="chats-sidebar active">
-                <div class="chats-header"><div class="chats-title">Collaps Chat</div><div class="header-buttons"><button class="icon-btn" id="create-chat-btn"><span class="material-symbols-rounded">add_circle</span></button><button class="icon-btn" id="search-btn"><span class="material-symbols-rounded">search</span></button><button class="icon-btn" id="settings-menu-btn"><span class="material-symbols-rounded">settings</span></button></div></div>
-                <div class="profile-bar"><div class="profile-avatar" id="user-avatar"></div><div style="flex:1;cursor:pointer" id="profile-click-area"><span class="profile-name" id="current-username">Loading...</span><br><span style="font-size:12px;color:var(--gray)" id="user-stars">0 stars</span></div><button class="icon-btn" id="logout-btn"><span class="material-symbols-rounded">logout</span></button></div>
-                <div class="announcements-container" id="announcements-container" style="display:none"></div>
-                <div class="stories-container" id="stories-container"></div>
-                <div class="search-container"><input type="text" id="search-input" placeholder="Search..." class="search-input"></div>
-                <div class="tabs-container"><button class="tab-btn active" data-tab="chats"><span class="material-symbols-rounded">chat_bubble</span> Chats</button><button class="tab-btn" data-tab="channels"><span class="material-symbols-rounded">campaign</span> Channels</button><button class="tab-btn" data-tab="groups"><span class="material-symbols-rounded">groups</span> Groups</button></div>
-                <div id="search-results-container" class="search-results-container"><div class="search-results-list" id="search-results-list" style="padding:8px"></div></div>
-                <div id="chats-list-container" class="chats-list-container"><div id="chats-list"></div></div>
-            </div>
+            <div class="main-content">
+                <div id="chats-sidebar" class="chats-sidebar active">
+                    <div class="chats-header"><div class="chats-title">Collaps Chat</div><div class="header-buttons"><button class="icon-btn" id="create-chat-btn"><span class="material-symbols-rounded">add_circle</span></button><button class="icon-btn" id="search-btn"><span class="material-symbols-rounded">search</span></button><button class="icon-btn" id="settings-menu-btn"><span class="material-symbols-rounded">settings</span></button></div></div>
+                    <div class="profile-bar"><div class="profile-avatar" id="user-avatar"></div><div style="flex:1;cursor:pointer" id="profile-click-area"><span class="profile-name" id="current-username">Loading...</span><br><span style="font-size:12px;color:var(--gray)" id="user-stars">0 stars</span></div><button class="icon-btn" id="logout-btn"><span class="material-symbols-rounded">logout</span></button></div>
+                    <div class="announcements-container" id="announcements-container" style="display:none"></div>
+                    <div class="stories-container" id="stories-container"></div>
+                    <div class="search-container"><input type="text" id="search-input" placeholder="Search..." class="search-input"></div>
+                    <div class="tabs-container"><button class="tab-btn active" data-tab="chats"><span class="material-symbols-rounded">chat_bubble</span> Chats</button><button class="tab-btn" data-tab="channels"><span class="material-symbols-rounded">campaign</span> Channels</button><button class="tab-btn" data-tab="groups"><span class="material-symbols-rounded">groups</span> Groups</button></div>
+                    <div id="search-results-container" class="search-results-container"><div class="search-results-list" id="search-results-list" style="padding:8px"></div></div>
+                    <div id="chats-list-container" class="chats-list-container"><div id="chats-list"></div></div>
+                </div>
 
-            <div id="chat-area" class="chat-area">
-                <div class="chat-header"><button class="icon-btn" id="back-to-chats"><span class="material-symbols-rounded">arrow_back</span></button><div class="chat-header-info" id="chat-header-info"><div class="chat-avatar" id="chat-avatar"><span class="material-symbols-rounded">person</span></div><div style="min-width:0;flex:1"><div class="chat-title" id="chat-title">Select chat</div><div class="chat-subtitle" id="chat-subtitle"></div></div></div><button class="icon-btn" id="chat-info-btn"><span class="material-symbols-rounded">info</span></button></div>
-                <div class="messages-container" id="messages-container"></div>
-                <div class="message-input-area" id="message-input-area" style="display:none"><label for="file-upload" class="icon-btn" style="cursor:pointer"><span class="material-symbols-rounded">attach_file</span></label><input type="file" id="file-upload" accept="image/*,video/*" style="display:none"><div class="input-wrapper"><input type="text" id="message-input" placeholder="Message" autocomplete="off"></div><button class="send-btn" id="send-btn"><span class="material-symbols-rounded">send</span></button></div>
-                <div class="channel-locked" id="channel-locked" style="display:none">Only admins can post in this channel</div>
-            </div>
-
-            <div id="profile-screen" class="profile-screen hidden">
-                <div class="profile-header"><button class="icon-btn" id="back-from-profile"><span class="material-symbols-rounded">arrow_back</span></button><h3>Profile</h3><button class="icon-btn" id="edit-profile-btn"><span class="material-symbols-rounded">edit</span></button></div>
-                <div class="profile-content"><div class="profile-avatar-large" id="profile-avatar"></div><div style="text-align:center;font-size:22px;font-weight:700;margin-bottom:8px" id="profile-name"></div><div style="color:var(--gray);font-size:14px;text-align:center;margin-bottom:20px" id="profile-substatus"></div><div class="tg-action-row" id="tg-action-row"><button class="tg-action-btn" id="tg-act-message"><span class="material-symbols-rounded">chat_bubble</span> Chat</button><button class="tg-action-btn" id="tg-act-mute"><span class="material-symbols-rounded">notifications</span> Sound</button><button class="tg-action-btn" id="tg-act-more"><span class="material-symbols-rounded">more_horiz</span> More</button></div><div class="tg-info-list" id="tg-info-list"></div><button class="profile-action-btn danger" id="delete-account-btn"><span class="material-symbols-rounded" style="font-size:18px;vertical-align:middle;margin-right:8px">delete_forever</span> Delete Account</button></div>
-            </div>
-
-            <div id="settings-screen" class="settings-screen hidden">
-                <div class="settings-header"><button class="icon-btn" id="back-from-settings"><span class="material-symbols-rounded">arrow_back</span></button><h3>Settings</h3></div>
-                <div class="settings-content">
-                    <div class="settings-item" id="settings-edit-profile"><div class="settings-item-left"><span class="material-symbols-rounded">edit</span><div><div class="settings-item-title">Edit Profile</div></div></div><span class="material-symbols-rounded">chevron_right</span></div>
-                    <div class="settings-item" id="settings-privacy"><div class="settings-item-left"><span class="material-symbols-rounded">lock</span><div><div class="settings-item-title">Privacy Settings</div></div></div><span class="material-symbols-rounded">chevron_right</span></div>
-                    <div class="settings-item" id="settings-create-channel"><div class="settings-item-left"><span class="material-symbols-rounded">campaign</span><div><div class="settings-item-title">Create Channel</div></div></div><span class="material-symbols-rounded">chevron_right</span></div>
-                    <div class="settings-item" id="settings-create-group"><div class="settings-item-left"><span class="material-symbols-rounded">groups</span><div><div class="settings-item-title">Create Group</div></div></div><span class="material-symbols-rounded">chevron_right</span></div>
-                    <div class="settings-item" id="settings-desktop"><div class="settings-item-left"><span class="material-symbols-rounded">desktop_windows</span><div><div class="settings-item-title">Login to PC Client</div></div></div><span class="material-symbols-rounded">chevron_right</span></div>
-                    <div class="settings-item" id="settings-announcements"><div class="settings-item-left"><span class="material-symbols-rounded">campaign</span><div><div class="settings-item-title">Announcements</div></div></div><span class="material-symbols-rounded">chevron_right</span></div>
-                    <div class="settings-item" id="settings-support"><div class="settings-item-left"><span class="material-symbols-rounded">support_agent</span><div><div class="settings-item-title">Support</div></div></div><span class="material-symbols-rounded">chevron_right</span></div>
-                    <div class="settings-item" id="settings-delete" style="border-left:3px solid var(--red)"><div class="settings-item-left"><span class="material-symbols-rounded" style="color:var(--red)">warning</span><div><div class="settings-item-title" style="color:var(--red)">Delete Account</div></div></div><span class="material-symbols-rounded">chevron_right</span></div>
+                <div id="chat-area" class="chat-area">
+                    <div class="chat-header"><button class="icon-btn" id="back-to-chats"><span class="material-symbols-rounded">arrow_back</span></button><div class="chat-header-info" id="chat-header-info"><div class="chat-avatar" id="chat-avatar"><span class="material-symbols-rounded">person</span></div><div style="min-width:0;flex:1"><div class="chat-title" id="chat-title">Select chat</div><div class="chat-subtitle" id="chat-subtitle"></div></div></div><button class="icon-btn" id="chat-info-btn"><span class="material-symbols-rounded">info</span></button></div>
+                    <div class="messages-container" id="messages-container"></div>
+                    <div class="message-input-area" id="message-input-area" style="display:none"><label for="file-upload" class="icon-btn" style="cursor:pointer"><span class="material-symbols-rounded">attach_file</span></label><input type="file" id="file-upload" accept="image/*,video/*" style="display:none"><div class="input-wrapper"><input type="text" id="message-input" placeholder="Message" autocomplete="off"></div><button class="send-btn" id="send-btn"><span class="material-symbols-rounded">send</span></button></div>
+                    <div class="channel-locked" id="channel-locked" style="display:none">Only admins can post in this channel</div>
                 </div>
             </div>
             <div class="main-footer">© 2026 Collaps Chat | <a href="privacy.html" target="_blank">Privacy Policy</a></div>
+        </div>
+
+        <div id="profile-screen" class="profile-screen hidden">
+            <div class="profile-header"><button class="icon-btn" id="back-from-profile"><span class="material-symbols-rounded">arrow_back</span></button><h3>Profile</h3><button class="icon-btn" id="edit-profile-btn"><span class="material-symbols-rounded">edit</span></button></div>
+            <div class="profile-content"><div class="profile-avatar-large" id="profile-avatar"></div><div style="text-align:center;font-size:22px;font-weight:700;margin-bottom:8px" id="profile-name"></div><div style="color:var(--gray);font-size:14px;text-align:center;margin-bottom:20px" id="profile-substatus"></div><div class="tg-action-row" id="tg-action-row"><button class="tg-action-btn" id="tg-act-message"><span class="material-symbols-rounded">chat_bubble</span> Chat</button><button class="tg-action-btn" id="tg-act-mute"><span class="material-symbols-rounded">notifications</span> Sound</button><button class="tg-action-btn" id="tg-act-more"><span class="material-symbols-rounded">more_horiz</span> More</button></div><div class="tg-info-list" id="tg-info-list"></div><button class="profile-action-btn danger" id="delete-account-btn"><span class="material-symbols-rounded" style="font-size:18px;vertical-align:middle;margin-right:8px">delete_forever</span> Delete Account</button></div>
+        </div>
+
+        <div id="settings-screen" class="settings-screen hidden">
+            <div class="settings-header"><button class="icon-btn" id="back-from-settings"><span class="material-symbols-rounded">arrow_back</span></button><h3>Settings</h3></div>
+            <div class="settings-content">
+                <div class="settings-item" id="settings-edit-profile"><div class="settings-item-left"><span class="material-symbols-rounded">edit</span><div><div class="settings-item-title">Edit Profile</div></div></div><span class="material-symbols-rounded">chevron_right</span></div>
+                <div class="settings-item" id="settings-privacy"><div class="settings-item-left"><span class="material-symbols-rounded">lock</span><div><div class="settings-item-title">Privacy Settings</div></div></div><span class="material-symbols-rounded">chevron_right</span></div>
+                <div class="settings-item" id="settings-create-channel"><div class="settings-item-left"><span class="material-symbols-rounded">campaign</span><div><div class="settings-item-title">Create Channel</div></div></div><span class="material-symbols-rounded">chevron_right</span></div>
+                <div class="settings-item" id="settings-create-group"><div class="settings-item-left"><span class="material-symbols-rounded">groups</span><div><div class="settings-item-title">Create Group</div></div></div><span class="material-symbols-rounded">chevron_right</span></div>
+                <div class="settings-item" id="settings-desktop"><div class="settings-item-left"><span class="material-symbols-rounded">desktop_windows</span><div><div class="settings-item-title">Login to PC Client</div></div></div><span class="material-symbols-rounded">chevron_right</span></div>
+                <div class="settings-item" id="settings-announcements"><div class="settings-item-left"><span class="material-symbols-rounded">campaign</span><div><div class="settings-item-title">Announcements</div></div></div><span class="material-symbols-rounded">chevron_right</span></div>
+                <div class="settings-item" id="settings-support"><div class="settings-item-left"><span class="material-symbols-rounded">support_agent</span><div><div class="settings-item-title">Support</div></div></div><span class="material-symbols-rounded">chevron_right</span></div>
+                <div class="settings-item" id="settings-delete" style="border-left:3px solid var(--red)"><div class="settings-item-left"><span class="material-symbols-rounded" style="color:var(--red)">warning</span><div><div class="settings-item-title" style="color:var(--red)">Delete Account</div></div></div><span class="material-symbols-rounded">chevron_right</span></div>
+            </div>
         </div>
     </div>
 
@@ -213,7 +213,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
     <script>
         const fc={apiKey:"AIzaSyDdey6ZroD4KsiPiD2dnVfQe3I3OW3MPV8",authDomain:"max-chat-f9319.firebaseapp.com",databaseURL:"https://max-chat-f9319-default-rtdb.europe-west1.firebasedatabase.app",projectId:"max-chat-f9319",storageBucket:"max-chat-f9319.firebasestorage.app",messagingSenderId:"1013158224179",appId:"1:1013158224179:web:c4a052ca2e86034de59e46"};
-        firebase.initializeApp(fc);const db=firebase.database(),auth=firebase.auth(),gp=new firebase.auth.GoogleAuthProvider();
+        firebase.initializeApp(fc);const db=firebase.database(),auth=firebase.auth();
         const CL='qik0zmv8',UP='collaps_chat',DA='https://ui-avatars.com/api/?name=User&background=2b5278&color=fff&size=256';
         let cu=null,ci=null,cc=null,cci=null,au={},ac={},ast={},aan={},at='chats',uc={},ne=true,mu=null,chu=null,su=null,ans=null,vu=null;
         const ref=(d,p)=>d.ref(p),set=(r,v)=>r.set(v),push=(r,v)=>v===undefined?r.push():r.push(v),upd=(r,v)=>r.update(v),rem=r=>r.remove(),get=r=>r.get(),onV=(r,cb)=>{r.on('value',cb);return()=>r.off('value',cb)},onCA=(r,cb)=>{r.on('child_added',cb);return()=>r.off('child_added',cb)},qy=(r,...cs)=>{let q=r;cs.forEach(c=>q=c(q));return q},obc=k=>q=>q.orderByChild(k),eq=v=>q=>q.equalTo(v);
@@ -276,13 +276,10 @@
         auth.onAuthStateChanged(async(user)=>{if(user){ci=user.uid;const snap=await get(ref(db,`users/${user.uid}`));if(snap.exists()){cu=snap.val();if(cu.ban){await auth.signOut();nt('Account banned','','error');return}}else{const uname=user.email?user.email.split('@')[0].replace(/[^a-zA-Z0-9_]/g,'')+'_'+Math.floor(Math.random()*1000):'user_'+Math.random().toString(36).substr(2,8);cu={id:user.uid,username:user.displayName||user.email?.split('@')[0]||'User',searchUsername:uname,email:user.email||'',stars:0,grant:false,checkReal:false,special:false,ban:false,bio:'Hello!',avatar:user.photoURL||DA,privacySettings:{inviteMe:'everyone',findMe:'everyone'},createdAt:Date.now(),lastSeen:Date.now(),online:true};await set(ref(db,`users/${user.uid}`),cu)}await upd(ref(db,`users/${ci}`),{online:true,lastSeen:Date.now()});document.getElementById('auth-screen').style.display='none';document.getElementById('main-screen').classList.add('active');uui();lau();luc();ls();lan()}else{document.getElementById('main-screen').classList.remove('active');document.getElementById('auth-screen').style.display='flex'}});
 
         document.getElementById('login-btn').addEventListener('click',async()=>{const e=document.getElementById('login-username').value.trim(),p=document.getElementById('login-password').value.trim();if(!e||!p){nt('Fill fields','','error');return}try{await auth.signInWithEmailAndPassword(e,p)}catch(err){nt(err.code==='auth/invalid-credential'?'Invalid credentials':err.message,'','error')}});
-        document.getElementById('google-login-btn').addEventListener('click',async()=>{try{await auth.signInWithPopup(gp)}catch(e){nt('Error',e.message,'error')}});
         document.getElementById('register-btn').addEventListener('click',async()=>{if(!document.getElementById('age-checkbox').checked){nt('You must be 13+','','error');return}if(!document.getElementById('privacy-checkbox').checked){nt('Accept Privacy Policy','','error');return}const un=document.getElementById('register-username').value.trim(),em=document.getElementById('register-email').value.trim(),pw=document.getElementById('register-password').value.trim();if(!un||!em||!pw){nt('Fill fields','','error');return}if(pw.length<6){nt('Password min 6','','error');return}try{const r=await auth.createUserWithEmailAndPassword(em,pw);const uid=r.user.uid;const sun=em.split('@')[0].replace(/[^a-zA-Z0-9_]/g,'')+'_'+Math.floor(Math.random()*1000);await set(ref(db,`users/${uid}`),{id:uid,username:un,searchUsername:sun,email:em,stars:0,grant:false,checkReal:false,special:false,ban:false,bio:'Hello!',avatar:`https://ui-avatars.com/api/?name=${encodeURIComponent(un)}&background=2b5278&color=fff&size=256`,privacySettings:{inviteMe:'everyone',findMe:'everyone'},createdAt:Date.now(),lastSeen:Date.now(),online:true});await r.user.updateProfile({displayName:un})}catch(e){nt(e.code==='auth/email-already-in-use'?'Email taken':e.message,'','error')}});
         document.getElementById('logout-btn').addEventListener('click',async()=>{if(ci)await upd(ref(db,`users/${ci}`),{online:false,lastSeen:Date.now()});if(mu)mu();if(chu)chu();if(su)su();if(ans)ans();cu=null;ci=null;await auth.signOut()});
-        
         function updateRegBtn(){const a=document.getElementById('age-checkbox')?.checked;const p=document.getElementById('privacy-checkbox')?.checked;document.getElementById('register-btn').disabled=!(a&&p)}
-        document.getElementById('age-checkbox').addEventListener('change',updateRegBtn);
-        document.getElementById('privacy-checkbox').addEventListener('change',updateRegBtn);
+        document.getElementById('age-checkbox').addEventListener('change',updateRegBtn);document.getElementById('privacy-checkbox').addEventListener('change',updateRegBtn);
         document.getElementById('show-register').addEventListener('click',e=>{e.preventDefault();document.getElementById('login-form').style.display='none';document.getElementById('register-form').style.display='block'});
         document.getElementById('show-login').addEventListener('click',e=>{e.preventDefault();document.getElementById('register-form').style.display='none';document.getElementById('login-form').style.display='block'});
 
@@ -299,8 +296,6 @@
         document.getElementById('search-input').addEventListener('input',e=>sa(e.target.value));
         document.querySelectorAll('.tab-btn').forEach(b=>{b.addEventListener('click',()=>{document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');at=b.dataset.tab;document.getElementById('search-results-container').classList.remove('active');document.getElementById('chats-list-container').classList.remove('hidden');document.getElementById('search-input').value='';rcl()})});
         document.getElementById('create-chat-btn').addEventListener('click',()=>{sm({title:'Create',customHtml:'<button class="modal-btn confirm" id="cr-chan" style="background:var(--channel);margin-bottom:8px">Channel</button><button class="modal-btn confirm" id="cr-grp" style="background:var(--group)">Group</button>',confirmText:'Close',cancelText:'',onConfirm:()=>{}});setTimeout(()=>{document.getElementById('cr-chan')?.addEventListener('click',()=>{document.getElementById('modal-overlay').classList.add('hidden');ccog('channel')});document.getElementById('cr-grp')?.addEventListener('click',()=>{document.getElementById('modal-overlay').classList.add('hidden');ccog('group')})},100)});
-        
-        // Настройки НЕ закрываются - модалки открываются поверх
         document.getElementById('settings-edit-profile').addEventListener('click',()=>{sps()});
         document.getElementById('settings-privacy').addEventListener('click',()=>{sprs()});
         document.getElementById('settings-create-channel').addEventListener('click',()=>{ccog('channel')});
